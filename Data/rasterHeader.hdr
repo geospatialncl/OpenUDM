@@ -1,0 +1,6 @@
+ncols val
+nrows val
+xllcorner val 
+yllcorner val
+cellsize val
+NODATA_value -1
