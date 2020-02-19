@@ -4,6 +4,7 @@
 udm_solo.py - Generic standalone model to carry out multi-criteria evaluation, zone id creation, zone avg suitability, and cellular urban development.
 
 """
+from __future__ import print_function
 __author__ = "James Virgo"
 
 import csv
@@ -19,7 +20,7 @@ def main():
     ### GENERIC INTERFACE BEGIN----------------------------------------------------------------------------------------
 
     #edit the following line according to installation
-    swap_path = 'C:/UDM_Solo/Data/'
+    swap_path = '../Data/'
 
     #n.b. could take swap_path as command line argument as in
     #for arg in sys.argv[1:]:
@@ -74,7 +75,7 @@ def main():
             num_rows = int(row['num_rows'])
 
     #params for table reading - hardcoded to simplify
-    label_total = 1
+    label_total = 2
     label_col = 0
 
     #params for table reading - hardcoded to simplify
@@ -162,7 +163,7 @@ def main():
 
 
     mce.MaskedWeightedSum((bval>0),mce_i_raster_count_str,mce_i_raster_str,mce_d_raster_count_str,mce_d_raster_str,mce_output_raster_str,full_rast_hdr,swap_path,(rval>0))
-
+    print("mce.MaskedWeightedSum")
     ###ZONE IDS-------------------------------------------------------------------------------------------
 
     #setup stack to hold raster filenames
@@ -190,46 +191,62 @@ def main():
     # CALL SWIG-WRAPPED C++ FUNCTION------------------------------------------------------------------------
 
     dz.CreateDevZones((bval>0), min_dev_area, (mval>0), mask_str, zone_id_str, full_rast_hdr, swap_path, ward_id_str)
-
+    print("dz.CreateDevZones")
     ###ZONE AVG---------------------------------------------------------------------------------------------
 
     # CALL SWIG-WRAPPED C++ FUNCTION------------------------------------------------------------------------
 
     dz.DevZoneAVGSuit((bval>0), zone_id_str, mce_output_raster_str, zone_avg_str, full_rast_hdr, swap_path)
-
+    print("dz.DevZoneAVGSuit")
 
     ###CELLULAR MODEL---------------------------------------------------------------------------------------
 
     # CALL SWIG-WRAPPED C++ FUNCTION-------------------------------------------------------------------------
 
+    print("CellularModel.CellularModel")
     cm = CellularModel.CellularModel()
-
+    print("cm.Setup", num_zones, cell_size, num_cols, num_rows)
     cm.Setup(num_zones, cell_size, num_cols, num_rows)
-
+    print("cm.UseBinaryRasters", bval)
     cm.UseBinaryRasters((bval>0))
+    print("cm.SetRasterHeader", full_rast_hdr)
     cm.SetRasterHeader(full_rast_hdr)
+    print("cm.SetPathToBinaryConfigFiles", swap_path)
     cm.SetPathToBinaryConfigFiles(swap_path)
 
+    print("cm.LoadWardLabels", wards_str, label_col, label_total)
     cm.LoadWardLabels(wards_str, label_col, label_total)
+    print("cm.LoadCurrentPopulation", pop_str, cur_pop_col, pop_total)
     cm.LoadCurrentPopulation(pop_str, cur_pop_col, pop_total)
+    print("cm.LoadFuturePopulation", pop_str, fut_pop_col, pop_total)
     cm.LoadFuturePopulation(pop_str, fut_pop_col, pop_total)
 
+    print("if", density_provided)
     if density_provided:
+        print("cm.LoadWardDensity", density_str,0,1)
         cm.LoadWardDensity(density_str,0,1)
 
+    print("cm.LoadWardIDRaster", ward_id_str)
     cm.LoadWardIDRaster(ward_id_str)
+    print("cm.LoadZoneIDRaster", zone_id_str)
     cm.LoadZoneIDRaster(zone_id_str)
+    print("cm.LoadZoneAVGRaster", zone_avg_str)
     cm.LoadZoneAVGRaster(zone_avg_str)
+    print("cm.LoadDevLandRaster", cur_dev_str)
     cm.LoadDevLandRaster(cur_dev_str)
+    print("cm.LoadCellSuitRaster", mce_output_raster_str)
     cm.LoadCellSuitRaster(mce_output_raster_str)
 
+    print("cm.RunModel")
     cm.RunModel()
-
+    print("cm.OutputRasterResult", cell_dev_output_str)
     cm.OutputRasterResult(cell_dev_output_str)
 
+    print("cm.WriteOverflowWards", overflow_str)
     cm.WriteOverflowWards(overflow_str)
 
-    cm.Cleanup();
+    print("cm.Cleanup")
+    cm.Cleanup()
 
     # WRITE RESULTS TO RASTER-----------------------------------------------------------------------------------
 
@@ -352,6 +369,7 @@ def main():
     md_str = swap_path + 'out_cell_metadata.csv'
 
     #write metadata to csv
+    print("writing", md_str)
     with open(md_str, "wb") as f:
         writer = csv.writer(f)
         writer.writerows(md)
