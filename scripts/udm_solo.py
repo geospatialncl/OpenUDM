@@ -12,10 +12,8 @@ import os
 import sys
 import time
 
-import CellularModel
-import DevZones as dz
-import MultiCriteriaEval as mce
-import RasterToolkit as rt
+from openudm import (
+    CellularModel, DevZones as dz, MultiCriteriaEval as mce, RasterToolkit as rt)
 
 def main(swap_path):
 
