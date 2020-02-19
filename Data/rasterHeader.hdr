@@ -2,5 +2,5 @@ ncols 5
 nrows 5
 xllcorner 0
 yllcorner 0
-cellsize 100
+cellsize 1
 NODATA_value -1
