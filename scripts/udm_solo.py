@@ -363,13 +363,12 @@ def main(swap_path):
 
     #write metadata to csv
     print("writing", md_str)
-    with open(md_str, "wb") as f:
+    with open(md_str, "w", newline='') as f:
         writer = csv.writer(f)
         writer.writerows(md)
 
     ### END OF METADATA
-
-    return False
+    print("Model run complete")
 
 if __name__ == "__main__":
     data_path = 'Data'
