@@ -8,23 +8,18 @@ from __future__ import print_function
 __author__ = "James Virgo"
 
 import csv
+import os
 import sys
-import RasterToolkit as rt
-import MultiCriteriaEval as mce
-import DevZones as dz
-import CellularModel
 import time
 
-def main():
+import CellularModel
+import DevZones as dz
+import MultiCriteriaEval as mce
+import RasterToolkit as rt
+
+def main(swap_path):
 
     ### GENERIC INTERFACE BEGIN----------------------------------------------------------------------------------------
-
-    #edit the following line according to installation
-    swap_path = '../Data/'
-
-    #n.b. could take swap_path as command line argument as in
-    #for arg in sys.argv[1:]:
-    #    swap_path = arg
 
     # INDATA BEGIN---------------------------------------------------------------------------------
 
@@ -32,12 +27,12 @@ def main():
     rast_hdr = 'rasterHeader.hdr'
 
     # INPUT STRINGS
-    mce_i_raster_str = swap_path + 'in_mce_ras_int.csv'
-    mce_d_raster_str = swap_path + 'in_mce_ras_dbl.csv'
-    cell_i_raster_str = swap_path + 'in_udm_ras.csv'
-    wards_str = swap_path + 'in_zone_order.csv'
-    pop_str = swap_path + 'in_zonal_pop.csv'
-    density_str = swap_path + 'in_zonal_density.csv'
+    mce_i_raster_str = os.path.join(swap_path, 'in_mce_ras_int.csv')
+    mce_d_raster_str = os.path.join(swap_path, 'in_mce_ras_dbl.csv')
+    cell_i_raster_str = os.path.join(swap_path, 'in_udm_ras.csv')
+    wards_str = os.path.join(swap_path, 'in_zone_order.csv')
+    pop_str = os.path.join(swap_path, 'in_zonal_pop.csv')
+    density_str = os.path.join(swap_path, 'in_zonal_density.csv')
 
     mce_i_rasters = mce_i_raster_str
     mce_d_rasters = mce_d_raster_str
@@ -51,8 +46,8 @@ def main():
 
     # OUTDATA BEGIN--------------------------------------------------------------------------------
 
-    cell_dev_asc_str = swap_path + 'out_cell_dev.asc'
-    overflow_str = swap_path + 'out_cell_overflow.csv'
+    cell_dev_asc_str = os.path.join(swap_path, 'out_cell_dev.asc')
+    overflow_str = os.path.join(swap_path, 'out_cell_overflow.csv')
 
     output_raster = cell_dev_asc_str
     overflow_data = overflow_str
@@ -61,7 +56,7 @@ def main():
 
     # PARAMETERS BEGIN-----------------------------------------------------------------------------
 
-    params_str = swap_path + 'in_params.csv'
+    params_str = os.path.join(swap_path, 'in_params.csv')
 
     #import parameters
     with open(params_str) as csvfile:
@@ -95,9 +90,9 @@ def main():
     ### GENERIC INTERFACE END------------------------------------------------------------------------------------------
 
     # OUTPUT STRINGS
-    full_rast_hdr = swap_path + rast_hdr
-    mce_i_raster_count_str = swap_path + 'mce_int_count.csv'
-    mce_d_raster_count_str = swap_path + 'mce_dbl_count.csv'
+    full_rast_hdr = os.path.join(swap_path, rast_hdr)
+    mce_i_raster_count_str = os.path.join(swap_path, 'mce_int_count.csv')
+    mce_d_raster_count_str = os.path.join(swap_path, 'mce_dbl_count.csv')
 
     mce_output_raster_str = ''
     zone_id_str = ''
@@ -105,15 +100,15 @@ def main():
     cell_dev_output_str = ''
 
     if bin_ras:
-        mce_output_raster_str = swap_path + 'mceOutput.bin'
-        zone_id_str = swap_path + 'zoneID.bin'
-        zone_avg_str = swap_path + 'zoneAVG.bin'
-        cell_dev_output_str = swap_path + 'cellDev.bin'
+        mce_output_raster_str = os.path.join(swap_path, 'mceOutput.bin')
+        zone_id_str = os.path.join(swap_path, 'zoneID.bin')
+        zone_avg_str = os.path.join(swap_path, 'zoneAVG.bin')
+        cell_dev_output_str = os.path.join(swap_path, 'cellDev.bin')
     else:
-        mce_output_raster_str = swap_path + 'mceOutput.csv'
-        zone_id_str = swap_path + 'zoneID.csv'
-        zone_avg_str = swap_path + 'zoneAVG.csv'
-        cell_dev_output_str = swap_path + 'cellDev.csv'
+        mce_output_raster_str = os.path.join(swap_path, 'mceOutput.csv')
+        zone_id_str = os.path.join(swap_path, 'zoneID.csv')
+        zone_avg_str = os.path.join(swap_path, 'zoneAVG.csv')
+        cell_dev_output_str = os.path.join(swap_path, 'cellDev.csv')
 
     ### MULTI CRITERIA EVALUATION------------------------------------------------------------------------
 
@@ -125,10 +120,10 @@ def main():
             num_ras += 1
             if row['convert'] is 'y':
                 #rt.IRasterAscToCsv(row['asc'], row['csv'])
-                rt.IRasterAscToCsv(swap_path + row['asc'], swap_path + row['csv'])
+                rt.IRasterAscToCsv(os.path.join(swap_path, row['asc']), os.path.join(swap_path, row['csv']))
 
     #write num_ras to csv
-    with open(mce_i_raster_count_str, "wb") as f:
+    with open(mce_i_raster_count_str, "w", newline='') as f:
         writer = csv.writer(f)
         writer.writerow(['row_count'])
         writer.writerow([num_ras])
@@ -141,10 +136,10 @@ def main():
             num_ras += 1
             if row['convert'] is 'y':
                 #rt.DRasterAscToCsv(row['asc'], row['csv'])
-                rt.DRasterAscToCsv(swap_path + row['asc'], swap_path + row['csv'])
+                rt.DRasterAscToCsv(os.path.join(swap_path, row['asc']), os.path.join(swap_path, row['csv']))
 
     #write num_ras to csv
-    with open(mce_d_raster_count_str, "wb") as f:
+    with open(mce_d_raster_count_str, "w", newline='') as f:
         writer = csv.writer(f)
         writer.writerow(['row_count'])
         writer.writerow([num_ras])
@@ -176,12 +171,12 @@ def main():
             stack.append(row['csv'])
             if row['convert'] is 'y':
                 #rt.IRasterAscToCsv(row['asc'], row['csv'])
-                rt.IRasterAscToCsv(swap_path + row['asc'], swap_path + row['csv'])
+                rt.IRasterAscToCsv(os.path.join(swap_path, row['asc']), os.path.join(swap_path, row['csv']))
 
     #retrieve filenames from stack
-    cur_dev_str = swap_path + stack.pop()
-    ward_id_str = swap_path + stack.pop()
-    mask_str = swap_path + stack.pop()
+    cur_dev_str = os.path.join(swap_path, stack.pop())
+    ward_id_str = os.path.join(swap_path, stack.pop())
+    mask_str = os.path.join(swap_path, stack.pop())
 
     #set mval based upon boolean input (moore) - it can then be tested in place as an argument to CreateDevZones()
     mval = 0
@@ -366,7 +361,7 @@ def main():
     md = zip(*md)
 
     #set metadata csv output string
-    md_str = swap_path + 'out_cell_metadata.csv'
+    md_str = os.path.join(swap_path, 'out_cell_metadata.csv')
 
     #write metadata to csv
     print("writing", md_str)
@@ -379,4 +374,12 @@ def main():
     return False
 
 if __name__ == "__main__":
-    main()
+    data_path = 'Data'
+
+    try:
+        data_path = sys.argv[1]
+        print(f"Using provided data path: {data_path}")
+    except IndexError:
+        print(f"Using default data path: {data_path}")
+
+    main(data_path)
