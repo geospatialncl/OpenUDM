@@ -11,59 +11,51 @@ struct Cell {
 	int c;
 	int r;
 	int z;
-	Cell(int col, int row, int zone) {
-		c = col;
-		r = row;
-		z = zone;
-	}
+	Cell(int col, int row, int zone) : c(col), r(row), z(zone) { }
 };
 
 //simple zone structure
 struct Zone {
 	int id;
 	vector<Cell> cells;
-	Zone(int zid) {
-		id = zid;
-	}
+	Zone(int zid) : id(zid) { }
 };
 
 //simple ward structure
-struct Ward {
-	vector<Cell> cells;	
-};
+typedef vector<Cell> Ward;
 
-bool DevCompare(std::string iRas1, std::string iRas2, std::string result);
-bool IRasterCompare(std::string iRas1, std::string iRas2, std::string result);
-bool DRasterCompare(std::string dRas1, std::string dRas2, std::string result);
+bool DevCompare(const std::string& iRas1, const std::string& iRas2, const std::string& result);
+bool IRasterCompare(const std::string& iRas1, const std::string& iRas2, const std::string& result);
+bool DRasterCompare(const std::string& dRas1, const std::string& dRas2, const std::string& result);
 
-void IRasterFixNoDataVal(std::string srcRas, int srcVal);
-void IRasterSetNoDataToRef(std::string srcRas, std::string refRas);
-void DRasterFixNoDataVal(std::string srcRas, int srcVal);
-void DRasterSetNoDataToRef(std::string srcRas, std::string refRas);
-void DRasterTidyNoDataVal(std::string srcRas, double srcVal);
+void IRasterFixNoDataVal(const std::string& srcRas, int srcVal);
+void IRasterSetNoDataToRef(const std::string& srcRas, const std::string& refRas);
+void DRasterFixNoDataVal(const std::string& srcRas, int srcVal);
+void DRasterSetNoDataToRef(const std::string& srcRas, const std::string& refRas);
+void DRasterTidyNoDataVal(const std::string& srcRas, double srcVal);
 
-void IRasterMaskedAddValue(std::string zoneIDRas, int val);
-void IRasterNotBoolean(std::string srcRas);
-void IRasterAddBoolean(std::string ras1Str, std::string ras2Str, std::string resultStr);
-void Standardise(std::string srcRas, std::string maskRas);
-void RevPolarityStandardise(std::string srcRas, std::string maskRas);
-void AreaFromRaster(std::string wardIDRas, int numWards, std::string wardDataRas, int refVal, std::string areaOutput);
-void BooleanDownsampler(std::string inputRas, std::string outputRas, int singleDimCellsToCell, int twoDimCellThreshold);
-void DRasterSumRows(std::string inputRas, std::string outputCSV);
-void DRasterSumColumns(std::string inputRas, std::string outputCSV);
+void IRasterMaskedAddValue(const std::string& zoneIDRas, int val);
+void IRasterNotBoolean(const std::string& srcRas);
+void IRasterAddBoolean(const std::string& ras1Str, const std::string& ras2Str, const std::string& resultStr);
+void Standardise(const std::string& srcRas, const std::string& maskRas);
+void RevPolarityStandardise(const std::string& srcRas, const std::string& maskRas);
+void AreaFromRaster(const std::string& wardIDRas, int numWards, const std::string& wardDataRas, int refVal, const std::string& areaOutput);
+void BooleanDownsampler(const std::string& inputRas, const std::string& outputRas, int singleDimCellsToCell, int twoDimCellThreshold);
+void DRasterSumRows(const std::string& inputRas, const std::string& outputCSV);
+void DRasterSumColumns(const std::string& inputRas, const std::string& outputCSV);
 
-void DRasterAscToBin(std::string input, std::string output, std::string pathToBinaryConfig);
-void DRasterAscToCsv(std::string input, std::string output);
-void IRasterAscToBin(std::string input, std::string output, std::string pathToBinaryConfig);
-void IRasterAscToCsv(std::string input, std::string output);
+void DRasterAscToBin(const std::string& input, const std::string& output, const std::string& pathToBinaryConfig);
+void DRasterAscToCsv(const std::string& input, const std::string& output);
+void IRasterAscToBin(const std::string& input, const std::string& output, const std::string& pathToBinaryConfig);
+void IRasterAscToCsv(const std::string& input, const std::string& output);
 
-void DRasterBinToAsc(std::string input, std::string output, std::string hdrFile);
-void DRasterCsvToAsc(std::string input, std::string output, std::string hdrfile);
-void IRasterBinToAsc(std::string input, std::string output, std::string hdrFile);
-void IRasterCsvToAsc(std::string input, std::string output, std::string hdrfile);
+void DRasterBinToAsc(const std::string& input, const std::string& output, const std::string& hdrFile);
+void DRasterCsvToAsc(const std::string& input, const std::string& output, const std::string& hdrfile);
+void IRasterBinToAsc(const std::string& input, const std::string& output, const std::string& hdrFile);
+void IRasterCsvToAsc(const std::string& input, const std::string& output, const std::string& hdrfile);
 
-void DRasterAscToODVal(std::string inputRas, std::string inputZoneCodes, std::string outputCSV);
-void DRasterSubRaster(std::string inRasStr, std::string inCodeStr, std::string outRasStr, std::string outCodeStr, std::string outHdrFile);
+void DRasterAscToODVal(const std::string& inputRas, const std::string& inputZoneCodes, const std::string& outputCSV);
+void DRasterSubRaster(const std::string& inRasStr, const std::string& inCodeStr, const std::string& outRasStr, const std::string& outCodeStr, const std::string& outHdrFile);
 
 
 

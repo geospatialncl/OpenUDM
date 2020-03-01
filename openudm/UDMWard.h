@@ -3,11 +3,11 @@
 #include "UDMCell.h"
 #include "UDMZone.h"
 
-class UDMWard
+class UDMWard final
 {
 public:
 	UDMWard();
-	~UDMWard(void);
+	~UDMWard() = default;
 	
 	std::vector<UDMZone*> zones;
 	std::vector<UDMCell*> cells;

@@ -3,7 +3,7 @@ class UDMCell
 {
 public:
 	UDMCell(int col, int row);
-	~UDMCell(void);
+	~UDMCell() = default;
 
 	int col;
 	int row;

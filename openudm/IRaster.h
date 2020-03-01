@@ -6,12 +6,12 @@
 #include <sstream>
 #include <iomanip>
 
-class IRaster
+class IRaster final
 {
 public:
 	//constructor/destructor
-	IRaster(void);
-	~IRaster(void);
+	IRaster();
+	~IRaster();
 
 	//header data
 	int ncols;
@@ -19,21 +19,21 @@ public:
 	double xllcorner;
 	double yllcorner;
 	double cellsize;
-	int NODATA_value;
+	static int NODATA_value;
 	//float weight;
 
 	//raster data
-	int** data;	
+	std::vector<std::vector<int>> data;	
 
-	void Setup(std::string ipfile);
+	void Setup(const std::string& ipfile);
 	void Setup(int ncols, int nrows, int init = 0);
 	void Cleanup();
-	void Read(std::string ipfile);
-	void Write(std::string writefile);
-	void FromPGBinary(std::string binData);
-	void ToPGBinary(std::string binData);
-	void ToPGBinary(std::string hdrPadFtrPath, std::string binData);
-	void FromCSV(std::string csvFile);
-	void ToCSV(std::string csvFile);
+	void Read(const std::string& ipfile);
+	void Write(const std::string& writefile);
+	void FromPGBinary(const std::string& binData);
+	void ToPGBinary(const std::string& binData);
+	void ToPGBinary(const std::string& hdrPadFtrPath, const std::string& binData);
+	void FromCSV(const std::string& csvFile);
+	void ToCSV(const std::string& csvFile);
 };
 
