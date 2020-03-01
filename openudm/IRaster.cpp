@@ -1,6 +1,10 @@
 #include "IRaster.h"
 #include "CSVToolkit.h"
 
+#include <limits>
+#include <cstring> // for memcpy
+#include <algorithm>
+
 using namespace std;
 
 IRaster::IRaster(void)
@@ -251,7 +255,7 @@ void IRaster::FromPGBinary(std::string binData) {
 
 		//check size and number of values to be read
 		//cout << "size of file = " << size << " bytes" << endl;
-		int numValues = bufSize / bufInt;
+		//int numValues = bufSize / bufInt;
 		//cout << "number of values = " << numValues << endl;
 
 		//buffer - each buffered integer is 10 bytes comprising..

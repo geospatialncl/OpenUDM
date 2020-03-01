@@ -41,10 +41,10 @@ public:
 private:
 
 	//wards and raster parameters
-	int numWards; 
-	int devRes; 
-	int rasterCols; 
-	int rasterRows;
+	size_t numWards; 
+	size_t devRes; 
+	size_t rasterCols; 
+	size_t rasterRows;
 
 	//input rasters
 	IRaster iWardID;

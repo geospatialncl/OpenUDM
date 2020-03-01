@@ -185,7 +185,7 @@ void ExtractCSVDataColumn(std::string ipfile, int numItems, int extractItem, std
 void ExtractCSVSingleDataColumn(std::string ipfile, std::string* data) {
 
 	ifstream ipfileData(ipfile);
-	int rowNum = 0;
+	//int rowNum = 0;
 	int dataCount = 0;
 	bool readData = false;
 	//declare string objects

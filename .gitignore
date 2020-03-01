@@ -21,6 +21,7 @@ bld/
 [Oo]bj/
 [Ll]og/
 [Ll]ogs/
+_*.so
 
 # Visual Studio 2015/2017 cache/options directory
 .vs/
@@ -131,3 +132,8 @@ Data/example*.csv
 Data/mce*
 Data/out*
 Data/zone*
+
+.vscode/
+
+# python virtualenvs
+.venv*

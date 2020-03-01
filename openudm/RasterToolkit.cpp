@@ -689,7 +689,7 @@ void AreaFromRaster(std::string wardIDRas, int numWards, std::string wardDataRas
 	for (int w = 0; w != numWards; ++w) {
 		int cellCount = 0;							//reset for each ward
 		if (!wards[w].cells.empty()) {
-			for (int c = 0; c != wards[w].cells.size(); ++c) {			
+			for (size_t c = 0; c != wards[w].cells.size(); ++c) {			
 
 				if (wardData.data[wards[w].cells[c].r][wards[w].cells[c].c] == refVal) {		//count cells equal to refVal
 					++cellCount;
@@ -819,7 +819,7 @@ void DRasterSumRows(std::string inputRas, std::string outputCSV) {
 		//write header
 		opfile << "row_total" << "\n";
 
-		for (int r = 0; r != rows.size(); ++r) {
+		for (size_t r = 0; r != rows.size(); ++r) {
 			opfile << rows[r] << "\n";
 		}		
 
@@ -881,7 +881,7 @@ void DRasterSumColumns(std::string inputRas, std::string outputCSV) {
 		//for (int r = 0; r != rows.size(); ++r) {
 		//	opfile << rows[r] << "\n";
 		//}
-		for (int c = 0; c != cols.size(); ++c) {
+		for (size_t c = 0; c != cols.size(); ++c) {
 			opfile << cols[c] << "\n";
 		}
 

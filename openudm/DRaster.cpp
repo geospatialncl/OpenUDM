@@ -1,6 +1,10 @@
 #include "DRaster.h"
 #include "CSVToolkit.h"
 
+#include <limits>
+#include <cstring> // for memcpy
+#include <algorithm>
+
 using namespace std;
 
 DRaster::DRaster(void)
@@ -256,7 +260,7 @@ void DRaster::FromPGBinary(std::string binData) {
 
 		//check size and number of values to be read
 		//cout << "size of file = " << size << " bytes" << endl;
-		int numValues = bufSize / bufDbl;
+		//int numValues = bufSize / bufDbl;
 		//cout << "number of values = " << numValues << endl;
 
 		//buffer - each buffered double is 14 bytes comprising..
