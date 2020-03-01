@@ -682,8 +682,7 @@ void AreaFromRaster(const std::string& wardIDRas, int numWards, const std::strin
 	}
 
 	//create storage for areaData
-	double* areaData;
-	areaData = new double[numWards];
+	std::vector<double> areaData(numWards);
 
 	//loop through all cells in all wards 
 	for (int w = 0; w != numWards; ++w) {
@@ -975,7 +974,7 @@ void DRasterAscToODVal(const std::string& inputRas, const std::string& inputZone
 	std::vector<std::string> zoneCodeStr(ras.nrows);	
 
 	//read from input csv label file into zoneLabels
-	ExtractCSV(inputZoneCodes, 1, 0, zoneCodeStr.data());
+	ExtractCSV(inputZoneCodes, 1, 0, zoneCodeStr);
 
 	//write 3-column csv using origin-destination-value format
 
@@ -1024,7 +1023,7 @@ void DRasterSubRaster(const std::string& inRasStr, const std::string& inCodeStr,
 	std::vector<std::string> inCodes(inRas.nrows);
 
 	//read from input csv 
-	ExtractCSV(inCodeStr, 1, 0, inCodes.data());
+	ExtractCSV(inCodeStr, 1, 0, inCodes);
 
 	DRaster outRas;
 	outRas.Setup(outHdrFile);
@@ -1032,7 +1031,7 @@ void DRasterSubRaster(const std::string& inRasStr, const std::string& inCodeStr,
 	std::vector<std::string> outCodes(outRas.nrows);
 
 	//read from input csv 
-	ExtractCSV(outCodeStr, 1, 0, outCodes.data());
+	ExtractCSV(outCodeStr, 1, 0, outCodes);
 
 	std::vector<int> outIndex(outRas.nrows);	
 

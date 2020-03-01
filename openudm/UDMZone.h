@@ -2,6 +2,8 @@
 #include "CSVToolkit.h"
 #include "UDMCell.h"
 
+#include <vector>
+
 class UDMZone final
 {
 public:
@@ -15,11 +17,16 @@ public:
 	UDMZone(UDMZone&&) = default;
 	UDMZone& operator=(UDMZone&&) = default;
 
-	std::vector<UDMCell*> cells;
+	// TODO address memory issues
+	std::vector<UDMCellPtr> cells;
 	int ID;
 	double avgSuit;
 
 	//test
 	bool final;
 };
+
+
+// convenience typedef
+typedef std::shared_ptr<UDMZone> UDMZonePtr;
 

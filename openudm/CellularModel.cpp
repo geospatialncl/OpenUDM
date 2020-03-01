@@ -1,13 +1,13 @@
 #include "CellularModel.h"
 
 //Vector sorting functions
-bool HighestZoneAVG(UDMZone* a, UDMZone* b) {
+bool HighestZoneAVG(UDMZonePtr a, UDMZonePtr b) {
 	return a->avgSuit > b->avgSuit;
 }
-bool HighestCellSuit(UDMCell* a, UDMCell* b) {
+bool HighestCellSuit(UDMCellPtr a, UDMCellPtr b) {
 	return a->suit > b->suit;
 }
-bool LowestCellSuit(UDMCell* a, UDMCell* b) {
+bool LowestCellSuit(UDMCellPtr a, UDMCellPtr b) {
 	return a->suit < b->suit;
 }
 
@@ -42,35 +42,35 @@ void CellularModel::Setup(int wards, int res, int cols, int rows) {
 void CellularModel::AllocateAll() {
 
 	//allocate dynamic memory
-	wardLabel = new std::string[numWards];	
-	tempCP = new std::string[numWards];	
-	tempFP = new std::string[numWards];	
-	tempWardStr = new std::string[numWards];
-	curPop = new double[numWards];	
-	futPop = new double[numWards];
-	wardDensity = new double[numWards];
+	wardLabel.resize(numWards);	
+	tempCP.resize(numWards);	
+	tempFP.resize(numWards);	
+	tempWardStr.resize(numWards);
+	curPop.resize(numWards);	
+	futPop.resize(numWards);
+	wardDensity.resize(numWards);
 }
 
 void CellularModel::UseBinaryRasters(bool useBin) {
 	bin_ras = useBin;
 }
 
-void CellularModel::SetRasterHeader(std::string hdr) {
+void CellularModel::SetRasterHeader(const std::string& hdr) {
 	rastHdr = hdr;
 	SetupFinalDevRaster();
 }
 
-void CellularModel::SetPathToBinaryConfigFiles(std::string binConfigPath) {
+void CellularModel::SetPathToBinaryConfigFiles(const std::string& binConfigPath) {
 	pathToBinConfig = binConfigPath;
 }
 
-void CellularModel::LoadWardLabels(std::string label, int labelColumn, int numColumns) {
+void CellularModel::LoadWardLabels(const std::string& label, int labelColumn, int numColumns) {
 
 	//read column from csv
 	ExtractCSV(label, numColumns, labelColumn, wardLabel);
 }
 
-void CellularModel::LoadCurrentPopulation(std::string popData, int curPopColumn, int numColumns) {
+void CellularModel::LoadCurrentPopulation(const std::string& popData, int curPopColumn, int numColumns) {
 
 	//read column from csv
 	ExtractCSV(popData, numColumns, curPopColumn, tempCP);
@@ -81,7 +81,7 @@ void CellularModel::LoadCurrentPopulation(std::string popData, int curPopColumn,
 	}
 }
 
-void CellularModel::LoadFuturePopulation(std::string popData, int futPopColumn, int numColumns) {
+void CellularModel::LoadFuturePopulation(const std::string& popData, int futPopColumn, int numColumns) {
 
 	//read column from csv
 	ExtractCSV(popData, numColumns, futPopColumn, tempFP);
@@ -92,7 +92,7 @@ void CellularModel::LoadFuturePopulation(std::string popData, int futPopColumn, 
 	}
 }
 
-void CellularModel::LoadWardDensity(std::string densityData, int densityColumn, int numColumns) {
+void CellularModel::LoadWardDensity(const std::string& densityData, int densityColumn, int numColumns) {
 
 	//read column from csv
 	ExtractCSV(densityData, numColumns, densityColumn, tempWardStr);
@@ -106,7 +106,7 @@ void CellularModel::LoadWardDensity(std::string densityData, int densityColumn, 
 	densityProvided = true;
 }
 
-void CellularModel::LoadWardIDRaster(std::string iWardIDData) {	
+void CellularModel::LoadWardIDRaster(const std::string& iWardIDData) {	
 
 	//setup and read raster
 	iWardID.Setup(rastHdr);
@@ -118,7 +118,7 @@ void CellularModel::LoadWardIDRaster(std::string iWardIDData) {
 	}
 }
 
-void CellularModel::LoadZoneIDRaster(std::string zoneIDData) {
+void CellularModel::LoadZoneIDRaster(const std::string& zoneIDData) {
 
 	//setup and read raster
 	zoneID.Setup(rastHdr);
@@ -130,7 +130,7 @@ void CellularModel::LoadZoneIDRaster(std::string zoneIDData) {
 	}
 }
 
-void CellularModel::LoadZoneAVGRaster(std::string zoneAVGData) {
+void CellularModel::LoadZoneAVGRaster(const std::string& zoneAVGData) {
 
 	//setup and read raster
 	zoneAVG.Setup(rastHdr);
@@ -142,7 +142,7 @@ void CellularModel::LoadZoneAVGRaster(std::string zoneAVGData) {
 	}
 }
 
-void CellularModel::LoadDevLandRaster(std::string devLandData) {
+void CellularModel::LoadDevLandRaster(const std::string& devLandData) {
 
 	//setup and read raster
 	devLand.Setup(rastHdr);
@@ -154,7 +154,7 @@ void CellularModel::LoadDevLandRaster(std::string devLandData) {
 	}
 }
 
-void CellularModel::LoadCellSuitRaster(std::string cellSuitData) {
+void CellularModel::LoadCellSuitRaster(const std::string& cellSuitData) {
 
 	//setup and read raster
 	cellSuit.Setup(rastHdr);
@@ -193,7 +193,7 @@ void CellularModel::CreateWards() {
 
 	//create wards
 	for (size_t w = 0; w != numWards; ++w) {
-		wards.push_back(new UDMWard());
+		wards.push_back(std::make_shared<UDMWard>());
 	}	
 }
 
@@ -205,7 +205,7 @@ void CellularModel::AssignWardCells() {
 	for (size_t r = 0; r != rasterRows; ++r) {
 		for (size_t c = 0; c != rasterCols; ++c) {
 			if (iWardID.data[r][c] != iWardID.NODATA_value) {
-				wards[iWardID.data[r][c]]->cells.push_back(new UDMCell(c, r));
+				wards[iWardID.data[r][c]]->cells.push_back(std::make_shared<UDMCell>(c, r));
 			}			
 		}
 	}	
@@ -253,14 +253,14 @@ void CellularModel::AssignZones() {
 							if (!foundZ) {	//zone not found so create new one with zid and suit, then add current cell
 
 								double suit = zoneAVG.data[wards[w]->cells[c]->row][wards[w]->cells[c]->col];	//read zone avgSuit
-								wards[w]->zones.push_back(new UDMZone(zid, suit));
+								wards[w]->zones.push_back(std::make_shared<UDMZone>(zid, suit));
 								wards[w]->zones[wards[w]->zones.size() - 1]->cells.push_back(wards[w]->cells[c]);
 							}
 						}
 						else {	//no zones so create new one with zid and suit, then add current cell
 
 							double suit = zoneAVG.data[wards[w]->cells[c]->row][wards[w]->cells[c]->col];	//read zone avgSuit
-							wards[w]->zones.push_back(new UDMZone(zid, suit));
+							wards[w]->zones.push_back(std::make_shared<UDMZone>(zid, suit));
 							wards[w]->zones[0]->cells.push_back(wards[w]->cells[c]);
 						}
 					}
@@ -404,10 +404,10 @@ void CellularModel::DevelopNonOverflowWards() {
 							wards[w]->zones[z]->final = true;
 
 							//initial seed
-							UDMCell* seed = wards[w]->zones[z]->cells[0];
+							UDMCellPtr seed = wards[w]->zones[z]->cells[0];
 							//vetors of seeds and neighbours
-							std::vector<UDMCell*> seeds;
-							std::vector<UDMCell*> nbrs;
+							std::vector<UDMCellPtr> seeds;
+							std::vector<UDMCellPtr> nbrs;
 
 							//develop initial seed cell
 							seed->devStatus = true;
@@ -478,7 +478,7 @@ void CellularModel::DevelopNonOverflowWards() {
 	}	
 }
 
-void CellularModel::WriteOverflowWards(std::string overflowData) {
+void CellularModel::WriteOverflowWards(const std::string& overflowData) {
 
 	//create an ofstream object
 	std::ofstream opfile(overflowData);
@@ -649,7 +649,7 @@ void CellularModel::SetFutureDev() {
 	}
 }
 
-void CellularModel::OutputRasterResult(std::string rasterData) {
+void CellularModel::OutputRasterResult(const std::string& rasterData) {
 
 	//write results to raster	
 	if (bin_ras) {
@@ -667,19 +667,6 @@ void CellularModel::Cleanup() {
 }
 
 void CellularModel::FreeAll() {
-
-	//read strings
-	delete[] wardLabel;
-	delete[] tempCP;
-	delete[] tempFP;
-	delete[] tempWardStr;
-
-	//current and future population
-	delete[] curPop;
-	delete[] futPop; 
-
-	//density
-	delete[] wardDensity;
 
 	//rasters
 	iWardID.Cleanup();

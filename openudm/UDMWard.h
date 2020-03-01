@@ -8,9 +8,10 @@ class UDMWard final
 public:
 	UDMWard();
 	~UDMWard() = default;
-	
-	std::vector<UDMZone*> zones;
-	std::vector<UDMCell*> cells;
+
+	// TODO address memory issues	
+	std::vector<UDMZonePtr> zones;
+	std::vector<UDMCellPtr> cells;
 	double popChange;
 	bool devReq;
 	int curDevCells;
@@ -25,3 +26,5 @@ public:
 	int devCells;
 };
 
+// convenience typedef
+typedef std::shared_ptr<UDMWard> UDMWardPtr;

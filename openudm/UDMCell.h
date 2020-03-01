@@ -1,4 +1,6 @@
 #pragma once
+
+#include <memory>
 class UDMCell
 {
 public:
@@ -10,4 +12,7 @@ public:
 	bool devStatus;
 	double suit;
 };
+
+// convenience typedef
+typedef std::shared_ptr<UDMCell> UDMCellPtr;
 

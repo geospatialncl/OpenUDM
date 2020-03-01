@@ -270,23 +270,19 @@ void DRaster::ToPGBinary(const std::string& binData) {
 	int bufDbl = 14;
 
 	//header
-	int hdrLen = 19;
-	char* hdrBuf;
-	hdrBuf = new char[hdrLen];
+	const int hdrLen = 19;
+	char hdrBuf[hdrLen];
 
 	//footer
-	int ftrLen = 2;
-	char* ftrBuf;
-	ftrBuf = new char[ftrLen];
+	const int ftrLen = 2;
+	char ftrBuf[ftrLen];
 
 	//padding
-	int padLen = 6;
-	char* padBuf;
-	padBuf = new char[padLen];
+	const int padLen = 6;
+	char padBuf[padLen];
 
-	char* buffer;
 	int bufferSize = (nrows* ncols * bufDbl) + hdrLen + ftrLen;
-	buffer = new char[bufferSize];
+	std::vector<char> buffer(bufferSize);
 
 	ifstream hdrFile("Data/hdr.bin", ios::in | ios::binary | ios::ate);
 	if (hdrFile.is_open()) {
@@ -316,7 +312,7 @@ void DRaster::ToPGBinary(const std::string& binData) {
 	else cout << "unable to open padding file" << endl;
 
 	//copy header to buffer
-	std::memcpy(buffer, hdrBuf, hdrLen);
+	std::memcpy(buffer.data(), hdrBuf, hdrLen);
 
 	//copy double values to buffer
 
@@ -353,7 +349,7 @@ void DRaster::ToPGBinary(const std::string& binData) {
 	if (out.is_open())
 	{
 		out.seekp(0, ios::beg);
-		out.write(buffer, bufferSize);
+		out.write(buffer.data(), bufferSize);
 		out.close();
 	}
 	else cout << "Unable to open output file";
@@ -364,23 +360,19 @@ void DRaster::ToPGBinary(const std::string& hdrPadFtrPath, const std::string& bi
 	int bufDbl = 14;
 
 	//header
-	int hdrLen = 19;
-	char* hdrBuf;
-	hdrBuf = new char[hdrLen];
+	const int hdrLen = 19;
+	char hdrBuf[hdrLen];
 
 	//footer
-	int ftrLen = 2;
-	char* ftrBuf;
-	ftrBuf = new char[ftrLen];
+	const int ftrLen = 2;
+	char ftrBuf[ftrLen];
 
 	//padding
-	int padLen = 6;
-	char* padBuf;
-	padBuf = new char[padLen];
+	const int padLen = 6;
+	char padBuf[padLen];
 
-	char* buffer;
 	int bufferSize = (nrows* ncols * bufDbl) + hdrLen + ftrLen;
-	buffer = new char[bufferSize];
+	std::vector<char> buffer(bufferSize);
 
 	std::string hdrPath = hdrPadFtrPath + "hdr.bin";
 
@@ -419,7 +411,7 @@ void DRaster::ToPGBinary(const std::string& hdrPadFtrPath, const std::string& bi
 	else cout << "unable to open padding file" << endl;
 
 	//copy header to buffer
-	std::memcpy(buffer, hdrBuf, hdrLen);
+	std::memcpy(buffer.data(), hdrBuf, hdrLen);
 
 	//copy double values to buffer
 
@@ -456,7 +448,7 @@ void DRaster::ToPGBinary(const std::string& hdrPadFtrPath, const std::string& bi
 	if (out.is_open())
 	{
 		out.seekp(0, ios::beg);
-		out.write(buffer, bufferSize);
+		out.write(buffer.data(), bufferSize);
 		out.close();
 	}
 	else cout << "Unable to open output file";
@@ -476,7 +468,7 @@ void DRaster::FromCSV(const std::string& csvFile) {
 	std::vector<std::string> readStr(rasterSize);
 
 	//read from input csv file into single column
-	ExtractCSV(csvFile, 1, 0, readStr.data());
+	ExtractCSV(csvFile, 1, 0, readStr);
 
 	//set 1 dimensional cell index
 	int cellIndex = 0;

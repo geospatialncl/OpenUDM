@@ -16,25 +16,25 @@ public:
 	void Setup(int wards, int res, int cols, int rows);	
 
 	void UseBinaryRasters(bool useBin);
-	void SetRasterHeader(std::string hdr);
-	void SetPathToBinaryConfigFiles(std::string binConfigPath);
+	void SetRasterHeader(const std::string& hdr);
+	void SetPathToBinaryConfigFiles(const std::string& binConfigPath);
 
-	void LoadWardLabels(std::string label, int labelColumn, int numColumns);
-	void LoadCurrentPopulation(std::string popData, int curPopColumn, int numColumns);
-	void LoadFuturePopulation(std::string popData, int futPopColumn, int numColumns);
-	void LoadWardDensity(std::string densityData, int densityColumn, int numColumns);
+	void LoadWardLabels(const std::string& label, int labelColumn, int numColumns);
+	void LoadCurrentPopulation(const std::string& popData, int curPopColumn, int numColumns);
+	void LoadFuturePopulation(const std::string& popData, int futPopColumn, int numColumns);
+	void LoadWardDensity(const std::string& densityData, int densityColumn, int numColumns);
 
-	void LoadWardIDRaster(std::string iWardIDData);
-	void LoadZoneIDRaster(std::string zoneIDData);
-	void LoadZoneAVGRaster(std::string zoneAVGData);
-	void LoadDevLandRaster(std::string devLandData);
-	void LoadCellSuitRaster(std::string cellSuitData);
+	void LoadWardIDRaster(const std::string& iWardIDData);
+	void LoadZoneIDRaster(const std::string& zoneIDData);
+	void LoadZoneAVGRaster(const std::string& zoneAVGData);
+	void LoadDevLandRaster(const std::string& devLandData);
+	void LoadCellSuitRaster(const std::string& cellSuitData);
 	void SetupFinalDevRaster();
 
 	void RunModel();	
 
-	void OutputRasterResult(std::string rasterData);
-	void WriteOverflowWards(std::string overflowData);
+	void OutputRasterResult(const std::string& rasterData);
+	void WriteOverflowWards(const std::string& overflowData);
 
 	void Cleanup();
 
@@ -58,20 +58,20 @@ private:
 	bool bin_ras;
 
 	//top level of the wards->zones->cells hierarchy
-	std::vector<UDMWard*> wards;	
+	std::vector<UDMWardPtr> wards;	
 
 	//read strings
-	std::string* wardLabel;
-	std::string* tempCP;	
-	std::string* tempFP;
-	std::string* tempWardStr;
+	std::vector<std::string> wardLabel;
+	std::vector<std::string> tempCP;	
+	std::vector<std::string> tempFP;
+	std::vector<std::string> tempWardStr;
 	
 	//current and future population arrays
-	double* curPop;	
-	double* futPop;
+	std::vector<double> curPop;	
+	std::vector<double> futPop;
 
 	//density array
-	double* wardDensity;
+	std::vector<double> wardDensity;
 	bool densityProvided;
 	
 	//memory management

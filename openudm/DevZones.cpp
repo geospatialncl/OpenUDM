@@ -609,7 +609,7 @@ void DevZoneAVGSuit(bool useBin, std::string zoneID, std::string zoneData, std::
 	//perform some calculation--------------------------------------------------------------------------
 
 	//allocate storage for zoneStats
-	double* zoneStats = new double[numZones];
+	std::vector<double> zoneStats(numZones);
 
 	if (!zones.empty()) {
 		for (size_t z = 0; z != zones.size(); ++z) {
