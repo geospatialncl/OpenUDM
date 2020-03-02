@@ -10,7 +10,6 @@ __author__ = "James Virgo"
 import csv
 import os
 import sys
-import time
 
 from openudm import (
     CellularModel, DevZones as dz, MultiCriteriaEval as mce, RasterToolkit as rt)
@@ -92,11 +91,6 @@ def main(swap_path):
     mce_i_raster_count_str = os.path.join(swap_path, 'mce_int_count.csv')
     mce_d_raster_count_str = os.path.join(swap_path, 'mce_dbl_count.csv')
 
-    mce_output_raster_str = ''
-    zone_id_str = ''
-    zone_avg_str = ''
-    cell_dev_output_str = ''
-
     if bin_ras:
         mce_output_raster_str = os.path.join(swap_path, 'mceOutput.bin')
         zone_id_str = os.path.join(swap_path, 'zoneID.bin')
@@ -116,7 +110,7 @@ def main(swap_path):
         num_ras = 0
         for row in reader:
             num_ras += 1
-            if row['convert'] is 'y':
+            if row['convert'] == 'y':
                 #rt.IRasterAscToCsv(row['asc'], row['csv'])
                 rt.IRasterAscToCsv(os.path.join(swap_path, row['asc']), os.path.join(swap_path, row['csv']))
 
@@ -132,7 +126,7 @@ def main(swap_path):
         num_ras = 0
         for row in reader:
             num_ras += 1
-            if row['convert'] is 'y':
+            if row['convert'] == 'y':
                 #rt.DRasterAscToCsv(row['asc'], row['csv'])
                 rt.DRasterAscToCsv(os.path.join(swap_path, row['asc']), os.path.join(swap_path, row['csv']))
 
@@ -167,7 +161,7 @@ def main(swap_path):
         reader = csv.DictReader(csvfile)
         for row in reader:
             stack.append(row['csv'])
-            if row['convert'] is 'y':
+            if row['convert'] == 'y':
                 #rt.IRasterAscToCsv(row['asc'], row['csv'])
                 rt.IRasterAscToCsv(os.path.join(swap_path, row['asc']), os.path.join(swap_path, row['csv']))
 
