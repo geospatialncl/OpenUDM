@@ -1,0 +1,7 @@
+.idea
+.git
+
+dist
+build
+SWIG
+openudm.egg-info
