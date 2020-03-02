@@ -13,8 +13,7 @@ void MaskedWeightedSum(bool useBin, std::string iRasCount, std::string iRasInput
 	bool rev = reverse;
 
 	//setup single item read string
-	std::string* singleItemStr;
-	singleItemStr = new std::string[1];
+	std::vector<std::string> singleItemStr(1);
 
 	//variables to store number of input IRasters/DRasters
 	int numI, numD;
@@ -27,12 +26,9 @@ void MaskedWeightedSum(bool useBin, std::string iRasCount, std::string iRasInput
 	//cout << "numI = " << numI << endl;
 
 	//variables to store IRaster names and weights
-	std::string* iRasStr;
-	std::string* iWgtStr;
-	double* iWgt;
-	iRasStr = new std::string[numI];
-	iWgtStr = new std::string[numI];
-	iWgt = new double[numI];
+	std::vector<std::string> iRasStr(numI);
+	std::vector<std::string> iWgtStr(numI);
+	std::vector<double> iWgt(numI);
 
 	//read rasters column from csv
 	ExtractCSV(iRasInputs, 4, 1, iRasStr);
@@ -46,12 +42,7 @@ void MaskedWeightedSum(bool useBin, std::string iRasCount, std::string iRasInput
 	}
 
 	//setup a vector of IRasters
-	vector<IRaster> iVec;
-
-	//push back by numI
-	for (int i = 0; i != numI; ++i) {
-		iVec.push_back(IRaster());
-	}
+	vector<IRaster> iVec(numI);
 
 	//setup and read rasters
 	for (int i = 0; i != numI; ++i) {		
@@ -77,12 +68,9 @@ void MaskedWeightedSum(bool useBin, std::string iRasCount, std::string iRasInput
 	//cout << "numD = " << numD << endl;
 
 	//variables to store DRaster names and weights
-	std::string* dRasStr;
-	std::string* dWgtStr;
-	double* dWgt;
-	dRasStr = new std::string[numD];
-	dWgtStr = new std::string[numD];
-	dWgt = new double[numD];
+	std::vector<std::string> dRasStr(numD);
+	std::vector<std::string> dWgtStr(numD);
+	std::vector<double> dWgt(numD);
 
 	//read rasters column from csv
 	ExtractCSV(dRasInputs, 4, 1, dRasStr);

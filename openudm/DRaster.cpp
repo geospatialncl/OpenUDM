@@ -1,25 +1,25 @@
 #include "DRaster.h"
 #include "CSVToolkit.h"
 
+#include <limits>
+#include <cstring> // for memcpy
+#include <algorithm>
+
 using namespace std;
 
+double DRaster::NODATA_value = -1.0;
+
 DRaster::DRaster(void)
-{
-	//header data
-	ncols = 0;
-	nrows = 0;
-	xllcorner = 0.0;
-	yllcorner = 0.0;
-	cellsize = 100.0;
-	NODATA_value = -1;
+:	//header data
+	ncols(0),
+	nrows(0),
+	xllcorner(0.0),
+	yllcorner(0.0),
+	cellsize(100.0)
 	//weight = 1.0;
 	//data = NULL;
-}
+{ }
 
-
-DRaster::~DRaster(void)
-{
-}
 
 void DRaster::Setup(int ncols, int nrows) {
 	
@@ -27,20 +27,14 @@ void DRaster::Setup(int ncols, int nrows) {
 	this->nrows = nrows;
 
 	//Allocate memory for dynamic array using ncols and nrows
-	data = new double*[nrows];
-	for(int i = 0; i < nrows; ++i) {
-		data[i] = new double[ncols];
-	}
-
-	//initialise data
-	for (int r = 0; r != nrows; ++r) {
-		for (int c = 0; c != ncols; ++c) {
-			data[r][c] = 0.0;
-		}
+	data.resize(nrows);
+	for (auto& r: data) 
+	{
+		r.assign(ncols, 0.0);
 	}
 }
 
-void DRaster::Setup(std::string ipfile) {
+void DRaster::Setup(const std::string& ipfile) {
 
 
 	//declare an ifstream object
@@ -116,21 +110,10 @@ void DRaster::Setup(std::string ipfile) {
 	}
 	ipfileHeader.close();	
 
-	//Allocate memory for dynamic array using ncols and nrows
-	data = new double*[nrows];
-	for (int i = 0; i < nrows; ++i) {
-		data[i] = new double[ncols];
-	}
-
-	//initialise data
-	for (int r = 0; r != nrows; ++r) {
-		for (int c = 0; c != ncols; ++c) {
-			data[r][c] = 0.0;
-		}
-	}
+	Setup(ncols, nrows);
 }
 
-void DRaster::Read(std::string ipfile) {
+void DRaster::Read(const std::string& ipfile) {
 
 	ifstream ipfileData(ipfile);
 	int rowNum = 0;
@@ -190,7 +173,7 @@ void DRaster::Read(std::string ipfile) {
 	ipfileData.close();
 }
 
-void DRaster::Write(std::string writefile) {
+void DRaster::Write(const std::string& writefile) {
 
 	//create an ofstream object
 	ofstream opfile(writefile);
@@ -228,15 +211,13 @@ void DRaster::Write(std::string writefile) {
 	}	
 }
 
-void DRaster::FromPGBinary(std::string binData) {
+void DRaster::FromPGBinary(const std::string& binData) {
 
 	int hdrLen = 19;	//19byte header
 	int ftrLen = 2;		//2byte footer
 	int bufDbl = 14;	//6bytes of padding followed by 8bytes of double precision data
 
 	streampos size;
-	char* buffer;
-	int bufSize;
 
 	ifstream file(binData, ios::in | ios::binary | ios::ate);
 	if (file.is_open())
@@ -244,19 +225,18 @@ void DRaster::FromPGBinary(std::string binData) {
 		//get size for read operation - not including header and footer
 		size = file.tellg();
 		size -= (hdrLen + ftrLen);
-		bufSize = (int)size;
 
 		//setup read buffer
-		buffer = new char[bufSize];
+		std::vector<char> buffer(size);
 
 		//skip header the read entire file up to the footer
 		file.seekg(hdrLen, ios::beg);
-		file.read(buffer, size);
+		file.read(buffer.data(), size);
 		file.close();
 
 		//check size and number of values to be read
 		//cout << "size of file = " << size << " bytes" << endl;
-		int numValues = bufSize / bufDbl;
+		//int numValues = bufSize / bufDbl;
 		//cout << "number of values = " << numValues << endl;
 
 		//buffer - each buffered double is 14 bytes comprising..
@@ -281,34 +261,28 @@ void DRaster::FromPGBinary(std::string binData) {
 			}
 		}
 
-		//free char array
-		delete[] buffer;
 	}
 	else cout << "Unable to open file";
 }
 
-void DRaster::ToPGBinary(std::string binData) {
+void DRaster::ToPGBinary(const std::string& binData) {
 
 	int bufDbl = 14;
 
 	//header
-	int hdrLen = 19;
-	char* hdrBuf;
-	hdrBuf = new char[hdrLen];
+	const int hdrLen = 19;
+	char hdrBuf[hdrLen];
 
 	//footer
-	int ftrLen = 2;
-	char* ftrBuf;
-	ftrBuf = new char[ftrLen];
+	const int ftrLen = 2;
+	char ftrBuf[ftrLen];
 
 	//padding
-	int padLen = 6;
-	char* padBuf;
-	padBuf = new char[padLen];
+	const int padLen = 6;
+	char padBuf[padLen];
 
-	char* buffer;
 	int bufferSize = (nrows* ncols * bufDbl) + hdrLen + ftrLen;
-	buffer = new char[bufferSize];
+	std::vector<char> buffer(bufferSize);
 
 	ifstream hdrFile("Data/hdr.bin", ios::in | ios::binary | ios::ate);
 	if (hdrFile.is_open()) {
@@ -338,7 +312,7 @@ void DRaster::ToPGBinary(std::string binData) {
 	else cout << "unable to open padding file" << endl;
 
 	//copy header to buffer
-	std::memcpy(buffer, hdrBuf, hdrLen);
+	std::memcpy(buffer.data(), hdrBuf, hdrLen);
 
 	//copy double values to buffer
 
@@ -375,34 +349,30 @@ void DRaster::ToPGBinary(std::string binData) {
 	if (out.is_open())
 	{
 		out.seekp(0, ios::beg);
-		out.write(buffer, bufferSize);
+		out.write(buffer.data(), bufferSize);
 		out.close();
 	}
 	else cout << "Unable to open output file";
 }
 
-void DRaster::ToPGBinary(std::string hdrPadFtrPath, std::string binData) {
+void DRaster::ToPGBinary(const std::string& hdrPadFtrPath, const std::string& binData) {
 
 	int bufDbl = 14;
 
 	//header
-	int hdrLen = 19;
-	char* hdrBuf;
-	hdrBuf = new char[hdrLen];
+	const int hdrLen = 19;
+	char hdrBuf[hdrLen];
 
 	//footer
-	int ftrLen = 2;
-	char* ftrBuf;
-	ftrBuf = new char[ftrLen];
+	const int ftrLen = 2;
+	char ftrBuf[ftrLen];
 
 	//padding
-	int padLen = 6;
-	char* padBuf;
-	padBuf = new char[padLen];
+	const int padLen = 6;
+	char padBuf[padLen];
 
-	char* buffer;
 	int bufferSize = (nrows* ncols * bufDbl) + hdrLen + ftrLen;
-	buffer = new char[bufferSize];
+	std::vector<char> buffer(bufferSize);
 
 	std::string hdrPath = hdrPadFtrPath + "hdr.bin";
 
@@ -441,7 +411,7 @@ void DRaster::ToPGBinary(std::string hdrPadFtrPath, std::string binData) {
 	else cout << "unable to open padding file" << endl;
 
 	//copy header to buffer
-	std::memcpy(buffer, hdrBuf, hdrLen);
+	std::memcpy(buffer.data(), hdrBuf, hdrLen);
 
 	//copy double values to buffer
 
@@ -478,7 +448,7 @@ void DRaster::ToPGBinary(std::string hdrPadFtrPath, std::string binData) {
 	if (out.is_open())
 	{
 		out.seekp(0, ios::beg);
-		out.write(buffer, bufferSize);
+		out.write(buffer.data(), bufferSize);
 		out.close();
 	}
 	else cout << "Unable to open output file";
@@ -486,22 +456,16 @@ void DRaster::ToPGBinary(std::string hdrPadFtrPath, std::string binData) {
 
 void DRaster::Cleanup() {
 
-	//Free memory from dynamic array	
-	for (int i = 0; i < nrows; ++i) {
-		delete[] data[i];
-	}
-	delete[] data;
 
 }
 
-void DRaster::FromCSV(std::string csvFile) {
+void DRaster::FromCSV(const std::string& csvFile) {
 
 	//determine number of raster cells
 	int rasterSize = ncols * nrows;
 
 	//setup string to hold values for all cells
-	std::string* readStr;
-	readStr = new std::string[rasterSize];
+	std::vector<std::string> readStr(rasterSize);
 
 	//read from input csv file into single column
 	ExtractCSV(csvFile, 1, 0, readStr);
@@ -517,11 +481,9 @@ void DRaster::FromCSV(std::string csvFile) {
 		}
 	}
 
-	//tidy up
-	delete[] readStr;
 }
 
-void DRaster::ToCSV(std::string csvFile) {
+void DRaster::ToCSV(const std::string& csvFile) {
 
 	//create an ofstream object
 	ofstream opfile(csvFile);

@@ -8,7 +8,7 @@ void CreateDevZones(bool useBin, int minSize, bool moore, std::string inputMask,
 
 	bool bin_ras = useBin;									//FROM FUNCTION ARGUMENTS
 	bool mooreNbrs = moore;									//FROM FUNCTION ARGUMENTS
-	int minZoneSize = minSize;								//FROM FUNCTION ARGUMENTS
+	size_t minZoneSize = minSize;								//FROM FUNCTION ARGUMENTS
 	std::string outputZoneIDData = outputZone;				//FROM FUNCTION ARGUMENTS
 	std::string maskData = inputMask;						//FROM FUNCTION ARGUMENTS
 	std::string wardIDData = inputWard;						//FROM FUNCTION ARGUMENTS	
@@ -200,7 +200,7 @@ void CreateDevZones(bool useBin, int minSize, bool moore, std::string inputMask,
 				vector<Cell> zoneCells;
 				vector<Cell> noZoneCells;
 				if (!nbrCells.empty()) {
-					for (int n = 0; n != nbrCells.size(); ++n) {
+					for (size_t n = 0; n != nbrCells.size(); ++n) {
 						if (nbrCells[n].z == NOZONE) {
 							noZoneCells.push_back(nbrCells[n]);
 						}
@@ -218,14 +218,14 @@ void CreateDevZones(bool useBin, int minSize, bool moore, std::string inputMask,
 
 					//find lowest zone
 					int lo = zoneCells[0].z;
-					for (int z = 0; z != zoneCells.size(); ++z) {
+					for (size_t z = 0; z != zoneCells.size(); ++z) {
 						if (zoneCells[z].z < lo) {
 							lo = zoneCells[z].z;
 						}
 					}
 
 					//group into lo and hi
-					for (int z = 0; z != zoneCells.size(); ++z) {
+					for (size_t z = 0; z != zoneCells.size(); ++z) {
 						if (zoneCells[z].z > lo) {
 							hiZoneCells.push_back(zoneCells[z]);
 						}
@@ -242,13 +242,13 @@ void CreateDevZones(bool useBin, int minSize, bool moore, std::string inputMask,
 						mergeZoneIDs.push_back(currentZ);
 					}
 					if (!hiZoneCells.empty()) {
-						for (int h = 0; h != hiZoneCells.size(); ++h) {
+						for (size_t h = 0; h != hiZoneCells.size(); ++h) {
 							bool found = false;
 							if (mergeZoneIDs.empty()) {
 								mergeZoneIDs.push_back(hiZoneCells[h].z);
 							}
 							else {
-								for (int z = 0; z != mergeZoneIDs.size(); ++z) {
+								for (size_t z = 0; z != mergeZoneIDs.size(); ++z) {
 									if (hiZoneCells[h].z == mergeZoneIDs[z]) {
 										found = true;
 									}
@@ -332,7 +332,7 @@ void CreateDevZones(bool useBin, int minSize, bool moore, std::string inputMask,
 						zoneID.data[curCell.r][curCell.c] = curCell.z;
 
 						//only add current cell if zone is different
-						for (int z = 0; z != zones.size(); ++z) {
+						for (size_t z = 0; z != zones.size(); ++z) {
 							if (zones[z].id == curCell.z) {
 								if (addCurCell) {
 									zones[z].cells.push_back(curCell);
@@ -366,13 +366,13 @@ void CreateDevZones(bool useBin, int minSize, bool moore, std::string inputMask,
 						//NO ZONE CELLS - BEGIN--------------------------------
 
 						//seed new zone from current cell
-						for (int n = 0; n != noZoneCells.size(); ++n) {
+						for (size_t n = 0; n != noZoneCells.size(); ++n) {
 							noZoneCells[n].z = curCell.z;
 							zoneID.data[noZoneCells[n].r][noZoneCells[n].c] = noZoneCells[n].z;
 						}
 
 						//add no zone cells to newly created zone
-						for (int n = 0; n != noZoneCells.size(); ++n) {
+						for (size_t n = 0; n != noZoneCells.size(); ++n) {
 							zones[zID].cells.push_back(noZoneCells[n]);
 						}
 
@@ -397,7 +397,7 @@ void CreateDevZones(bool useBin, int minSize, bool moore, std::string inputMask,
 						zoneID.data[curCell.r][curCell.c] = curCell.z;
 
 						//add current cell to pre existing zone - if not already in zone
-						for (int z = 0; z != zones.size(); ++z) {
+						for (size_t z = 0; z != zones.size(); ++z) {
 							if (zones[z].id == curCell.z) {
 								if (addCurCell) {
 									zones[z].cells.push_back(curCell);
@@ -410,16 +410,16 @@ void CreateDevZones(bool useBin, int minSize, bool moore, std::string inputMask,
 						//NO ZONE CELLS - BEGIN---------------------------------
 
 						//seed zone from single valid neighbour
-						for (int n = 0; n != noZoneCells.size(); ++n) {
+						for (size_t n = 0; n != noZoneCells.size(); ++n) {
 							noZoneCells[n].z = zoneCells[0].z;
 							zoneID.data[noZoneCells[n].r][noZoneCells[n].c] = noZoneCells[n].z;
 						}
 
 						//add cells to pre-existing zone
 						//only add current cell if zone is different??
-						for (int z = 0; z != zones.size(); ++z) {
+						for (size_t z = 0; z != zones.size(); ++z) {
 							if (zones[z].id == zoneCells[0].z) {
-								for (int n = 0; n != noZoneCells.size(); ++n) {
+								for (size_t n = 0; n != noZoneCells.size(); ++n) {
 									zones[z].cells.push_back(noZoneCells[n]);
 								}
 							}
@@ -443,7 +443,7 @@ void CreateDevZones(bool useBin, int minSize, bool moore, std::string inputMask,
 						zoneID.data[curCell.r][curCell.c] = curCell.z;
 
 						//add current cell zone to pre existing zone - only if current cell is not already allocated a zone
-						for (int z = 0; z != zones.size(); ++z) {
+						for (size_t z = 0; z != zones.size(); ++z) {
 							if (zones[z].id == curCell.z) {
 								if (addCurCell) {
 									zones[z].cells.push_back(curCell);
@@ -457,7 +457,7 @@ void CreateDevZones(bool useBin, int minSize, bool moore, std::string inputMask,
 
 						//seed noZone cells
 						if (!noZoneCells.empty()) {
-							for (int n = 0; n != noZoneCells.size(); ++n) {
+							for (size_t n = 0; n != noZoneCells.size(); ++n) {
 								noZoneCells[n].z = loZoneCells[0].z;
 								zoneID.data[noZoneCells[n].r][noZoneCells[n].c] = noZoneCells[n].z;
 							}
@@ -465,9 +465,9 @@ void CreateDevZones(bool useBin, int minSize, bool moore, std::string inputMask,
 
 						//add noZone cells to pre-existing zone
 						if (!noZoneCells.empty()) {
-							for (int z = 0; z != zones.size(); ++z) {
+							for (size_t z = 0; z != zones.size(); ++z) {
 								if (zones[z].id == noZoneCells[0].z) {
-									for (int n = 0; n != noZoneCells.size(); ++n) {
+									for (size_t n = 0; n != noZoneCells.size(); ++n) {
 										zones[z].cells.push_back(noZoneCells[n]);
 									}
 								}
@@ -480,15 +480,15 @@ void CreateDevZones(bool useBin, int minSize, bool moore, std::string inputMask,
 
 						//merge zones into zone with lowest id
 						if (!mergeZoneIDs.empty()) {
-							for (int r = 0; r != mergeZoneIDs.size(); ++r) {
+							for (size_t r = 0; r != mergeZoneIDs.size(); ++r) {
 
 								if (!zones.empty()) {
-									for (int z = 0; z != zones.size(); ++z) {
+									for (size_t z = 0; z != zones.size(); ++z) {
 
 										if (zones[z].id == loZoneCells[0].z) {
 
 											if (!zones[mergeZoneIDs[r]].cells.empty()) {
-												for (int c = 0; c != zones[mergeZoneIDs[r]].cells.size(); ++c) {
+												for (size_t c = 0; c != zones[mergeZoneIDs[r]].cells.size(); ++c) {
 
 													//seed mergeZoneCells
 													zoneID.data[zones[mergeZoneIDs[r]].cells[c].r][zones[mergeZoneIDs[r]].cells[c].c] = loZoneCells[0].z;
@@ -505,7 +505,7 @@ void CreateDevZones(bool useBin, int minSize, bool moore, std::string inputMask,
 
 						//clear cells from merged zones
 						if (!mergeZoneIDs.empty()) {
-							for (int r = 0; r != mergeZoneIDs.size(); ++r) {
+							for (size_t r = 0; r != mergeZoneIDs.size(); ++r) {
 								zones[mergeZoneIDs[r]].cells.clear();
 							}
 						}
@@ -523,9 +523,9 @@ void CreateDevZones(bool useBin, int minSize, bool moore, std::string inputMask,
 	int opZCode = 0;
 
 	if (!zones.empty()) {
-		for (int z = 0; z != zones.size(); ++z) {
+		for (size_t z = 0; z != zones.size(); ++z) {
 			if (zones[z].cells.size() >= minZoneSize) {
-				for (int c = 0; c != zones[z].cells.size(); ++c) {
+				for (size_t c = 0; c != zones[z].cells.size(); ++c) {
 					outputZoneID.data[zones[z].cells[c].r][zones[z].cells[c].c] = opZCode;
 				}
 				++opZCode;
@@ -572,16 +572,16 @@ void DevZoneAVGSuit(bool useBin, std::string zoneID, std::string zoneData, std::
 	zStats.Setup(rastHdr);
 
 	//obtain raster dimensions from input zoneID raster
-	int rCols = zID.ncols;
-	int rRows = zID.nrows;
+	size_t rCols = zID.ncols;
+	size_t rRows = zID.nrows;
 
 	int numZones = 0;
 	vector<Zone> zones;
 
 	//push into zones----------------------------------------------------------------------------------------
 
-	for (int r = 0; r != rRows; ++r) {						 //down rows
-		for (int c = 0; c != rCols; ++c) {		//scan line	//across columns
+	for (size_t r = 0; r != rRows; ++r) {						 //down rows
+		for (size_t c = 0; c != rCols; ++c) {		//scan line	//across columns
 
 			//read current cell zoneID
 			int z = zID.data[r][c];
@@ -589,7 +589,7 @@ void DevZoneAVGSuit(bool useBin, std::string zoneID, std::string zoneData, std::
 			//if current cell belongs to valid zone
 			if (z > -1) {
 
-				if (z == zones.size()) {							//create new zone
+				if (static_cast<size_t>(z) == zones.size()) {							//create new zone
 					zones.push_back(Zone(z));
 					zones[z].cells.push_back(Cell(c, r, z));
 					++numZones;
@@ -597,7 +597,7 @@ void DevZoneAVGSuit(bool useBin, std::string zoneID, std::string zoneData, std::
 				else											//add to existing zone
 					zones[z].cells.push_back(Cell(c, r, z));
 
-				if (z > zones.size())
+				if (static_cast<size_t>(z) > zones.size())
 					cout << "ERROR... ZONE NOT CREATED YET" << endl;
 
 			}
@@ -609,13 +609,13 @@ void DevZoneAVGSuit(bool useBin, std::string zoneID, std::string zoneData, std::
 	//perform some calculation--------------------------------------------------------------------------
 
 	//allocate storage for zoneStats
-	double* zoneStats = new double[numZones];
+	std::vector<double> zoneStats(numZones);
 
 	if (!zones.empty()) {
-		for (int z = 0; z != zones.size(); ++z) {
+		for (size_t z = 0; z != zones.size(); ++z) {
 			double sum = 0.0;	//reset for each zone
 			if (!zones[z].cells.empty()) {
-				for (int c = 0; c != zones[z].cells.size(); ++c) {
+				for (size_t c = 0; c != zones[z].cells.size(); ++c) {
 					sum += zData.data[zones[z].cells[c].r][zones[z].cells[c].c];
 				}
 			}
@@ -625,8 +625,8 @@ void DevZoneAVGSuit(bool useBin, std::string zoneID, std::string zoneData, std::
 
 	//write results to output raster
 
-	for (int r = 0; r != rRows; ++r) {						 //down rows
-		for (int c = 0; c != rCols; ++c) {		//scan line	//across columns
+	for (size_t r = 0; r != rRows; ++r) {						 //down rows
+		for (size_t c = 0; c != rCols; ++c) {		//scan line	//across columns
 
 			//read current cell zoneID
 			int z = zID.data[r][c];

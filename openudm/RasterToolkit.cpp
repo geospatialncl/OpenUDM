@@ -1,6 +1,6 @@
 #include "RasterToolkit.h"
 
-bool DevCompare(std::string iRas1, std::string iRas2, std::string result) {
+bool DevCompare(const std::string& iRas1, const std::string& iRas2, const std::string& result) {
 
 	//set comparison to true initially
 	bool comp = true;
@@ -59,7 +59,7 @@ bool DevCompare(std::string iRas1, std::string iRas2, std::string result) {
 	return comp;
 }
 
-bool IRasterCompare(std::string iRas1, std::string iRas2, std::string result) {
+bool IRasterCompare(const std::string& iRas1, const std::string& iRas2, const std::string& result) {
 
 	//set comparison to true initially
 	bool comp = true;
@@ -101,7 +101,7 @@ bool IRasterCompare(std::string iRas1, std::string iRas2, std::string result) {
 	return comp;
 }
 
-bool DRasterCompare(std::string dRas1, std::string dRas2, std::string result) {
+bool DRasterCompare(const std::string& dRas1, const std::string& dRas2, const std::string& result) {
 
 	//set comparison to true initially
 	bool comp = true;
@@ -143,7 +143,7 @@ bool DRasterCompare(std::string dRas1, std::string dRas2, std::string result) {
 	return comp;
 }
 
-void IRasterFixNoDataVal(std::string srcRas, int srcVal) {
+void IRasterFixNoDataVal(const std::string& srcRas, int srcVal) {
 
 	//declare src raster
 	IRaster src;
@@ -169,7 +169,7 @@ void IRasterFixNoDataVal(std::string srcRas, int srcVal) {
 	src.Write(srcRas);
 }
 
-void IRasterSetNoDataToRef(std::string srcRas, std::string refRas) {
+void IRasterSetNoDataToRef(const std::string& srcRas, const std::string& refRas) {
 
 	//declare src raster
 	IRaster src;
@@ -202,7 +202,7 @@ void IRasterSetNoDataToRef(std::string srcRas, std::string refRas) {
 	src.Write(srcRas);
 }
 
-void DRasterFixNoDataVal(std::string srcRas, int srcVal) {
+void DRasterFixNoDataVal(const std::string& srcRas, int srcVal) {
 
 	//declare src raster
 	DRaster src;
@@ -228,7 +228,7 @@ void DRasterFixNoDataVal(std::string srcRas, int srcVal) {
 	src.Write(srcRas);
 }
 
-void DRasterSetNoDataToRef(std::string srcRas, std::string refRas) {
+void DRasterSetNoDataToRef(const std::string& srcRas, const std::string& refRas) {
 
 	//declare src raster
 	DRaster src;
@@ -261,7 +261,7 @@ void DRasterSetNoDataToRef(std::string srcRas, std::string refRas) {
 	src.Write(srcRas);
 }
 
-//void DRasterTidyNoDataVal(std::string srcRas, double srcVal) {
+//void DRasterTidyNoDataVal(const std::string& srcRas, double srcVal) {
 //
 //	//declare src raster
 //	DRaster src;
@@ -355,7 +355,7 @@ void DRasterSetNoDataToRef(std::string srcRas, std::string refRas) {
 //	src.Write(srcRas);
 //}
 
-void DRasterTidyNoDataVal(std::string srcRas, double srcVal) {
+void DRasterTidyNoDataVal(const std::string& srcRas, double srcVal) {
 
 	//declare src raster
 	DRaster src;
@@ -449,7 +449,7 @@ void DRasterTidyNoDataVal(std::string srcRas, double srcVal) {
 	src.Write(srcRas);
 }
 
-void IRasterMaskedAddValue(std::string zoneIDRas, int val) {
+void IRasterMaskedAddValue(const std::string& zoneIDRas, int val) {
 
 	//load input zoneID raster	
 	IRaster zID;
@@ -469,7 +469,7 @@ void IRasterMaskedAddValue(std::string zoneIDRas, int val) {
 	zID.Write(zoneIDRas);	
 }
 
-void IRasterNotBoolean(std::string srcRas) {
+void IRasterNotBoolean(const std::string& srcRas) {
 
 	//declare src raster
 	IRaster src;
@@ -505,7 +505,7 @@ void IRasterNotBoolean(std::string srcRas) {
 	src.Write(srcRas);
 }
 
-void IRasterAddBoolean(std::string ras1Str, std::string ras2Str, std::string resultStr) {
+void IRasterAddBoolean(const std::string& ras1Str, const std::string& ras2Str, const std::string& resultStr) {
 
 	//declare ras1 raster
 	IRaster ras1;
@@ -543,7 +543,7 @@ void IRasterAddBoolean(std::string ras1Str, std::string ras2Str, std::string res
 	res.Write(resultStr);
 }
 
-void Standardise(std::string srcRas, std::string maskRas) {
+void Standardise(const std::string& srcRas, const std::string& maskRas) {
 
 	//declare src raster
 	DRaster src;
@@ -599,7 +599,7 @@ void Standardise(std::string srcRas, std::string maskRas) {
 	src.Write(srcRas);
 }
 
-void RevPolarityStandardise(std::string srcRas, std::string maskRas) {
+void RevPolarityStandardise(const std::string& srcRas, const std::string& maskRas) {
 
 	//declare src raster
 	DRaster src;
@@ -654,7 +654,7 @@ void RevPolarityStandardise(std::string srcRas, std::string maskRas) {
 	src.Write(srcRas);
 }
 
-void AreaFromRaster(std::string wardIDRas, int numWards, std::string wardDataRas, int refVal, std::string areaOutput) {
+void AreaFromRaster(const std::string& wardIDRas, int numWards, const std::string& wardDataRas, int refVal, const std::string& areaOutput) {
 
 	//load wardID raster
 	IRaster wardID;
@@ -676,22 +676,21 @@ void AreaFromRaster(std::string wardIDRas, int numWards, std::string wardDataRas
 	for (int r = 0; r != wardID.nrows; ++r) {
 		for (int c = 0; c != wardID.ncols; ++c) {
 			if (wardID.data[r][c] != wardID.NODATA_value) {										// ignore NODATA_value cells
-				wards[wardID.data[r][c]].cells.push_back(Cell(c, r, wardID.data[r][c]));
+				wards[wardID.data[r][c]].push_back(Cell(c, r, wardID.data[r][c]));
 			}
 		}
 	}
 
 	//create storage for areaData
-	double* areaData;
-	areaData = new double[numWards];
+	std::vector<double> areaData(numWards);
 
 	//loop through all cells in all wards 
 	for (int w = 0; w != numWards; ++w) {
 		int cellCount = 0;							//reset for each ward
-		if (!wards[w].cells.empty()) {
-			for (int c = 0; c != wards[w].cells.size(); ++c) {			
+		if (!wards[w].empty()) {
+			for (size_t c = 0; c != wards[w].size(); ++c) {			
 
-				if (wardData.data[wards[w].cells[c].r][wards[w].cells[c].c] == refVal) {		//count cells equal to refVal
+				if (wardData.data[wards[w][c].r][wards[w][c].c] == refVal) {		//count cells equal to refVal
 					++cellCount;
 				}
 			}
@@ -728,7 +727,7 @@ void AreaFromRaster(std::string wardIDRas, int numWards, std::string wardDataRas
 	}
 }
 
-void BooleanDownsampler(std::string inputRas, std::string outputRas, int singleDimCellsToCell, int twoDimCellThreshold) {
+void BooleanDownsampler(const std::string& inputRas, const std::string& outputRas, int singleDimCellsToCell, int twoDimCellThreshold) {
 
 	//load inputRas
 	IRaster in;
@@ -786,7 +785,7 @@ void BooleanDownsampler(std::string inputRas, std::string outputRas, int singleD
 	out.Write(outputRas);
 }
 
-void DRasterSumRows(std::string inputRas, std::string outputCSV) {
+void DRasterSumRows(const std::string& inputRas, const std::string& outputCSV) {
 
 	DRaster ras;
 	ras.Setup(inputRas);
@@ -819,7 +818,7 @@ void DRasterSumRows(std::string inputRas, std::string outputCSV) {
 		//write header
 		opfile << "row_total" << "\n";
 
-		for (int r = 0; r != rows.size(); ++r) {
+		for (size_t r = 0; r != rows.size(); ++r) {
 			opfile << rows[r] << "\n";
 		}		
 
@@ -831,7 +830,7 @@ void DRasterSumRows(std::string inputRas, std::string outputCSV) {
 	}
 }
 
-void DRasterSumColumns(std::string inputRas, std::string outputCSV) {
+void DRasterSumColumns(const std::string& inputRas, const std::string& outputCSV) {
 
 	DRaster ras;
 	ras.Setup(inputRas);
@@ -881,7 +880,7 @@ void DRasterSumColumns(std::string inputRas, std::string outputCSV) {
 		//for (int r = 0; r != rows.size(); ++r) {
 		//	opfile << rows[r] << "\n";
 		//}
-		for (int c = 0; c != cols.size(); ++c) {
+		for (size_t c = 0; c != cols.size(); ++c) {
 			opfile << cols[c] << "\n";
 		}
 
@@ -893,7 +892,7 @@ void DRasterSumColumns(std::string inputRas, std::string outputCSV) {
 	}
 }
 
-void DRasterAscToBin(std::string input, std::string output, std::string pathToBinaryConfig) {
+void DRasterAscToBin(const std::string& input, const std::string& output, const std::string& pathToBinaryConfig) {
 
 	DRaster ras;
 	ras.Setup(input);
@@ -902,7 +901,7 @@ void DRasterAscToBin(std::string input, std::string output, std::string pathToBi
 	ras.Cleanup();
 }
 
-void DRasterAscToCsv(std::string input, std::string output) {
+void DRasterAscToCsv(const std::string& input, const std::string& output) {
 
 	DRaster ras;
 	ras.Setup(input);
@@ -911,7 +910,7 @@ void DRasterAscToCsv(std::string input, std::string output) {
 	ras.Cleanup();
 }
 
-void DRasterBinToAsc(std::string input, std::string output, std::string hdrFile) {
+void DRasterBinToAsc(const std::string& input, const std::string& output, const std::string& hdrFile) {
 
 	DRaster ras;
 	ras.Setup(hdrFile);
@@ -920,7 +919,7 @@ void DRasterBinToAsc(std::string input, std::string output, std::string hdrFile)
 	ras.Cleanup();
 }
 
-void DRasterCsvToAsc(std::string input, std::string output, std::string hdrFile) {
+void DRasterCsvToAsc(const std::string& input, const std::string& output, const std::string& hdrFile) {
 
 	DRaster ras;
 	ras.Setup(hdrFile);
@@ -929,7 +928,7 @@ void DRasterCsvToAsc(std::string input, std::string output, std::string hdrFile)
 	ras.Cleanup();
 }
 
-void IRasterAscToBin(std::string input, std::string output, std::string pathToBinaryConfig) {
+void IRasterAscToBin(const std::string& input, const std::string& output, const std::string& pathToBinaryConfig) {
 
 	IRaster ras;
 	ras.Setup(input);
@@ -938,7 +937,7 @@ void IRasterAscToBin(std::string input, std::string output, std::string pathToBi
 	ras.Cleanup();
 }
 
-void IRasterAscToCsv(std::string input, std::string output) {
+void IRasterAscToCsv(const std::string& input, const std::string& output) {
 
 	IRaster ras;
 	ras.Setup(input);
@@ -947,7 +946,7 @@ void IRasterAscToCsv(std::string input, std::string output) {
 	ras.Cleanup();
 }
 
-void IRasterBinToAsc(std::string input, std::string output, std::string hdrFile) {
+void IRasterBinToAsc(const std::string& input, const std::string& output, const std::string& hdrFile) {
 
 	IRaster ras;
 	ras.Setup(hdrFile);
@@ -956,7 +955,7 @@ void IRasterBinToAsc(std::string input, std::string output, std::string hdrFile)
 	ras.Cleanup();
 }
 
-void IRasterCsvToAsc(std::string input, std::string output, std::string hdrFile) {
+void IRasterCsvToAsc(const std::string& input, const std::string& output, const std::string& hdrFile) {
 
 	IRaster ras;
 	ras.Setup(hdrFile);
@@ -965,15 +964,14 @@ void IRasterCsvToAsc(std::string input, std::string output, std::string hdrFile)
 	ras.Cleanup();
 }
 
-void DRasterAscToODVal(std::string inputRas, std::string inputZoneCodes, std::string outputCSV) {
+void DRasterAscToODVal(const std::string& inputRas, const std::string& inputZoneCodes, const std::string& outputCSV) {
 
 	//setup double precision raster from csv
 	DRaster ras;
 	ras.Setup(inputRas);
 	ras.Read(inputRas);	
 
-	std::string* zoneCodeStr;
-	zoneCodeStr = new std::string[ras.nrows];	
+	std::vector<std::string> zoneCodeStr(ras.nrows);	
 
 	//read from input csv label file into zoneLabels
 	ExtractCSV(inputZoneCodes, 1, 0, zoneCodeStr);
@@ -1013,18 +1011,16 @@ void DRasterAscToODVal(std::string inputRas, std::string inputZoneCodes, std::st
 
 	//cleanup	
 	ras.Cleanup();
-	delete[] zoneCodeStr;
 }
 
-void DRasterSubRaster(std::string inRasStr, std::string inCodeStr, std::string outRasStr, std::string outCodeStr, std::string outHdrFile) {
+void DRasterSubRaster(const std::string& inRasStr, const std::string& inCodeStr, const std::string& outRasStr, const std::string& outCodeStr, const std::string& outHdrFile) {
 
 	//setup
 	DRaster inRas;
 	inRas.Setup(inRasStr);
 	inRas.Read(inRasStr);
 
-	std::string* inCodes;
-	inCodes = new std::string[inRas.nrows];
+	std::vector<std::string> inCodes(inRas.nrows);
 
 	//read from input csv 
 	ExtractCSV(inCodeStr, 1, 0, inCodes);
@@ -1032,14 +1028,12 @@ void DRasterSubRaster(std::string inRasStr, std::string inCodeStr, std::string o
 	DRaster outRas;
 	outRas.Setup(outHdrFile);
 
-	std::string* outCodes;
-	outCodes = new std::string[outRas.nrows];
+	std::vector<std::string> outCodes(outRas.nrows);
 
 	//read from input csv 
 	ExtractCSV(outCodeStr, 1, 0, outCodes);
 
-	int* outIndex;
-	outIndex = new int[outRas.nrows];	
+	std::vector<int> outIndex(outRas.nrows);	
 
 	for (int ocode = 0; ocode != outRas.nrows; ++ocode) {
 		for (int icode = 0; icode != inRas.nrows; ++icode) {
@@ -1065,9 +1059,6 @@ void DRasterSubRaster(std::string inRasStr, std::string inCodeStr, std::string o
 	//tidy up
 	inRas.Cleanup();
 	outRas.Cleanup();
-	delete[] inCodes;
-	delete[] outCodes;
-	delete[] outIndex;
 }
 
 

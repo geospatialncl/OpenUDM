@@ -2,31 +2,19 @@
 
 using namespace std;
 
-int GetIntFromString(std::string input) {
-	stringstream ss;
-	int i;
-	ss << input;
-	ss >> i;
-	return i;
+int GetIntFromString(const std::string& input) {
+	return std::stoi(input);
 }
 
-float GetFloatFromString(std::string input) {
-	stringstream ss;
-	float f;
-	ss << input;
-	ss >> f;
-	return f;
+float GetFloatFromString(const std::string& input) {
+	return std::stof(input);
 }
 
-double GetDoubleFromString(std::string input) {
-	stringstream ss;
-	double d;
-	ss << input;
-	ss >> d;
-	return d;
+double GetDoubleFromString(const std::string& input) {
+	return std::stod(input);
 }
 
-void ExtractCSV(std::string ipfile, int numItems, int extractItem, std::string* data) {
+void ExtractCSV(const std::string& ipfile, int numItems, int extractItem, std::vector<std::string>& data) {
 
 	if (numItems > 1) {
 		ExtractCSVDataColumn(ipfile, numItems, extractItem, data);
@@ -36,7 +24,7 @@ void ExtractCSV(std::string ipfile, int numItems, int extractItem, std::string* 
 	}
 }
 
-void ExtractCSVDataColumn(std::string ipfile, int numItems, int extractItem, std::string* data) {
+void ExtractCSVDataColumn(const std::string& ipfile, int numItems, int extractItem, std::vector<std::string>& data) {
 
 	//declare input stream
 	ifstream ipfileData(ipfile);
@@ -182,10 +170,10 @@ void ExtractCSVDataColumn(std::string ipfile, int numItems, int extractItem, std
 
 //--
 
-void ExtractCSVSingleDataColumn(std::string ipfile, std::string* data) {
+void ExtractCSVSingleDataColumn(const std::string& ipfile, std::vector<std::string>& data) {
 
 	ifstream ipfileData(ipfile);
-	int rowNum = 0;
+	//int rowNum = 0;
 	int dataCount = 0;
 	bool readData = false;
 	//declare string objects

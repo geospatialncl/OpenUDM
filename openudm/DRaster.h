@@ -10,8 +10,8 @@ class DRaster
 {
 public:
 	//constructor/destructor
-	DRaster(void);
-	~DRaster(void);
+	DRaster();
+	~DRaster() = default;
 
 	//header data
 	int ncols;
@@ -19,21 +19,21 @@ public:
 	double xllcorner;
 	double yllcorner;
 	double cellsize;
-	double NODATA_value;
+	static double NODATA_value;
 	//float weight;
 
 	//raster data
-	double** data;	
+	std::vector<std::vector<double>> data;	
 
-	void Setup(std::string ipfile);
+	void Setup(const std::string& ipfile);
 	void Setup(int ncols, int nrows);
 	void Cleanup();
-	void Read(std::string ipfile);
-	void Write(std::string writefile);
-	void FromPGBinary(std::string binData);
-	void ToPGBinary(std::string binData);
-	void ToPGBinary(std::string hdrPadFtrPath, std::string binData);
-	void FromCSV(std::string csvFile);
-	void ToCSV(std::string csvFile);
+	void Read(const std::string& ipfile);
+	void Write(const std::string& writefile);
+	void FromPGBinary(const std::string& binData);
+	void ToPGBinary(const std::string& binData);
+	void ToPGBinary(const std::string& hdrPadFtrPath, const std::string& binData);
+	void FromCSV(const std::string& csvFile);
+	void ToCSV(const std::string& csvFile);
 };
 

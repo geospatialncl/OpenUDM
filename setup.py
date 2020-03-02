@@ -5,9 +5,12 @@ sources = glob('openudm/*.cpp') + glob('openudm/*.i')
 
 py_modules = ['CellularModel', 'RasterToolkit', 'MultiCriteriaEval', 'DevZones']
 
+cxxflags = ['-Wall', '-std=c++11', '-Werror', '-pedantic']
+
 ext_modules = [
     Extension(
         'openudm._CellularModel',
+        extra_compile_args = cxxflags,
         sources=[
             'openudm/CellularModel.i',
             'openudm/CellularModel.cpp',
@@ -23,6 +26,7 @@ ext_modules = [
     ),
     Extension(
         'openudm._DevZones',
+        extra_compile_args = cxxflags,
         sources=[
             'openudm/DevZones.i',
             'openudm/DevZones.cpp',
@@ -35,6 +39,7 @@ ext_modules = [
     ),
     Extension(
         'openudm._MultiCriteriaEval',
+        extra_compile_args = cxxflags,
         sources=[
             'openudm/MultiCriteriaEval.i',
             'openudm/MultiCriteriaEval.cpp',
@@ -47,6 +52,7 @@ ext_modules = [
     ),
     Extension(
         'openudm._RasterToolkit',
+        extra_compile_args = cxxflags,
         sources=[
             'openudm/RasterToolkit.i',
             'openudm/RasterToolkit.cpp',
