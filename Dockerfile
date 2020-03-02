@@ -8,4 +8,5 @@ WORKDIR /openudm
 RUN python setup.py build
 RUN python setup.py install
 
-# RUN python scripts/udm_solo.py
+# Test a model
+RUN python scripts/udm_solo.py
