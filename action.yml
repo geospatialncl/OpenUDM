@@ -1,0 +1,5 @@
+name: 'Test Model build'
+description: 'Build the docker container and give the model a test run.'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
