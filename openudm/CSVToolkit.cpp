@@ -14,7 +14,7 @@ double GetDoubleFromString(const std::string& input) {
 	return std::stod(input);
 }
 
-void ExtractCSV(std::string ipfile, int numItems, int extractItem, std::vector<std::string>& data) {
+void ExtractCSV(const std::string& ipfile, int numItems, int extractItem, std::vector<std::string>& data) {
 
 	if (numItems > 1) {
 		ExtractCSVDataColumn(ipfile, numItems, extractItem, data);
@@ -24,7 +24,7 @@ void ExtractCSV(std::string ipfile, int numItems, int extractItem, std::vector<s
 	}
 }
 
-void ExtractCSVDataColumn(std::string ipfile, int numItems, int extractItem, std::vector<std::string>& data) {
+void ExtractCSVDataColumn(const std::string& ipfile, int numItems, int extractItem, std::vector<std::string>& data) {
 
 	//declare input stream
 	ifstream ipfileData(ipfile);
@@ -170,7 +170,7 @@ void ExtractCSVDataColumn(std::string ipfile, int numItems, int extractItem, std
 
 //--
 
-void ExtractCSVSingleDataColumn(std::string ipfile, std::vector<std::string>& data) {
+void ExtractCSVSingleDataColumn(const std::string& ipfile, std::vector<std::string>& data) {
 
 	ifstream ipfileData(ipfile);
 	//int rowNum = 0;
