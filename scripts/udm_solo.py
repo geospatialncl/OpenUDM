@@ -66,6 +66,8 @@ def main(swap_path):
             num_cols = int(row['num_cols'])
             num_rows = int(row['num_rows'])
 
+    print( "Parameters file imported.")
+
     #params for table reading - hardcoded to simplify
     label_total = 2
     label_col = 0
@@ -149,7 +151,7 @@ def main(swap_path):
         rval = 1
 
 
-    mce.MaskedWeightedSum((bval>0),mce_i_raster_count_str,mce_i_raster_str,mce_d_raster_count_str,mce_d_raster_str,mce_output_raster_str,full_rast_hdr,swap_path,(rval>0))
+    mce.MaskedWeightedSum((bval>0),mce_i_raster_count_str,mce_i_raster_str,mce_d_raster_count_str,mce_d_raster_str,mce_output_raster_str,full_rast_hdr,swap_path + "/",(rval>0))
     print("mce.MaskedWeightedSum")
     ###ZONE IDS-------------------------------------------------------------------------------------------
 
