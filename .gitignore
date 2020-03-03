@@ -137,3 +137,6 @@ Data/zone*
 
 # python virtualenvs
 .venv*
+
+# IntelliJ
+.idea
