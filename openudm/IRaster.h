@@ -11,7 +11,7 @@ class IRaster final
 public:
 	//constructor/destructor
 	IRaster();
-	//~IRaster();
+	~IRaster() = default;
 
 	//header data
 	int ncols;

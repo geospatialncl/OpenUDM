@@ -36,8 +36,6 @@ public:
 	void OutputRasterResult(const std::string& rasterData);
 	void WriteOverflowWards(const std::string& overflowData);
 
-	void Cleanup();
-
 private:
 
 	//wards and raster parameters
@@ -76,7 +74,6 @@ private:
 	
 	//memory management
 	void AllocateAll();	
-	void FreeAll();
 
 	//RunModel() functions
 	void CreateWards();
@@ -90,5 +87,6 @@ private:
 	void SetCurrentDev();
 	void SetNoData();
 	void SetFutureDev();
+
 };
 

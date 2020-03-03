@@ -898,7 +898,6 @@ void DRasterAscToBin(const std::string& input, const std::string& output, const 
 	ras.Setup(input);
 	ras.Read(input);
 	ras.ToPGBinary(pathToBinaryConfig, output);
-	ras.Cleanup();
 }
 
 void DRasterAscToCsv(const std::string& input, const std::string& output) {
@@ -907,7 +906,6 @@ void DRasterAscToCsv(const std::string& input, const std::string& output) {
 	ras.Setup(input);
 	ras.Read(input);
 	ras.ToCSV(output);
-	ras.Cleanup();
 }
 
 void DRasterBinToAsc(const std::string& input, const std::string& output, const std::string& hdrFile) {
@@ -916,7 +914,6 @@ void DRasterBinToAsc(const std::string& input, const std::string& output, const 
 	ras.Setup(hdrFile);
 	ras.FromPGBinary(input);
 	ras.Write(output);
-	ras.Cleanup();
 }
 
 void DRasterCsvToAsc(const std::string& input, const std::string& output, const std::string& hdrFile) {
@@ -925,7 +922,6 @@ void DRasterCsvToAsc(const std::string& input, const std::string& output, const 
 	ras.Setup(hdrFile);
 	ras.FromCSV(input);
 	ras.Write(output);
-	ras.Cleanup();
 }
 
 void IRasterAscToBin(const std::string& input, const std::string& output, const std::string& pathToBinaryConfig) {
@@ -934,7 +930,6 @@ void IRasterAscToBin(const std::string& input, const std::string& output, const 
 	ras.Setup(input);
 	ras.Read(input);
 	ras.ToPGBinary(pathToBinaryConfig, output);
-	ras.Cleanup();
 }
 
 void IRasterAscToCsv(const std::string& input, const std::string& output) {
@@ -943,7 +938,6 @@ void IRasterAscToCsv(const std::string& input, const std::string& output) {
 	ras.Setup(input);
 	ras.Read(input);
 	ras.ToCSV(output);
-	ras.Cleanup();
 }
 
 void IRasterBinToAsc(const std::string& input, const std::string& output, const std::string& hdrFile) {
@@ -952,7 +946,6 @@ void IRasterBinToAsc(const std::string& input, const std::string& output, const 
 	ras.Setup(hdrFile);
 	ras.FromPGBinary(input);
 	ras.Write(output);
-	ras.Cleanup();
 }
 
 void IRasterCsvToAsc(const std::string& input, const std::string& output, const std::string& hdrFile) {
@@ -961,7 +954,6 @@ void IRasterCsvToAsc(const std::string& input, const std::string& output, const 
 	ras.Setup(hdrFile);
 	ras.FromCSV(input);
 	ras.Write(output);
-	ras.Cleanup();
 }
 
 void DRasterAscToODVal(const std::string& inputRas, const std::string& inputZoneCodes, const std::string& outputCSV) {
@@ -1009,8 +1001,6 @@ void DRasterAscToODVal(const std::string& inputRas, const std::string& inputZone
 		cout << "Unable to open csv output file";
 	}
 
-	//cleanup	
-	ras.Cleanup();
 }
 
 void DRasterSubRaster(const std::string& inRasStr, const std::string& inCodeStr, const std::string& outRasStr, const std::string& outCodeStr, const std::string& outHdrFile) {
@@ -1056,9 +1046,6 @@ void DRasterSubRaster(const std::string& inRasStr, const std::string& inCodeStr,
 
 	outRas.Write(outRasStr);		
 
-	//tidy up
-	inRas.Cleanup();
-	outRas.Cleanup();
 }
 
 

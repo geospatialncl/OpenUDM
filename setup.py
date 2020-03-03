@@ -7,6 +7,8 @@ py_modules = ['CellularModel', 'RasterToolkit', 'MultiCriteriaEval', 'DevZones']
 
 cxxflags = ['-Wall', '-std=c++11', '-Werror', '-pedantic']
 
+headers = glob('openudm/*.h')
+
 ext_modules = [
     Extension(
         'openudm._CellularModel',
@@ -22,6 +24,7 @@ ext_modules = [
             'openudm/UDMWard.cpp',
             'openudm/UDMZone.cpp',
         ],
+        depends=headers,
         swig_opts=['-c++']
     ),
     Extension(
@@ -35,6 +38,7 @@ ext_modules = [
             'openudm/DRaster.cpp',
             'openudm/IRaster.cpp',
         ],
+        depends=headers,
         swig_opts=['-c++']
     ),
     Extension(
@@ -48,6 +52,7 @@ ext_modules = [
             'openudm/DRaster.cpp',
             'openudm/IRaster.cpp',
         ],
+        depends=headers,
         swig_opts=['-c++']
     ),
     Extension(
@@ -61,6 +66,7 @@ ext_modules = [
             'openudm/DRaster.cpp',
             'openudm/IRaster.cpp',
         ],
+        depends=headers,
         swig_opts=['-c++']
     )
 ]
