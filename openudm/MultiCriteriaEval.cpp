@@ -22,7 +22,7 @@ void MaskedWeightedSum(bool useBin, std::string iRasCount, std::string iRasInput
 
 	//read numI
 	ExtractCSV(iRasCount, 1, 0, singleItemStr);
-	numI = GetIntFromString(singleItemStr[0]);
+	numI = std::stoi(singleItemStr[0]);
 	//cout << "numI = " << numI << endl;
 
 	//variables to store IRaster names and weights
@@ -38,7 +38,7 @@ void MaskedWeightedSum(bool useBin, std::string iRasCount, std::string iRasInput
 
 	//convert string data to double
 	for (int i = 0; i != numI; ++i) {
-		iWgt[i] = GetDoubleFromString(iWgtStr[i]);
+		iWgt[i] = std::stod(iWgtStr[i]);
 	}
 
 	//setup a vector of IRasters
@@ -64,7 +64,7 @@ void MaskedWeightedSum(bool useBin, std::string iRasCount, std::string iRasInput
 
 	//read numD
 	ExtractCSV(dRasCount, 1, 0, singleItemStr);
-	numD = GetIntFromString(singleItemStr[0]);
+	numD = std::stoi(singleItemStr[0]);
 	//cout << "numD = " << numD << endl;
 
 	//variables to store DRaster names and weights
@@ -80,7 +80,7 @@ void MaskedWeightedSum(bool useBin, std::string iRasCount, std::string iRasInput
 
 	//convert string data to double
 	for (int d = 0; d != numD; ++d) {
-		dWgt[d] = GetDoubleFromString(dWgtStr[d]);
+		dWgt[d] = std::stod(dWgtStr[d]);
 	}
 
 	//setup a vector of DRasters

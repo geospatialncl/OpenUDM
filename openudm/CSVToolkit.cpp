@@ -1,18 +1,9 @@
 #include "CSVToolkit.h"
 
+#include <sstream>
+#include <fstream>
+
 using namespace std;
-
-int GetIntFromString(const std::string& input) {
-	return std::stoi(input);
-}
-
-float GetFloatFromString(const std::string& input) {
-	return std::stof(input);
-}
-
-double GetDoubleFromString(const std::string& input) {
-	return std::stod(input);
-}
 
 void ExtractCSV(const std::string& ipfile, int numItems, int extractItem, std::vector<std::string>& data) {
 
