@@ -461,10 +461,6 @@ void IRaster::ToPGBinary(const std::string& hdrPadFtrPath, const std::string& bi
 	else cout << "Unable to open output file";
 }
 
-void IRaster::Cleanup() {
-	// TODO remove
-}
-
 void IRaster::FromCSV(const std::string& csvFile) {	
 
 	//determine number of raster cells

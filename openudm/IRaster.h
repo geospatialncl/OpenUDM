@@ -27,7 +27,6 @@ public:
 
 	void Setup(const std::string& ipfile);
 	void Setup(int ncols, int nrows, int init = 0);
-	void Cleanup();
 	void Read(const std::string& ipfile);
 	void Write(const std::string& writefile);
 	void FromPGBinary(const std::string& binData);

@@ -454,10 +454,6 @@ void DRaster::ToPGBinary(const std::string& hdrPadFtrPath, const std::string& bi
 	else cout << "Unable to open output file";
 }
 
-void DRaster::Cleanup() {
-
-
-}
 
 void DRaster::FromCSV(const std::string& csvFile) {
 

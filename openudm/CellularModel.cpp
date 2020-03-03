@@ -660,22 +660,3 @@ void CellularModel::OutputRasterResult(const std::string& rasterData) {
 	}
 }
 
-void CellularModel::Cleanup() {
-
-	//call private function FreeAll()
-	FreeAll();
-}
-
-void CellularModel::FreeAll() {
-
-	//rasters
-	iWardID.Cleanup();
-	zoneID.Cleanup();
-	zoneAVG.Cleanup();
-	devLand.Cleanup();
-	cellSuit.Cleanup();
-	finalDev.Cleanup();
-
-	//wards hierarchy
-	wards.clear();
-}
