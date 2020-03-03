@@ -1,8 +1,16 @@
 #include "DevZones.h"
 
-void CreateDevZones(bool useBin, int minSize, bool moore, std::string inputMask, std::string outputZone, std::string rastHdr, std::string pathToBinConfig, std::string inputWard) {
+void CreateDevZones(bool useBin, 
+										int minSize, 
+										bool moore, 
+										const std::string& inputMask, 
+										const std::string& outputZone, 
+										const std::string& rastHdr, 
+										const std::string& pathToBinConfig, 
+										const std::string& inputWard) 
+{
 
-	vector<Zone> zones;
+	std::vector<Zone> zones;
 
 	//INPUT PARAMETERS BEGIN-------------------------------------------------------------------------------------------------------------
 
@@ -70,7 +78,7 @@ void CreateDevZones(bool useBin, int minSize, bool moore, std::string inputMask,
 				int currentW = wardID.data[r][c];
 
 				//gather valid neighbour cells
-				vector<Cell> nbrCells;
+				std::vector<Cell> nbrCells;
 
 				//range limited read of neighbouring zone codes--------
 
@@ -197,8 +205,8 @@ void CreateDevZones(bool useBin, int minSize, bool moore, std::string inputMask,
 				//MOORE NEIGHBOURS end
 
 				//gather valid neighbour cells which are already in valid zones
-				vector<Cell> zoneCells;
-				vector<Cell> noZoneCells;
+				std::vector<Cell> zoneCells;
+				std::vector<Cell> noZoneCells;
 				if (!nbrCells.empty()) {
 					for (size_t n = 0; n != nbrCells.size(); ++n) {
 						if (nbrCells[n].z == NOZONE) {
@@ -212,8 +220,8 @@ void CreateDevZones(bool useBin, int minSize, bool moore, std::string inputMask,
 
 				//gather valid neighbour cells with lowest zoneID into loZoneCells
 				//gather other valid zone cells into hiZoneCells
-				vector<Cell> loZoneCells;
-				vector<Cell> hiZoneCells;
+				std::vector<Cell> loZoneCells;
+				std::vector<Cell> hiZoneCells;
 				if (zoneCells.size() > 1) {
 
 					//find lowest zone
@@ -236,7 +244,7 @@ void CreateDevZones(bool useBin, int minSize, bool moore, std::string inputMask,
 				}
 
 				//gather (int)zoneID for current cell and hiZoneCells in order to combine and merge zones
-				vector<int> mergeZoneIDs;
+				std::vector<int> mergeZoneIDs;
 				if (!loZoneCells.empty()) {
 					if (currentZ != NOZONE && currentZ != loZoneCells[0].z) {
 						mergeZoneIDs.push_back(currentZ);
@@ -543,7 +551,12 @@ void CreateDevZones(bool useBin, int minSize, bool moore, std::string inputMask,
 	}
 }
 
-void DevZoneAVGSuit(bool useBin, std::string zoneID, std::string zoneData, std::string zoneAVG, std::string rastHdr, std::string pathToBinConfig) {
+void DevZoneAVGSuit(bool useBin, 
+										const std::string& zoneID, 
+										const std::string& zoneData, 
+										const std::string& zoneAVG, 
+										const std::string& rastHdr, 
+										const std::string& pathToBinConfig) {
 
 	bool bin_ras = useBin;
 
@@ -576,7 +589,7 @@ void DevZoneAVGSuit(bool useBin, std::string zoneID, std::string zoneData, std::
 	size_t rRows = zID.nrows;
 
 	int numZones = 0;
-	vector<Zone> zones;
+	std::vector<Zone> zones;
 
 	//push into zones----------------------------------------------------------------------------------------
 
@@ -598,7 +611,7 @@ void DevZoneAVGSuit(bool useBin, std::string zoneID, std::string zoneData, std::
 					zones[z].cells.push_back(Cell(c, r, z));
 
 				if (static_cast<size_t>(z) > zones.size())
-					cout << "ERROR... ZONE NOT CREATED YET" << endl;
+					std::cout << "ERROR... ZONE NOT CREATED YET" << std::endl;
 
 			}
 		}

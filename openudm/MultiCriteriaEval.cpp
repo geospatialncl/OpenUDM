@@ -1,9 +1,15 @@
 #include "MultiCriteriaEval.h"
 
-void MaskedWeightedSum(bool useBin, std::string iRasCount, std::string iRasInputs, std::string dRasCount, std::string dRasInputs, std::string output,
-	std::string rastHdr, std::string binConfigPath, bool reverse) {
-
-	//new - BEGIN
+void MaskedWeightedSum(bool useBin, 
+  										 const std::string& iRasCount, 
+  										 const std::string& iRasInputs, 
+  										 const std::string& dRasCount, 
+  										 const std::string& dRasInputs, 
+  										 const std::string& output,	
+  										 const std::string& rastHdr, 
+  										 const std::string& binConfigPath, 
+  										 bool reverse) {
+  //new - BEGIN
 	std::string swap_path = binConfigPath;
 	//new - END
 
@@ -42,7 +48,7 @@ void MaskedWeightedSum(bool useBin, std::string iRasCount, std::string iRasInput
 	}
 
 	//setup a vector of IRasters
-	vector<IRaster> iVec(numI);
+	std::vector<IRaster> iVec(numI);
 
 	//setup and read rasters
 	for (int i = 0; i != numI; ++i) {		
@@ -54,7 +60,7 @@ void MaskedWeightedSum(bool useBin, std::string iRasCount, std::string iRasInput
 		}
 		else {
 			iVec[i].FromCSV(swap_path + iRasStr[i]);
-			cout << "reading " << swap_path + iRasStr[i] << endl;
+			std::cout << "reading " << swap_path + iRasStr[i] << std::endl;
 		}
 	}
 
@@ -84,7 +90,7 @@ void MaskedWeightedSum(bool useBin, std::string iRasCount, std::string iRasInput
 	}
 
 	//setup a vector of DRasters
-	vector<DRaster> dVec;
+	std::vector<DRaster> dVec;
 
 	//push back by numD
 	for (int d = 0; d != numD; ++d) {
@@ -101,7 +107,7 @@ void MaskedWeightedSum(bool useBin, std::string iRasCount, std::string iRasInput
 		}
 		else {
 			dVec[d].FromCSV(swap_path + dRasStr[d]);
-			cout << "reading " << swap_path + dRasStr[d] << endl;
+			std::cout << "reading " << swap_path + dRasStr[d] << std::endl;
 		}
 	}
 

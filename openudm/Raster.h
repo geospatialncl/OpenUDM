@@ -9,8 +9,6 @@
 #include <sstream>
 #include <fstream>
 
-using namespace std;
-
 template<typename T>
 class Raster final
 {
@@ -70,10 +68,10 @@ void Raster<T>::Setup(const std::string& ipfile) {
 
 	//declare an ifstream object
 	//ifstream ipfileHeader ("testRaster.asc");
-	ifstream ipfileHeader(ipfile);
+	std::ifstream ipfileHeader(ipfile);
 
 	//declare a string object
-	string line, read, value;
+	std::string line, read, value;
 
 	//boolean header complete
 	bool headerComplete = false;	
@@ -81,12 +79,12 @@ void Raster<T>::Setup(const std::string& ipfile) {
 	//check the file opened OK
 	if (ipfileHeader.is_open())
 	{
-		//cout << "Reading Header..." << endl << endl;
+		//std::cout << "Reading Header..." << std::endl << std::endl;
 
 		while ( ipfileHeader.good() && !headerComplete)
 		{
 			
-			stringstream lineStream;
+			std::stringstream lineStream;
 			
 			//read a line from the file into string line
 			getline( ipfileHeader, line );
@@ -96,45 +94,45 @@ void Raster<T>::Setup(const std::string& ipfile) {
 			lineStream >> read;
 
 			if(read == "ncols") {
-				//cout << "ncols data detected.." << endl;
+				//std::cout << "ncols data detected.." << std::endl;
 				lineStream >> value;
 				ncols = std::stoi(value);
-				//cout << "ncols = " << ncols << endl;
+				//std::cout << "ncols = " << ncols << std::endl;
 			} 
 
 			if(read == "nrows") {
-				//cout << "nrows data detected.." << endl;
+				//std::cout << "nrows data detected.." << std::endl;
 				lineStream >> value;
 				nrows = std::stoi(value);
-				//cout << "nrows = " << nrows << endl;
+				//std::cout << "nrows = " << nrows << std::endl;
 			} 
 
 			if(read == "xllcorner") {
-				//cout << "xllcorner data detected.." << endl;
+				//std::cout << "xllcorner data detected.." << std::endl;
 				lineStream >> value;
 				xllcorner = std::stod(value);
-				//cout << "xllcorner = " << xllcorner << endl;
+				//std::cout << "xllcorner = " << xllcorner << std::endl;
 			} 
 
 			if(read == "yllcorner") {
-				//cout << "yllcorner data detected.." << endl;
+				//std::cout << "yllcorner data detected.." << std::endl;
 				lineStream >> value;
 				yllcorner = std::stod(value);
-				//cout << "yllcorner = " << yllcorner << endl;
+				//std::cout << "yllcorner = " << yllcorner << std::endl;
 			} 
 
 			if(read == "cellsize") {
-				//cout << "cellsize data detected.." << endl;
+				//std::cout << "cellsize data detected.." << std::endl;
 				lineStream >> value;
 				cellsize = std::stod(value);
-				//cout << "cellsize = " << cellsize << endl;
+				//std::cout << "cellsize = " << cellsize << std::endl;
 			} 
 
 			if(read == "NODATA_value") {
-				//cout << "NODATA_value data detected.." << endl;
+				//std::cout << "NODATA_value data detected.." << std::endl;
 				lineStream >> value;
 				NODATA_value = getFromString(value);
-				//cout << "NODATA_value = " << NODATA_value << endl << endl;
+				//std::cout << "NODATA_value = " << NODATA_value << std::endl << std::endl;
 				headerComplete = true;
 			} 					
 		}
@@ -147,21 +145,21 @@ void Raster<T>::Setup(const std::string& ipfile) {
 template<typename T>
 void Raster<T>::Read(const std::string& ipfile) {
 
-	ifstream ipfileData(ipfile);
+	std::ifstream ipfileData(ipfile);
 	int rowNum = 0;
 	bool readArray = false;
 	//declare string objects
-	string line, read, value;
+	std::string line, read, value;
 
 	//check the file opened OK
 	if (ipfileData.is_open())
 	{
-		cout << "Reading Data..." << endl << endl;
+		std::cout << "Reading Data..." << std::endl << std::endl;
 
 		while ( ipfileData.good() )
 		{
 			if(!readArray) {
-				stringstream lineStream;
+				std::stringstream lineStream;
 			
 				//read a line from the file into string line
 				getline( ipfileData, line );
@@ -172,15 +170,15 @@ void Raster<T>::Read(const std::string& ipfile) {
 
 				//skip header this time through but switch to readArray after final header line
 				if(read == "NODATA_value") {	
-					//cout << "skipping header.." << endl;
+					//std::cout << "skipping header.." << std::endl;
 					readArray = true;
 					line.clear();
 				} 
 			} else
 			{
-				//cout << "HERE?" << endl;
+				//std::cout << "HERE?" << std::endl;
 
-				stringstream lineStream;
+				std::stringstream lineStream;
 			
 				//read a line from the file into string line
 				getline( ipfileData, line );
@@ -193,7 +191,7 @@ void Raster<T>::Read(const std::string& ipfile) {
 						lineStream >> value;
 						//if(rowNum <= nrows) {
 						data[rowNum][i] = getFromString(value);
-						//cout << "READ" << endl;
+						//std::cout << "READ" << std::endl;
 						//}	
 
 					}
@@ -209,7 +207,7 @@ template<typename T>
 void Raster<T>::Write(const std::string& writefile) {
 
 	//create an ofstream object
-	ofstream opfile(writefile);
+	std::ofstream opfile(writefile);
 
 	//check the file opened OK
 	if (opfile.is_open()) {
@@ -236,7 +234,7 @@ void Raster<T>::Write(const std::string& writefile) {
 		opfile.close();		
 	}
 	else {
-		cout << "Unable to open output file"; 
+		std::cout << "Unable to open output file"; 
 	}	
 }
 
@@ -247,9 +245,9 @@ void Raster<T>::FromPGBinary(const std::string& binData) {
 	int ftrLen = 2;		//2byte footer
 	int buf_T = 6 + sizeof(value_type);	//6bytes of padding followed by the size of value_type
 
-	streampos size;
+	std::streampos size;
 
-	ifstream file(binData, ios::in | ios::binary | ios::ate);
+	std::ifstream file(binData, std::ios::in | std::ios::binary | std::ios::ate);
 	if (file.is_open())
 	{
 		//get size for read operation - not including header and footer
@@ -260,14 +258,14 @@ void Raster<T>::FromPGBinary(const std::string& binData) {
 		std::vector<char> buffer(size);
 
 		//skip header the read entire file up to the footer
-		file.seekg(hdrLen, ios::beg);
+		file.seekg(hdrLen, std::ios::beg);
 		file.read(buffer.data(), buffer.size());
 		file.close();
 
 		//check size and number of values to be read
-		//cout << "size of file = " << size << " bytes" << endl;
+		//std::cout << "size of file = " << size << " bytes" << std::endl;
 		//int numValues = bufSize / bufInt;
-		//cout << "number of values = " << numValues << endl;
+		//std::cout << "number of values = " << numValues << std::endl;
 
 		//buffer - each buffered integer is 10 bytes comprising..
 		//0->1   - 2 byte count of numFields
@@ -292,7 +290,7 @@ void Raster<T>::FromPGBinary(const std::string& binData) {
 		}
 
 	}
-	else cout << "Unable to open file";
+	else std::cout << "Unable to open file";
 }
 
 template<typename T>
@@ -316,32 +314,32 @@ void Raster<T>::ToPGBinary(const std::string& binData) {
 	int bufferSize = (nrows* ncols * buf_T) + hdrLen + ftrLen;
 	std::vector<char> buffer(bufferSize);
 
-	ifstream hdrFile("hdr.bin", ios::in | ios::binary | ios::ate);
+	std::ifstream hdrFile("hdr.bin", std::ios::in | std::ios::binary | std::ios::ate);
 	if (hdrFile.is_open()) {
 		//read header
-		hdrFile.seekg(0, ios::beg);
+		hdrFile.seekg(0, std::ios::beg);
 		hdrFile.read(hdrBuf, hdrLen);
 		hdrFile.close();
 	}
-	else cout << "unable to open header file" << endl;
+	else std::cout << "unable to open header file" << std::endl;
 
-	ifstream ftrFile("ftr.bin", ios::in | ios::binary | ios::ate);
+	std::ifstream ftrFile("ftr.bin", std::ios::in | std::ios::binary | std::ios::ate);
 	if (ftrFile.is_open()) {
 		//read header
-		ftrFile.seekg(0, ios::beg);
+		ftrFile.seekg(0, std::ios::beg);
 		ftrFile.read(ftrBuf, ftrLen);
 		ftrFile.close();
 	}
-	else cout << "unable to open footer file" << endl;
+	else std::cout << "unable to open footer file" << std::endl;
 
-	ifstream padFile("i_pad.bin", ios::in | ios::binary | ios::ate);
+	std::ifstream padFile("i_pad.bin", std::ios::in | std::ios::binary | std::ios::ate);
 	if (padFile.is_open()) {
 		//read header
-		padFile.seekg(0, ios::beg);
+		padFile.seekg(0, std::ios::beg);
 		padFile.read(padBuf, padLen);
 		padFile.close();
 	}
-	else cout << "unable to open padding file" << endl;
+	else std::cout << "unable to open padding file" << std::endl;
 
 	//copy header to buffer
 	std::memcpy(buffer.data(), hdrBuf, hdrLen);
@@ -378,14 +376,14 @@ void Raster<T>::ToPGBinary(const std::string& binData) {
 	std::memcpy(&buffer[(nrows * ncols * buf_T) + hdrLen], ftrBuf, ftrLen);
 
 	//write buffer to file
-	ofstream out(binData, ios::out | ios::binary);
+	std::ofstream out(binData, std::ios::out | std::ios::binary);
 	if (out.is_open())
 	{
-		out.seekp(0, ios::beg);
+		out.seekp(0, std::ios::beg);
 		out.write(buffer.data(), bufferSize);
 		out.close();
 	}
-	else cout << "Unable to open output file";
+	else std::cout << "Unable to open output file";
 }
 
 template<typename T>
@@ -410,39 +408,39 @@ void Raster<T>::ToPGBinary(const std::string& hdrPadFtrPath, const std::string& 
 
 	std::string hdrPath = hdrPadFtrPath + "hdr.bin";
 
-	//ifstream hdrFile("hdr.bin", ios::in | ios::binary | ios::ate);
-	ifstream hdrFile(hdrPath, ios::in | ios::binary | ios::ate);
+	//std::ifstream hdrFile("hdr.bin", std::ios::in | std::ios::binary | std::ios::ate);
+	std::ifstream hdrFile(hdrPath, std::ios::in | std::ios::binary | std::ios::ate);
 	if (hdrFile.is_open()) {
 		//read header
-		hdrFile.seekg(0, ios::beg);
+		hdrFile.seekg(0, std::ios::beg);
 		hdrFile.read(hdrBuf, hdrLen);
 		hdrFile.close();
 	}
-	else cout << "unable to open header file" << endl;
+	else std::cout << "unable to open header file" << std::endl;
 
 	std::string ftrPath = hdrPadFtrPath + "ftr.bin";
 
-	//ifstream ftrFile("ftr.bin", ios::in | ios::binary | ios::ate);
-	ifstream ftrFile(ftrPath, ios::in | ios::binary | ios::ate);
+	//std::ifstream ftrFile("ftr.bin", std::ios::in | std::ios::binary | std::ios::ate);
+	std::ifstream ftrFile(ftrPath, std::ios::in | std::ios::binary | std::ios::ate);
 	if (ftrFile.is_open()) {
 		//read header
-		ftrFile.seekg(0, ios::beg);
+		ftrFile.seekg(0, std::ios::beg);
 		ftrFile.read(ftrBuf, ftrLen);
 		ftrFile.close();
 	}
-	else cout << "unable to open footer file" << endl;
+	else std::cout << "unable to open footer file" << std::endl;
 
 	std::string padPath = hdrPadFtrPath + "i_pad.bin";
 
-	//ifstream padFile("i_pad.bin", ios::in | ios::binary | ios::ate);
-	ifstream padFile(padPath, ios::in | ios::binary | ios::ate);
+	//std::ifstream padFile("i_pad.bin", std::ios::in | std::ios::binary | std::ios::ate);
+	std::ifstream padFile(padPath, std::ios::in | std::ios::binary | std::ios::ate);
 	if (padFile.is_open()) {
 		//read header
-		padFile.seekg(0, ios::beg);
+		padFile.seekg(0, std::ios::beg);
 		padFile.read(padBuf, padLen);
 		padFile.close();
 	}
-	else cout << "unable to open padding file" << endl;
+	else std::cout << "unable to open padding file" << std::endl;
 
 	//copy header to buffer
 	std::memcpy(buffer.data(), hdrBuf, hdrLen);
@@ -479,14 +477,14 @@ void Raster<T>::ToPGBinary(const std::string& hdrPadFtrPath, const std::string& 
 	std::memcpy(&buffer[(nrows * ncols * buf_T) + hdrLen], ftrBuf, ftrLen);
 
 	//write buffer to file
-	ofstream out(binData, ios::out | ios::binary);
+	std::ofstream out(binData, std::ios::out | std::ios::binary);
 	if (out.is_open())
 	{
-		out.seekp(0, ios::beg);
+		out.seekp(0, std::ios::beg);
 		out.write(buffer.data(), bufferSize);
 		out.close();
 	}
-	else cout << "Unable to open output file";
+	else std::cout << "Unable to open output file";
 }
 
 template<typename T>
@@ -518,7 +516,7 @@ template<typename T>
 void Raster<T>::ToCSV(const std::string& csvFile) {
 
 	//create an ofstream object
-	ofstream opfile(csvFile);
+	std::ofstream opfile(csvFile);
 
 	//check the file opened OK
 	if (opfile.is_open()) {
@@ -538,7 +536,7 @@ void Raster<T>::ToCSV(const std::string& csvFile) {
 		opfile.close();
 	}
 	else {
-		cout << "Unable to open csv output file";
+		std::cout << "Unable to open csv output file";
 	}
 }
 

@@ -2,9 +2,10 @@
 #include "IRaster.h"
 #include "CSVToolkit.h"
 #include <chrono>
-#define NOZONE -1
 
-using namespace std;
+
+const int NOZONE = -1;
+
 
 //simple cell structure
 struct Cell {
@@ -21,7 +22,7 @@ struct Cell {
 //simple zone structure
 struct Zone {
 	int id;
-	vector<Cell> cells;
+	std::vector<Cell> cells;
 	Zone(int zid) {
 		id = zid;
 	}
@@ -29,9 +30,19 @@ struct Zone {
 
 //simple ward structure
 struct Ward {
-	vector<Cell> cells;
+	std::vector<Cell> cells;
 };
 
-void CreateDevZones(bool useBin, int minSize, bool moore, std::string inputMask, std::string outputZone, std::string rastHdr, std::string pathToBinConfig, std::string inputWard = std::string());
+void CreateDevZones(bool useBin, int minSize, bool moore, 
+										const std::string& inputMask, 
+										const std::string& outputZone, 
+										const std::string& rastHdr, 
+										const std::string& pathToBinConfig, 
+										const std::string& inputWard = std::string());
 
-void DevZoneAVGSuit(bool useBin, std::string zoneID, std::string zoneData, std::string zoneAVG, std::string rastHdr, std::string pathToBinConfig);
+void DevZoneAVGSuit(bool useBin, 
+										const std::string& zoneID, 
+										const std::string& zoneData, 
+										const std::string& zoneAVG, 
+										const std::string& rastHdr, 
+										const std::string& pathToBinConfig);
