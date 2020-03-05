@@ -1,9 +1,15 @@
 #include "MultiCriteriaEval.h"
 
-void MaskedWeightedSum(bool useBin, std::string iRasCount, std::string iRasInputs, std::string dRasCount, std::string dRasInputs, std::string output,
-	std::string rastHdr, std::string binConfigPath, bool reverse) {
-
-	//new - BEGIN
+void MaskedWeightedSum(bool useBin, 
+  										 const std::string& iRasCount, 
+  										 const std::string& iRasInputs, 
+  										 const std::string& dRasCount, 
+  										 const std::string& dRasInputs, 
+  										 const std::string& output,	
+  										 const std::string& rastHdr, 
+  										 const std::string& binConfigPath, 
+  										 bool reverse) {
+  //new - BEGIN
 	std::string swap_path = binConfigPath;
 	//new - END
 
@@ -22,7 +28,7 @@ void MaskedWeightedSum(bool useBin, std::string iRasCount, std::string iRasInput
 
 	//read numI
 	ExtractCSV(iRasCount, 1, 0, singleItemStr);
-	numI = GetIntFromString(singleItemStr[0]);
+	numI = std::stoi(singleItemStr[0]);
 	//cout << "numI = " << numI << endl;
 
 	//variables to store IRaster names and weights
@@ -38,11 +44,11 @@ void MaskedWeightedSum(bool useBin, std::string iRasCount, std::string iRasInput
 
 	//convert string data to double
 	for (int i = 0; i != numI; ++i) {
-		iWgt[i] = GetDoubleFromString(iWgtStr[i]);
+		iWgt[i] = std::stod(iWgtStr[i]);
 	}
 
 	//setup a vector of IRasters
-	vector<IRaster> iVec(numI);
+	std::vector<IRaster> iVec(numI);
 
 	//setup and read rasters
 	for (int i = 0; i != numI; ++i) {		
@@ -54,7 +60,7 @@ void MaskedWeightedSum(bool useBin, std::string iRasCount, std::string iRasInput
 		}
 		else {
 			iVec[i].FromCSV(swap_path + iRasStr[i]);
-			cout << "reading " << swap_path + iRasStr[i] << endl;
+			std::cout << "reading " << swap_path + iRasStr[i] << std::endl;
 		}
 	}
 
@@ -64,7 +70,7 @@ void MaskedWeightedSum(bool useBin, std::string iRasCount, std::string iRasInput
 
 	//read numD
 	ExtractCSV(dRasCount, 1, 0, singleItemStr);
-	numD = GetIntFromString(singleItemStr[0]);
+	numD = std::stoi(singleItemStr[0]);
 	//cout << "numD = " << numD << endl;
 
 	//variables to store DRaster names and weights
@@ -80,11 +86,11 @@ void MaskedWeightedSum(bool useBin, std::string iRasCount, std::string iRasInput
 
 	//convert string data to double
 	for (int d = 0; d != numD; ++d) {
-		dWgt[d] = GetDoubleFromString(dWgtStr[d]);
+		dWgt[d] = std::stod(dWgtStr[d]);
 	}
 
 	//setup a vector of DRasters
-	vector<DRaster> dVec;
+	std::vector<DRaster> dVec;
 
 	//push back by numD
 	for (int d = 0; d != numD; ++d) {
@@ -101,7 +107,7 @@ void MaskedWeightedSum(bool useBin, std::string iRasCount, std::string iRasInput
 		}
 		else {
 			dVec[d].FromCSV(swap_path + dRasStr[d]);
-			cout << "reading " << swap_path + dRasStr[d] << endl;
+			std::cout << "reading " << swap_path + dRasStr[d] << std::endl;
 		}
 	}
 

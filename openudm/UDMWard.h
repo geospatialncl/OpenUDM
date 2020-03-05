@@ -9,7 +9,6 @@ public:
 	UDMWard();
 	~UDMWard() = default;
 
-	// TODO address memory issues	
 	std::vector<UDMZonePtr> zones;
 	std::vector<UDMCellPtr> cells;
 	double popChange;

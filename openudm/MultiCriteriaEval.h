@@ -3,7 +3,13 @@
 #include "CSVToolkit.h"
 #include <chrono>
 
-using namespace std;
 
-void MaskedWeightedSum(bool useBin, std::string iRasCount, std::string iRasInputs, std::string dRasCount, std::string dRasInputs, std::string output,
-						std::string rastHdr, std::string binConfigPath, bool reverse);
+void MaskedWeightedSum(bool useBin, 
+											 const std::string& iRasCount, 
+											 const std::string& iRasInputs, 
+											 const std::string& dRasCount, 
+											 const std::string& dRasInputs, 
+											 const std::string& output,
+											 const std::string& rastHdr, 
+											 const std::string& binConfigPath, 
+											 bool reverse);

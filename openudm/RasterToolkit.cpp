@@ -563,8 +563,8 @@ void Standardise(const std::string& srcRas, const std::string& maskRas) {
 	src.NODATA_value = mask.NODATA_value;
 
 	//set min and max
-	double min = numeric_limits<double>::max();
-	double max = numeric_limits<double>::min();
+	double min = std::numeric_limits<double>::max();
+	double max = std::numeric_limits<double>::min();
 
 	//for all cells in srcRas
 	for (int r = 0; r != src.nrows; ++r) {
@@ -619,8 +619,8 @@ void RevPolarityStandardise(const std::string& srcRas, const std::string& maskRa
 	src.NODATA_value = mask.NODATA_value;
 
 	//set min and max
-	double min = numeric_limits<double>::max();
-	double max = numeric_limits<double>::min();
+	double min = std::numeric_limits<double>::max();
+	double max = std::numeric_limits<double>::min();
 
 	//for all cells in srcRas
 	for (int r = 0; r != src.nrows; ++r) {
@@ -667,7 +667,7 @@ void AreaFromRaster(const std::string& wardIDRas, int numWards, const std::strin
 	wardData.Read(wardDataRas);
 
 	//create a vector of wards whose size = numWards
-	vector<Ward> wards;
+	std::vector<Ward> wards;
 	for (int w = 0; w != numWards; ++w) {
 		wards.push_back(Ward());
 	}
@@ -701,7 +701,7 @@ void AreaFromRaster(const std::string& wardIDRas, int numWards, const std::strin
 	//write areaData to CSV	
 
 	//create an ofstream object
-	ofstream opfile(areaOutput);
+	std::ofstream opfile(areaOutput);
 
 	//set precision to max = 15 digits...	
 	opfile.precision(std::numeric_limits<double>::digits10);
@@ -723,7 +723,7 @@ void AreaFromRaster(const std::string& wardIDRas, int numWards, const std::strin
 		opfile.close();
 	}
 	else {
-		cout << "Unable to open areaOutput file";
+		std::cout << "Unable to open areaOutput file";
 	}
 }
 
@@ -791,7 +791,7 @@ void DRasterSumRows(const std::string& inputRas, const std::string& outputCSV) {
 	ras.Setup(inputRas);
 	ras.Read(inputRas);
 
-	vector<double> rows;
+	std::vector<double> rows;
 
 	for (int r = 0; r != ras.nrows; ++r) {
 		
@@ -806,7 +806,7 @@ void DRasterSumRows(const std::string& inputRas, const std::string& outputCSV) {
 	}
 
 	//create an ofstream object
-	ofstream opfile(outputCSV);
+	std::ofstream opfile(outputCSV);
 
 	//set precision to max = 15 digits...	
 	opfile.precision(std::numeric_limits<double>::digits10);
@@ -826,7 +826,7 @@ void DRasterSumRows(const std::string& inputRas, const std::string& outputCSV) {
 		opfile.close();
 	}
 	else {
-		cout << "Unable to open csv output file";
+		std::cout << "Unable to open csv output file";
 	}
 }
 
@@ -836,8 +836,8 @@ void DRasterSumColumns(const std::string& inputRas, const std::string& outputCSV
 	ras.Setup(inputRas);
 	ras.Read(inputRas);
 
-	vector<double> rows;
-	vector<double> cols;
+	std::vector<double> rows;
+	std::vector<double> cols;
 
 	/*for (int r = 0; r != ras.nrows; ++r) {
 
@@ -864,7 +864,7 @@ void DRasterSumColumns(const std::string& inputRas, const std::string& outputCSV
 	}
 
 	//create an ofstream object
-	ofstream opfile(outputCSV);
+	std::ofstream opfile(outputCSV);
 
 	//set precision to max = 15 digits...	
 	opfile.precision(std::numeric_limits<double>::digits10);
@@ -888,7 +888,7 @@ void DRasterSumColumns(const std::string& inputRas, const std::string& outputCSV
 		opfile.close();
 	}
 	else {
-		cout << "Unable to open csv output file";
+		std::cout << "Unable to open csv output file";
 	}
 }
 
@@ -898,7 +898,6 @@ void DRasterAscToBin(const std::string& input, const std::string& output, const 
 	ras.Setup(input);
 	ras.Read(input);
 	ras.ToPGBinary(pathToBinaryConfig, output);
-	ras.Cleanup();
 }
 
 void DRasterAscToCsv(const std::string& input, const std::string& output) {
@@ -907,7 +906,6 @@ void DRasterAscToCsv(const std::string& input, const std::string& output) {
 	ras.Setup(input);
 	ras.Read(input);
 	ras.ToCSV(output);
-	ras.Cleanup();
 }
 
 void DRasterBinToAsc(const std::string& input, const std::string& output, const std::string& hdrFile) {
@@ -916,7 +914,6 @@ void DRasterBinToAsc(const std::string& input, const std::string& output, const 
 	ras.Setup(hdrFile);
 	ras.FromPGBinary(input);
 	ras.Write(output);
-	ras.Cleanup();
 }
 
 void DRasterCsvToAsc(const std::string& input, const std::string& output, const std::string& hdrFile) {
@@ -925,7 +922,6 @@ void DRasterCsvToAsc(const std::string& input, const std::string& output, const 
 	ras.Setup(hdrFile);
 	ras.FromCSV(input);
 	ras.Write(output);
-	ras.Cleanup();
 }
 
 void IRasterAscToBin(const std::string& input, const std::string& output, const std::string& pathToBinaryConfig) {
@@ -934,7 +930,6 @@ void IRasterAscToBin(const std::string& input, const std::string& output, const 
 	ras.Setup(input);
 	ras.Read(input);
 	ras.ToPGBinary(pathToBinaryConfig, output);
-	ras.Cleanup();
 }
 
 void IRasterAscToCsv(const std::string& input, const std::string& output) {
@@ -943,7 +938,6 @@ void IRasterAscToCsv(const std::string& input, const std::string& output) {
 	ras.Setup(input);
 	ras.Read(input);
 	ras.ToCSV(output);
-	ras.Cleanup();
 }
 
 void IRasterBinToAsc(const std::string& input, const std::string& output, const std::string& hdrFile) {
@@ -952,7 +946,6 @@ void IRasterBinToAsc(const std::string& input, const std::string& output, const 
 	ras.Setup(hdrFile);
 	ras.FromPGBinary(input);
 	ras.Write(output);
-	ras.Cleanup();
 }
 
 void IRasterCsvToAsc(const std::string& input, const std::string& output, const std::string& hdrFile) {
@@ -961,7 +954,6 @@ void IRasterCsvToAsc(const std::string& input, const std::string& output, const 
 	ras.Setup(hdrFile);
 	ras.FromCSV(input);
 	ras.Write(output);
-	ras.Cleanup();
 }
 
 void DRasterAscToODVal(const std::string& inputRas, const std::string& inputZoneCodes, const std::string& outputCSV) {
@@ -979,7 +971,7 @@ void DRasterAscToODVal(const std::string& inputRas, const std::string& inputZone
 	//write 3-column csv using origin-destination-value format
 
 	//create an ofstream object
-	ofstream opfile(outputCSV);
+	std::ofstream opfile(outputCSV);
 
 	//set precision to max = 15 digits...	
 	opfile.precision(std::numeric_limits<double>::digits10);
@@ -1006,11 +998,9 @@ void DRasterAscToODVal(const std::string& inputRas, const std::string& inputZone
 		opfile.close();
 	}
 	else {
-		cout << "Unable to open csv output file";
+		std::cout << "Unable to open csv output file";
 	}
 
-	//cleanup	
-	ras.Cleanup();
 }
 
 void DRasterSubRaster(const std::string& inRasStr, const std::string& inCodeStr, const std::string& outRasStr, const std::string& outCodeStr, const std::string& outHdrFile) {
@@ -1044,7 +1034,7 @@ void DRasterSubRaster(const std::string& inRasStr, const std::string& inCodeStr,
 	}
 
 	for (int ocode = 0; ocode != outRas.nrows; ++ocode) {
-		cout << outCodes[ocode] << " = " << outIndex[ocode] << endl;
+		std::cout << outCodes[ocode] << " = " << outIndex[ocode] << std::endl;
 	}
 
 	//use the outIndex[ocode] to copy values from input to output rasters	
@@ -1056,9 +1046,6 @@ void DRasterSubRaster(const std::string& inRasStr, const std::string& inCodeStr,
 
 	outRas.Write(outRasStr);		
 
-	//tidy up
-	inRas.Cleanup();
-	outRas.Cleanup();
 }
 
 

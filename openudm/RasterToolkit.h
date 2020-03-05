@@ -2,9 +2,6 @@
 #include "IRaster.h"
 #include "CSVToolkit.h"
 #include <chrono>
-#define NOZONE -1
-
-using namespace std;
 
 //simple cell structure
 struct Cell {
@@ -17,12 +14,12 @@ struct Cell {
 //simple zone structure
 struct Zone {
 	int id;
-	vector<Cell> cells;
+	std::vector<Cell> cells;
 	Zone(int zid) : id(zid) { }
 };
 
 //simple ward structure
-typedef vector<Cell> Ward;
+typedef std::vector<Cell> Ward;
 
 bool DevCompare(const std::string& iRas1, const std::string& iRas2, const std::string& result);
 bool IRasterCompare(const std::string& iRas1, const std::string& iRas2, const std::string& result);

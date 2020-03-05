@@ -234,9 +234,6 @@ def main(swap_path):
     print("cm.WriteOverflowWards", overflow_str)
     cm.WriteOverflowWards(overflow_str)
 
-    print("cm.Cleanup")
-    cm.Cleanup()
-
     # WRITE RESULTS TO RASTER-----------------------------------------------------------------------------------
 
     #convert development output raster from csv to asc

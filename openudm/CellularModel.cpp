@@ -77,7 +77,7 @@ void CellularModel::LoadCurrentPopulation(const std::string& popData, int curPop
 
 	//convert string data to double
 	for (size_t w = 0; w != numWards; ++w) {
-		curPop[w] = GetDoubleFromString(tempCP[w]);
+		curPop[w] = std::stod(tempCP[w]);
 	}
 }
 
@@ -88,7 +88,7 @@ void CellularModel::LoadFuturePopulation(const std::string& popData, int futPopC
 
 	//convert string data to double
 	for (size_t w = 0; w != numWards; ++w) {
-		futPop[w] = GetDoubleFromString(tempFP[w]);
+		futPop[w] = std::stod(tempFP[w]);
 	}
 }
 
@@ -99,7 +99,7 @@ void CellularModel::LoadWardDensity(const std::string& densityData, int densityC
 
 	//convert string data to double
 	for (size_t w = 0; w != numWards; ++w) {
-		wardDensity[w] = GetDoubleFromString(tempWardStr[w]);
+		wardDensity[w] = std::stod(tempWardStr[w]);
 	}
 
 	//density values have been provided
@@ -660,22 +660,3 @@ void CellularModel::OutputRasterResult(const std::string& rasterData) {
 	}
 }
 
-void CellularModel::Cleanup() {
-
-	//call private function FreeAll()
-	FreeAll();
-}
-
-void CellularModel::FreeAll() {
-
-	//rasters
-	iWardID.Cleanup();
-	zoneID.Cleanup();
-	zoneAVG.Cleanup();
-	devLand.Cleanup();
-	cellSuit.Cleanup();
-	finalDev.Cleanup();
-
-	//wards hierarchy
-	wards.clear();
-}
