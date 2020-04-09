@@ -1,0 +1,29 @@
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 'Checkout and build'
+          - uses: actions/checkout@v2
+          - uses: actions/setup-python@v1
+            with:
+              python-version: '3.x'
+              architecture: 'x64'
+          run: |
+            python setup.py build
+            python setup.py install
+
+      - name: 'Login via Azure CLI'
+          uses: azure/login@v1
+          with:
+            creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+        - uses: azure/docker-login@v1
+          with:
+            login-server: contoso.azurecr.io
+            username: ${{ secrets.REGISTRY_USERNAME }}
+            password: ${{ secrets.REGISTRY_PASSWORD }}
+
+        - run: |
+            docker build . -t contoso.azurecr.io/nodejssampleapp:${{ github.sha }}
+            docker push contoso.azurecr.io/nodejssampleapp:${{ github.sha }}
