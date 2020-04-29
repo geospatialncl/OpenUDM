@@ -20,10 +20,10 @@ jobs:
 
         - uses: azure/docker-login@v1
           with:
-            login-server: contoso.azurecr.io
+            login-server: rsenucitycat.azurecr.io
             username: ${{ secrets.REGISTRY_USERNAME }}
             password: ${{ secrets.REGISTRY_PASSWORD }}
 
         - run: |
-            docker build . -t contoso.azurecr.io/nodejssampleapp:${{ github.sha }}
-            docker push contoso.azurecr.io/nodejssampleapp:${{ github.sha }}
+            docker build . -t rsenucitycat.azurecr.io/open-udm:${{ github.sha }}
+            docker push rsenucitycat.azurecr.io/open-udm:${{ github.sha }}
