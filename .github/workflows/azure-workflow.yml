@@ -12,20 +12,19 @@ jobs:
         with:
           python-version: '3.x'
           architecture: 'x64'
-      -
-        name: "Build and install"
-        run: |
-          apt-get update
-          python3 --version
-          python3 setup.py build
-          python3 setup.py install
       #-
-       # name: "Login via Azure CLI"
-        #uses: azure/login@v1
-        #with:
-         # login-server: rsenucitycat.azurecr.io
-          #username: ${{ secrets.REGISTRY_USERNAME }}
-          #password: ${{ secrets.REGISTRY_PASSWORD }}
+       # name: "Build and install"
+        #run: |
+         # python3 --version
+          #python3 setup.py build
+          #python3 setup.py install
+      -
+        name: "Login via Azure CLI"
+        uses: azure/login@v1
+        with:
+          login-server: rsenucitycat.azurecr.io
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
       #-
        # name: "Build and push docker image"
         #run: |
