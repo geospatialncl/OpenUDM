@@ -12,11 +12,12 @@ jobs:
         with:
           python-version: '3.x'
           architecture: 'x64'
-      #-
-        #name: "Build and install"
-        #run: |
-         # python setup.py build
-         # python setup.py install
+      -
+        name: "Build and install"
+        run: |
+          python3 --version
+          python3 setup.py build
+          python3 setup.py install
       #-
        # name: "Login via Azure CLI"
         #uses: azure/login@v1
