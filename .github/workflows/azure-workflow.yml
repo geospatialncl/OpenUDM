@@ -20,7 +20,7 @@ jobs:
           #python3 setup.py install
       -
         name: "Login via Azure CLI"
-        uses: azure/login@v1
+        uses: azure/docker-login@v1
         with:
           login-server: rsenucitycat.azurecr.io
           username: ${{ secrets.REGISTRY_USERNAME }}
