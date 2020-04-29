@@ -20,12 +20,12 @@ jobs:
       -
         name: "Login via Azure CLI"
         uses: azure/login@v1
-      -
-        name: "Build and push docker image"
         with:
           login-server: rsenucitycat.azurecr.io
           username: ${{ secrets.REGISTRY_USERNAME }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
+      -
+        name: "Build and push docker image"
         run: |
           docker build . -t rsenucitycat.azurecr.io/open-udm:${{ github.sha }}
           docker push rsenucitycat.azurecr.io/open-udm:${{ github.sha }}
