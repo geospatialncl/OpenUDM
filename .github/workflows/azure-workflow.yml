@@ -15,6 +15,7 @@ jobs:
       -
         name: "Build and install"
         run: |
+          apt-get update
           python3 --version
           python3 setup.py build
           python3 setup.py install
