@@ -17,13 +17,13 @@ jobs:
         run: |
           python setup.py build
           python setup.py install
-      -
-        name: "Login via Azure CLI"
-        uses: azure/login@v1
-        with:
-          login-server: rsenucitycat.azurecr.io
-          username: ${{ secrets.REGISTRY_USERNAME }}
-          password: ${{ secrets.REGISTRY_PASSWORD }}
+      #-
+       # name: "Login via Azure CLI"
+        #uses: azure/login@v1
+        #with:
+         # login-server: rsenucitycat.azurecr.io
+          #username: ${{ secrets.REGISTRY_USERNAME }}
+          #password: ${{ secrets.REGISTRY_PASSWORD }}
       #-
        # name: "Build and push docker image"
         #run: |
