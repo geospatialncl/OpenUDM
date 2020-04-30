@@ -9,4 +9,4 @@ RUN python setup.py build
 RUN python setup.py install
 
 # Test a model
-RUN python scripts/udm_solo.py
+ENTRYPOINT ["python", "scripts/udm_solo.py"]
