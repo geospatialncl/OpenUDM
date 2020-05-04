@@ -1,0 +1,20 @@
+on: [push, pull_request]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        uses: actions/checkout@v2
+      -
+        name: "Login via Azure CLI"
+        uses: azure/docker-login@v1
+        with:
+          login-server: rsenucitycat.azurecr.io
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+      -
+        name: "Build and push docker image"
+        run: |
+          docker build . -t rsenucitycat.azurecr.io/open-udm:${{ github.sha }}
+          docker push rsenucitycat.azurecr.io/open-udm:${{ github.sha }}
