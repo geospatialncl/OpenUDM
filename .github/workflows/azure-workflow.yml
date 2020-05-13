@@ -10,11 +10,11 @@ jobs:
         name: "Login via Azure CLI"
         uses: azure/docker-login@v1
         with:
-          login-server: rsenucitycat.azurecr.io
+          login-server: rsenumistral.azurecr.io
           username: ${{ secrets.REGISTRY_USERNAME }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
       -
         name: "Build and push docker image"
         run: |
-          docker build . -t rsenucitycat.azurecr.io/open-udm:${{ github.sha }}
-          docker push rsenucitycat.azurecr.io/open-udm:${{ github.sha }}
+          docker build . -t rsenumistral.azurecr.io/open-udm:${{ github.sha }}
+          docker push rsenumistral.azurecr.io/open-udm:${{ github.sha }}
