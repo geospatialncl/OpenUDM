@@ -1,11 +1,15 @@
 from setuptools import Extension, setup
 from glob import glob
+import os
 
 sources = glob('openudm/*.cpp') + glob('openudm/*.i')
 
 py_modules = ['CellularModel', 'RasterToolkit', 'MultiCriteriaEval', 'DevZones']
 
-cxxflags = ['-Wall', '-std=c++11', '-Werror', '-pedantic']
+if os.name == 'nt':
+    cxxflags = {'gcc': ['/Qstd=c99']}
+else:
+    cxxflags = ['-Wall', '-std=c++11', '-Werror', '-pedantic']
 
 headers = glob('openudm/*.h')
 
