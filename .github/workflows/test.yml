@@ -18,12 +18,14 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install swig
-      run: |
-        conda install swig
+      run: conda install swig
+      shell: bash -l {0}
     - name: Build and install openudm
       run: |
         python setup.py build
         python setup.py install
+      shell: bash -l {0}
     - name: Run script
       run: |
         python scripts/udm_solo.py
+      shell: bash -l {0}
