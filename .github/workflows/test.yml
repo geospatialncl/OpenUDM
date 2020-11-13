@@ -27,7 +27,7 @@ jobs:
     - name: Install swig (windows)
       if: matrix.os == 'windows-latest'
       run: |
-        choco install swig
+        choco install swig -y
 
     - name: Build and install openudm
       run: |
