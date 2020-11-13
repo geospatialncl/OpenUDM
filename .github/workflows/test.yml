@@ -19,18 +19,18 @@ jobs:
         python-version: ${{ matrix.python-version }}
 
     - name: Install swig (ubuntu)
-      if: ${{ matrix.os }} == 'ubuntu-latest'
+      if: matrix.os == 'ubuntu-latest'
       run: |
         sudo apt-get update
         sudo apt-get install -y swig
 
     - name: Install swig (macos)
-      if: ${{ matrix.os }} == 'macos-latest'
+      if: matrix.os == 'macos-latest'
       run: |
         brew install swig
 
     - name: Install swig (windows)
-      if: ${{ matrix.os }} == 'windows-latest'
+      if: matrix.os == 'windows-latest'
       run: |
         choco install swig
 
