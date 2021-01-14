@@ -4,6 +4,7 @@ import geopandas as gp
 
 def output_raster_to_vector(value_of_interest = 0, raster_file_path = 'raster.asc', output_vector_file = 'buildings.gpkg'):
     """
+    Converts a .asc file (or any raster format) to a vector geopackage creating polygons for cells with the given value (default value set to 0)
 
     param: value_of_interest:
         raster value assigned to cells which are to be converted to polygons
