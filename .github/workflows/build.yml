@@ -26,7 +26,7 @@ jobs:
     - name: Build and install openudm
       run: |
         python setup.py build
-        python setup.py install
+        python setup.py develop
 
     - name: Run script
       run: |
@@ -38,6 +38,6 @@ jobs:
         TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
         TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
       run: |
-        python setup.py sdist -d release bdist_wheel -d release
+        python setup.py sdist bdist_wheel
         pip install setuptools wheel twine
-        twine upload release/*
+        twine upload dist/*
