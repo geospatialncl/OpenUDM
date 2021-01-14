@@ -77,5 +77,6 @@ setup(
     author='James Virgo',
     description='Urban Development Model',
     packages=['openudm'],
-    ext_modules=ext_modules
+    ext_modules=ext_modules,
+    entry_points={'console_scripts':['raster_to_vector=tools.command_line:raster_to_vector']}
 )

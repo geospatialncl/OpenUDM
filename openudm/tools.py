@@ -1,8 +1,25 @@
 import rasterio
 from rasterio.features import shapes
 import geopandas as gp
+import sys
 
-def output_raster_to_vector(value_of_interest = 0, raster_file_path = 'raster.asc', output_vector_file = 'buildings.gpkg'):
+def output_raster_to_vector():
+    """
+    Run raster to vector file conversion for UDM output dataset conversion.
+
+    """
+    # default values for required input variables
+    value_of_interest = 22
+    raster_file_path = 'raster.asc'
+    output_vector_file = 'buildings.gpkg'
+
+    # parse command line arguments
+    args = sys.argv[1:]
+        
+    rasster_to_vector(value_of_interest, raster_file_path, output_vector_file)
+
+
+def raster_to_vector(value_of_interest = 0, raster_file_path = 'raster.asc', output_vector_file = 'buildings.gpkg'):
     """
     Converts a .asc file (or any raster format) to a vector geopackage creating polygons for cells with the given value (default value set to 0)
 
