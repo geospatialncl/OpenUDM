@@ -37,6 +37,7 @@ jobs:
       uses: RalfG/python-wheels-manylinux-build@v0.3.3
       with:
         python-versions: 'cp36-cp36m cp37-cp37m cp38-cp38'
+        system-packages: 'swig'
 
     - name: Build wheels (Windows)
       if: matrix.os == 'windows-latest'
