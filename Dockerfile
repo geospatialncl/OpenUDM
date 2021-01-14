@@ -12,4 +12,4 @@ RUN python setup.py build
 RUN python setup.py install
 
 # Test a model
-ENTRYPOINT ["python", "scripts/udm_solo.py"]
+ENTRYPOINT ["python", "-m", "openudm"]
