@@ -31,13 +31,16 @@ def main(swap_path):
     pop_str = os.path.join(swap_path, 'in_zonal_pop.csv')
     density_str = os.path.join(swap_path, 'in_zonal_density.csv')
 
+    #variable density
+    dph_i_raster_str = os.path.join(swap_path, 'in_dph_ras.csv')
+
     mce_i_rasters = mce_i_raster_str
     mce_d_rasters = mce_d_raster_str
     cell_i_rasters = cell_i_raster_str
     ordered_wards = wards_str
     zonal_pop_output = pop_str
     driver_name = 'no_driver'
-    density = density_str
+    density = density_str    
 
     # INDATA END-----------------------------------------------------------------------------------
 
@@ -83,6 +86,9 @@ def main(swap_path):
     is_driven = 0
     reverse = 0
     moore = 0
+
+    #variable density - enable to test then move to params table
+    dph = 1
 
     # PARAMETERS END-------------------------------------------------------------------------------
 
@@ -179,7 +185,10 @@ def main(swap_path):
 
     # CALL SWIG-WRAPPED C++ FUNCTION------------------------------------------------------------------------
 
-    dz.CreateDevZones((bval>0), min_dev_area, (mval>0), mask_str, zone_id_str, full_rast_hdr, swap_path, ward_id_str)
+    #dz.CreateDevZones((bval>0), min_dev_area, (mval>0), mask_str, zone_id_str, full_rast_hdr, swap_path, ward_id_str)
+    
+    grid_id_csv = os.path.join(swap_path, 'rasGridIDs.csv')
+    dz.CreateDevZones((bval>0), min_dev_area, (mval>0), mask_str, zone_id_str, full_rast_hdr, swap_path, grid_id_csv)
     print("dz.CreateDevZones")
     ###ZONE AVG---------------------------------------------------------------------------------------------
 
@@ -189,6 +198,29 @@ def main(swap_path):
     print("dz.DevZoneAVGSuit")
 
     ###CELLULAR MODEL---------------------------------------------------------------------------------------
+
+    #variable density
+    #rt.IRasterAscToCsv(dwellings_raster_asc, dwellings_raster_csv)
+
+    #set dval based upon boolean input (dph) - it can then be tested in place as function argument
+    dval = 0
+    if dph:
+        dval = 1
+
+    #setup stack to hold raster filenames
+    stack = []
+
+    #import table and convert rasters from .asc named in 'asc' column to .csv named in 'csv' column
+    if dval:
+        with open(dph_i_raster_str) as csvfile:
+            reader = csv.DictReader(csvfile)
+            for row in reader: 
+                stack.append(row['csv'])           
+                if row['convert'] == 'y':                
+                    rt.IRasterAscToCsv(os.path.join(swap_path, row['asc']), os.path.join(swap_path, row['csv']))
+
+        #retrieve filename from stack
+        dph_raster_csv = os.path.join(swap_path, stack.pop())
 
     # CALL SWIG-WRAPPED C++ FUNCTION-------------------------------------------------------------------------
 
@@ -214,6 +246,10 @@ def main(swap_path):
     if density_provided:
         print("cm.LoadWardDensity", density_str,0,1)
         cm.LoadWardDensity(density_str,0,1)
+
+    #variable density 
+    if dval:
+        cm.LoadDwellingsRaster(dph_raster_csv)
 
     print("cm.LoadWardIDRaster", ward_id_str)
     cm.LoadWardIDRaster(ward_id_str)
