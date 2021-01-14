@@ -30,7 +30,7 @@ jobs:
 
     - name: Run script
       run: |
-        python scripts/udm_solo.py
+        python -m openudm
 
     - name: Publish
       if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
