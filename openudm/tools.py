@@ -10,7 +10,7 @@ def output_raster_to_vector():
 
     """
     # default values for required input variables
-    value_of_interest = 22
+    value_of_interest = 1
     raster_file_path = 'raster.asc'
     output_vector_file = 'buildings.gpkg'
 
@@ -18,15 +18,27 @@ def output_raster_to_vector():
     args = sys.argv[1:]
 
     # parse passed command line arguments
-    opts, args = getopt.getopt(args, "i:o:cv:", ["input_path_file=", "output_path_file", "raster_cell_value"]) # e.g. i = input file (colon indicates input expected)
+    try:
+        opts, args = getopt.getopt(args, "i:o:c:", ["input_path_file=", "output_path_file=", "raster_cell_value="]) # e.g. i = input file (colon indicates input expected)
+    except getopt.GetoptError as err:
+        print(err)
+        sys.exit(2)
 
+    # check each passed argument and assign values to variables
     for opt, arg in opts:
-        if opt in ("-i"):
+        if opt in ("-i", "input_path_file="):
             raster_file_path = arg
-        elif opt in ("-o"):
+        elif opt in ("-o", "output_path_file="):
             output_vector_file = arg
-        elif opt in ("cv"):
-            value_of_interest = arg
+        elif opt in ("-c", "raster_cell_value="):
+            try:
+                value_of_interest = int(arg)
+            except:
+                print('Expected integer value for input argument -c. Instead got %s' %arg)
+                sys.exit(2)
+        else:
+            print('Un-recognised argument %s' %opt)
+            sys.exit(2)
 
     raster_to_vector(value_of_interest, raster_file_path, output_vector_file)
 
