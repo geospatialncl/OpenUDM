@@ -78,5 +78,5 @@ setup(
     description='Urban Development Model',
     packages=['openudm'],
     ext_modules=ext_modules,
-    entry_points={'console_scripts':['raster_to_vector=openudm.tools:raster_to_vector']}
+    entry_points={'console_scripts':['raster_to_vector=openudm.tools:output_raster_to_vector']}
 )

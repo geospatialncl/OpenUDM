@@ -2,6 +2,7 @@ import rasterio
 from rasterio.features import shapes
 import geopandas as gp
 import sys
+import getopt
 
 def output_raster_to_vector():
     """
@@ -13,10 +14,18 @@ def output_raster_to_vector():
     raster_file_path = 'raster.asc'
     output_vector_file = 'buildings.gpkg'
 
-    # parse command line arguments
-    args = sys.argv[1:]
-        
-    rasster_to_vector(value_of_interest, raster_file_path, output_vector_file)
+    # parse passed command line arguments
+    opts, args = getopt.getopt(args, "i:o:") # e.g. i = input file (colon indicates input expected)
+
+    for opt, arg in opts:
+        if opt in ("-i"):
+            print("Got input file option:", arg)
+            raster_file_path = arg
+        elif opt in ("-o"):
+            print("Got output file option:", arg)
+            output_vector_file = arg
+
+    raster_to_vector(value_of_interest, raster_file_path, output_vector_file)
 
 
 def raster_to_vector(value_of_interest = 0, raster_file_path = 'raster.asc', output_vector_file = 'buildings.gpkg'):
