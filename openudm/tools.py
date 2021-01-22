@@ -77,7 +77,7 @@ def raster_to_vector(value_of_interest = 0, raster_file_path = 'raster.asc', out
     if len(gpd_polygons) == 0:
         print('Could not export as no cells matched the expected cell value (%s)' %value_of_interest)
         exit(2)
-        
+
     # export file
     gpd_polygons.to_file(output_vector_file, layer='buildings', driver="GPKG")
 

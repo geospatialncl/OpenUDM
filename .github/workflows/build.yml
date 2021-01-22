@@ -35,5 +35,5 @@ jobs:
     - name: Run script
       run: |
         python -m openudm
-        raster_to_vector -i Data/out_cell_dev.asc -o Data/buildings.gpkg -c 22
+        raster_to_vector -i Data/out_cell_dev.asc -o Data/new_buildings.gpkg -c 1
 
