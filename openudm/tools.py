@@ -14,16 +14,19 @@ def output_raster_to_vector():
     raster_file_path = 'raster.asc'
     output_vector_file = 'buildings.gpkg'
 
+    # get args list
+    args = sys.argv[1:]
+
     # parse passed command line arguments
-    opts, args = getopt.getopt(args, "i:o:") # e.g. i = input file (colon indicates input expected)
+    opts, args = getopt.getopt(args, "i:o:cv:", ["input_path_file=", "output_path_file", "raster_cell_value"]) # e.g. i = input file (colon indicates input expected)
 
     for opt, arg in opts:
         if opt in ("-i"):
-            print("Got input file option:", arg)
             raster_file_path = arg
         elif opt in ("-o"):
-            print("Got output file option:", arg)
             output_vector_file = arg
+        elif opt in ("cv"):
+            value_of_interest = arg
 
     raster_to_vector(value_of_interest, raster_file_path, output_vector_file)
 
