@@ -20,7 +20,7 @@ jobs:
 
     - name: Install python requirements
       run: |
-        pip3 install requirements.txt
+        pip3 install -r requirements.txt
 
     - name: Install swig (windows)
       if: matrix.os == 'windows-latest'
