@@ -2,7 +2,7 @@
 
 Open Urban Development Model
 
-[![Test](https://github.com/geospatialncl/OpenUDM/workflows/Test/badge.svg)](https://github.com/geospatialncl/OpenUDM/actions)
+[![build](https://github.com/geospatialncl/OpenUDM/workflows/build/badge.svg)](https://github.com/geospatialncl/OpenUDM/actions)
 [![PyPI package](https://img.shields.io/pypi/v/openudm.svg)](https://pypi.python.org/pypi/openudm)
 
 **OpenUDM** is a grid cell-based model which explores where future urban
@@ -31,7 +31,7 @@ development on the natural environment.
 
 ## Quickstart
 
-OpenUDM is a Python package which is tested with Python 3.6 and above. To
+OpenUDM is a Python package which is tested with Python 3.6 - 3.8. To
 install the package using pip, run:
 
     pip install openudm
@@ -40,6 +40,14 @@ If `pip install` fails, you may need to install [`swig`](http://swig.org/),
 which is used to build the core model code. On Ubuntu, run:
 
     sudo apt install swig
+
+On Windows (with [Chocolatey](https://chocolatey.org) installed), run:
+
+    choco install swig
+   
+[`swig`](http://swig.org/) can also be installed using [Anaconda](https://www.anaconda.com/):
+
+    conda install swig
 
 Before running the model, set up the parameter files and grid data files for
 attractors, constraints, current development, and zones. A small example is
