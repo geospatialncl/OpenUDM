@@ -27,6 +27,12 @@ jobs:
         auto-activate-base: false
         use-only-tar-bz2: true
 
+    - name: Install gdal (windows)
+      if: matrix.os == 'windows-latest'
+      run: |
+        pip install gdal
+      shell: bash -l {0}
+
     - name: Install python requirements
       run: |
         pip install rasterio geopandas
