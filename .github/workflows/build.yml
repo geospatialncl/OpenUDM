@@ -26,6 +26,7 @@ jobs:
       run: |
         conda update conda
         conda install gdal
+        conda install -c conda-forge rasterio
 
     - name: Install python requirements
       if: matrix.os == 'ubuntu-latest'
