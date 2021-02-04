@@ -29,15 +29,12 @@ jobs:
 
     - name: Install python requirements
       run: |
+        conda install gdal
         conda install --file requirements.txt
 
-    - name: Build openudm
+    - name: Build & install openudm
       run: |
         python setup.py build
-      shell: bash -l {0}
-
-    - name: Install udm
-      run: |
         python setup.py develop
       shell: bash -l {0}
 
