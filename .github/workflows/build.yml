@@ -31,15 +31,20 @@ jobs:
       run: |
         conda install gdal
 
-    - name: Build and install openudm
+    - name: Build openudm
       run: |
-        which python
         python setup.py build
+        bash -l {0}
+
+    - name: Install udm
+      run: |
         python setup.py develop
+        bash -l {0}
 
     - name: Run script to test UDM
       run: |
         python -m openudm
+        bash -l {0}
 
     - name: Run test for R2V tool
       run: |
