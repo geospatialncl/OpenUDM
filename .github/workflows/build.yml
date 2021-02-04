@@ -29,7 +29,6 @@ jobs:
 
     - name: Install python requirements
       run: |
-        conda install gdal
         conda install rasterio
         # conda install --file requirements.txt
 
