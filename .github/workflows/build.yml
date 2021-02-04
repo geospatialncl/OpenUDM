@@ -21,7 +21,8 @@ jobs:
     - name: Setup GDAL (windows)
       if: matrix.os == 'windows-latest'
       run: |
-        pip3 install geos libgdal gdal
+        apt-get install libgdal-dev
+        pip3 install geos gdal
 
     - name: Install python requirements
       run: |
