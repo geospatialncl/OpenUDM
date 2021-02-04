@@ -34,17 +34,17 @@ jobs:
     - name: Build openudm
       run: |
         python setup.py build
-        bash -l {0}
+      shell: bash -l {0}
 
     - name: Install udm
       run: |
         python setup.py develop
-        bash -l {0}
+      shell: bash -l {0}
 
     - name: Run script to test UDM
       run: |
         python -m openudm
-        bash -l {0}
+      shell: bash -l {0}
 
     - name: Run test for R2V tool
       run: |
