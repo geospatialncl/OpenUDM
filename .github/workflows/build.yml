@@ -31,13 +31,11 @@ jobs:
       if: matrix.os == 'windows-latest'
       run: |
         conda install gdal
-        # pip install gdal
-      # shell: bash -l {0}
 
     - name: Install python requirements
       run: |
-        pip install rasterio geopandas
-        # conda install rasterio
+        # pip install rasterio geopandas
+        conda install rasterio
         # conda install --file requirements.txt
       shell: bash -l {0}
 
