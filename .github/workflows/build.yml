@@ -29,7 +29,7 @@ jobs:
 
     - name: Install python requirements
       run: |
-        conda install gdal
+        conda install --file requirements.txt
 
     - name: Build openudm
       run: |
