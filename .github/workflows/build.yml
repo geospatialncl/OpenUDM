@@ -41,7 +41,7 @@ jobs:
     - name: Run script to test UDM
       run: |
         python -m openudm
-
+      shell: bash -l {0}
 
     - name: Run test for R2V tool
       run: |
