@@ -28,10 +28,11 @@ jobs:
         conda install gdal
         conda install rasterio
 
-    # - name: Install python requirements
-    #   run: |
-    #     pip install rasterio geopandas
-    #  shell: bash -l {0}
+    - name: Install python requirements
+      if: matrix.os == 'ubuntu-latest'
+      run: |
+         pip install rasterio geopandas
+      shell: bash -l {0}
 
     - name: Install swig (windows)
       if: matrix.os == 'windows-latest'
