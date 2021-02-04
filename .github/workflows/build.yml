@@ -9,7 +9,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
-        python-version: [3.6, 3.7] #, 3.8]
+        python-version: [3.6, 3.7, 3.8]
 
     steps:
     - uses: actions/checkout@v2
@@ -29,8 +29,10 @@ jobs:
 
     - name: Install python requirements
       run: |
-        conda install rasterio
+        pip install rasterio geopandas
+        # conda install rasterio
         # conda install --file requirements.txt
+      shell: bash -l {0}
 
     - name: Build openudm
       run: |
