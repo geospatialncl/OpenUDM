@@ -33,6 +33,7 @@ jobs:
 
     - name: Build and install openudm
       run: |
+        which python
         python setup.py build
         python setup.py develop
 
@@ -43,5 +44,3 @@ jobs:
     - name: Run test for R2V tool
       run: |
         raster_to_vector -i Data/out_cell_dev.asc -o Data/new_buildings.gpkg -c 1
-
-
