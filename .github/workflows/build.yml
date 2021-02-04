@@ -13,21 +13,23 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Setup Python ${{ matrix.python-version }}
-      uses: conda-incubator/setup-miniconda@v2
-      with:
-        python-version: ${{ matrix.python-version }}
-        activate-environment: udm
-
-    - name: Install python requirements
-      run: |
-        conda install gdal
-        # conda install --file requirements.txt
 
     - name: Install swig (windows)
       if: matrix.os == 'windows-latest'
       run: |
         choco install swig -y
+
+    - name: Setup Python ${{ matrix.python-version }}
+      uses: conda-incubator/setup-miniconda@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+        activate-environment: udm
+        auto-activate-base: false
+        use-only-tar-bz2: true
+
+    - name: Install python requirements
+      run: |
+        conda install gdal
 
     - name: Build and install openudm
       run: |
