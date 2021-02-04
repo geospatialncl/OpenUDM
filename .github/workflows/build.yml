@@ -28,6 +28,7 @@ jobs:
         conda install gdal
         conda install -c conda-forge rasterio
         conda install -c conda-forge geopandas
+        conda install -c conda-forge rtree=0.9.3
 
     - name: Install python requirements
       if: matrix.os == 'ubuntu-latest'
