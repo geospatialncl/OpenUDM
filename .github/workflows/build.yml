@@ -30,9 +30,9 @@ jobs:
     - name: Install python requirements
       run: |
         conda install gdal
-        conda install --file requirements.txt
+        # conda install --file requirements.txt
 
-    - name: Build & install openudm
+    - name: Build openudm
       run: |
         python setup.py build
         python setup.py develop
@@ -41,8 +41,9 @@ jobs:
     - name: Run script to test UDM
       run: |
         python -m openudm
-      shell: bash -l {0}
+
 
     - name: Run test for R2V tool
       run: |
         raster_to_vector -i Data/out_cell_dev.asc -o Data/new_buildings.gpkg -c 1
+      shell: bash -l {0}
