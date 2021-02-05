@@ -71,11 +71,19 @@ ext_modules = [
     )
 ]
 
+
+def readme():
+  with open('README.md') as f:
+    return f.read()
+
+
 setup(
     name='openudm',
     version='1.0.3',
     author='James Virgo',
     description='Urban Development Model',
+    long_description=readme(),
+    long_description_content_type="text/markdown",
     packages=['openudm'],
     ext_modules=ext_modules,
     entry_points={'console_scripts':['raster_to_vector=openudm.tools:output_raster_to_vector']}
