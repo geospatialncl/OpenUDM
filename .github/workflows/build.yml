@@ -13,22 +13,46 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+
     - name: Setup Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
+      uses: conda-incubator/setup-miniconda@v2
       with:
         python-version: ${{ matrix.python-version }}
+        activate-environment: udm
+        use-only-tar-bz2: true
+
+    - name: Install gdal (windows)
+      if: matrix.os == 'windows-latest'
+      run: |
+        conda update conda
+        conda install gdal
+        conda install -c conda-forge rasterio
+        conda install -c conda-forge geopandas
+        conda install -c conda-forge rtree=0.9.3
+
+    - name: Install python requirements
+      if: matrix.os == 'ubuntu-latest'
+      run: |
+         pip install rasterio geopandas
+      shell: bash -l {0}
 
     - name: Install swig (windows)
       if: matrix.os == 'windows-latest'
       run: |
         choco install swig -y
 
-    - name: Build and install openudm
+    - name: Build openudm
       run: |
         python setup.py build
         python setup.py develop
+      shell: bash -l {0}
 
-    - name: Run script
+    - name: Run script to test UDM
       run: |
         python -m openudm
+      shell: bash -l {0}
 
+    - name: Run test for R2V tool
+      run: |
+        raster_to_vector -i Data/out_cell_dev.asc -o Data/new_buildings.gpkg -c 1
+      shell: bash -l {0}

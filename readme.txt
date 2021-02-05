@@ -108,3 +108,14 @@ out_cell_metadata.csv - record of all inputs, outputs and parameters.
 ---Usage
 
 run udm_solo.py script
+
+--Additional tools
+
+---Raster to Vector
+Command line tool allowing conversion of rasters to vectors
+
+command line call: raster_to_vector
+expected arguments:
+-i <path and name of input raster>
+-o <path and name of output vector - supports geopackages only at the moment>
+-c <the cell value to identify and convert to vectors, expects an integer>

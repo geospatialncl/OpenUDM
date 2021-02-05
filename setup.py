@@ -85,5 +85,6 @@ setup(
     long_description=readme(),
     long_description_content_type="text/markdown",
     packages=['openudm'],
-    ext_modules=ext_modules
+    ext_modules=ext_modules,
+    entry_points={'console_scripts':['raster_to_vector=openudm.tools:output_raster_to_vector']}
 )
