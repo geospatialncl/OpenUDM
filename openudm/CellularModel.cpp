@@ -113,12 +113,12 @@ void CellularModel::LoadWardDensity(const std::string& densityData, int densityC
 void CellularModel::LoadDwellingsRaster(const std::string& dwellingsData) {	
 
 	//setup and read raster
-	iWardID.Setup(rastHdr);
+	dwellingsRaster.Setup(rastHdr);
 	if (bin_ras) {
-		iWardID.FromPGBinary(dwellingsData);
+		dwellingsRaster.FromPGBinary(dwellingsData);
 	}
 	else {
-		iWardID.FromCSV(dwellingsData);
+		dwellingsRaster.FromCSV(dwellingsData);
 	}
 
 	//dwellings values are provided
