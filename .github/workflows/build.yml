@@ -19,22 +19,8 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
         activate-environment: udm
+        environment-file: environment.yml
         use-only-tar-bz2: true
-
-    - name: Install gdal (windows)
-      if: matrix.os == 'windows-latest'
-      run: |
-        conda update conda
-        conda install gdal
-        conda install -c conda-forge rasterio
-        conda install -c conda-forge geopandas
-        conda install -c conda-forge rtree=0.9.3
-
-    - name: Install python requirements
-      if: matrix.os == 'ubuntu-latest'
-      run: |
-         pip install rasterio geopandas
-      shell: bash -l {0}
 
     - name: Install swig (windows)
       if: matrix.os == 'windows-latest'
