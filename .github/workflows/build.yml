@@ -14,32 +14,24 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Cache conda
+      uses: actions/cache@v1
+      env:
+        # Increase this value to reset cache if environment.yml has not changed
+        CACHE_NUMBER: 0
+      with:
+        path: ~/conda_pkgs_dir
+        key:
+          ${{ runner.os }}-conda-${{ matrix.python-version }}-${{ env.CACHE_NUMBER }}-${{
+          hashFiles('environment.yml') }}
+
     - name: Setup Python ${{ matrix.python-version }}
       uses: conda-incubator/setup-miniconda@v2
       with:
         python-version: ${{ matrix.python-version }}
         activate-environment: udm
+        environment-file: environment.yml
         use-only-tar-bz2: true
-
-    - name: Install gdal (windows)
-      if: matrix.os == 'windows-latest'
-      run: |
-        conda update conda
-        conda install gdal
-        conda install -c conda-forge rasterio
-        conda install -c conda-forge geopandas
-        conda install -c conda-forge rtree=0.9.3
-
-    - name: Install python requirements
-      if: matrix.os == 'ubuntu-latest'
-      run: |
-         pip install rasterio geopandas
-      shell: bash -l {0}
-
-    - name: Install swig (windows)
-      if: matrix.os == 'windows-latest'
-      run: |
-        choco install swig -y
 
     - name: Build openudm
       run: |
