@@ -43,8 +43,11 @@ private:
 
 	//VARIABLE DENSITY
 	bool useDwellingsData;
-	size_t dwellingsRequired;
-	size_t dwellingsAssigned;
+
+	//move these to UDMWard
+	//size_t dwellingsRequired;
+	//size_t dwellingsAssigned;
+	//also add dweelingsAvailable to UDMZone
 
 	//wards and raster parameters
 	size_t numWards; 
@@ -92,13 +95,23 @@ private:
 	void AssignWardCells();
 	void CalculatePopulationChange();
 	void AssignZones();
+
 	void CalculateRequiredDevelopment();
+	void CalculateRequiredDevelopment_DPH();
+
 	void FindOverflowWards();
+	void FindOverflowWards_DPH();
+
 	void DevelopNonOverflowWards();
+	void DevelopNonOverflowWards_DPH();
+
 	void DevelopOverflowWards();
 	void SetCurrentDev();
 	void SetNoData();
 	void SetFutureDev();
+
+	void Overflow(const std::string& overflowData);
+	void Overflow_DPH(const std::string& overflowData);
 
 };
 

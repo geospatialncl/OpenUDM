@@ -11,6 +11,8 @@ public:
 	int row;
 	bool devStatus;
 	double suit;
+
+	int dwellingsAvailable;
 };
 
 // convenience typedef

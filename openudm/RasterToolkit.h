@@ -54,5 +54,5 @@ void IRasterCsvToAsc(const std::string& input, const std::string& output, const 
 void DRasterAscToODVal(const std::string& inputRas, const std::string& inputZoneCodes, const std::string& outputCSV);
 void DRasterSubRaster(const std::string& inRasStr, const std::string& inCodeStr, const std::string& outRasStr, const std::string& outCodeStr, const std::string& outHdrFile);
 
-
+void IRasterDevToDPH(const std::string& devInStr, const std::string& dphInStr, const std::string& devOutStr, const std::string& dphOutStr);
 

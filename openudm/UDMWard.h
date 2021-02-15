@@ -19,10 +19,15 @@ public:
 	double cellDensity;
 	int reqDevCells;
 	int suitDevCells;
-	bool overflow;
+	bool overflow;	
 
 	//test
 	int devCells;
+
+	//DPH
+	size_t dwellingsRequired;
+	size_t dwellingsAvailable;
+	size_t dwellingsAssigned;
 };
 
 // convenience typedef

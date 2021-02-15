@@ -52,6 +52,8 @@ def main(swap_path):
     output_raster = cell_dev_asc_str
     overflow_data = overflow_str
 
+    cell_dph_asc_str = os.path.join(swap_path, 'out_cell_dph.asc')
+
     # OUTDATA END----------------------------------------------------------------------------------
 
     # PARAMETERS BEGIN-----------------------------------------------------------------------------
@@ -68,11 +70,12 @@ def main(swap_path):
             cell_size = int(row['cell_size'])
             num_cols = int(row['num_cols'])
             num_rows = int(row['num_rows'])
+            dph = int(row['dph'])
 
     print( "Parameters file imported.")
 
     #params for table reading - hardcoded to simplify
-    label_total = 2
+    label_total = 1
     label_col = 0
 
     #params for table reading - hardcoded to simplify
@@ -88,7 +91,7 @@ def main(swap_path):
     moore = 0
 
     #variable density - enable to test then move to params table
-    dph = 1
+    #dph = 1
 
     # PARAMETERS END-------------------------------------------------------------------------------
 
@@ -215,12 +218,14 @@ def main(swap_path):
         with open(dph_i_raster_str) as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader: 
+                stack.append(row['asc'])
                 stack.append(row['csv'])           
                 if row['convert'] == 'y':                
                     rt.IRasterAscToCsv(os.path.join(swap_path, row['asc']), os.path.join(swap_path, row['csv']))
 
-        #retrieve filename from stack
+        #retrieve filenames from stack
         dph_raster_csv = os.path.join(swap_path, stack.pop())
+        dph_raster_asc = os.path.join(swap_path, stack.pop())
 
     # CALL SWIG-WRAPPED C++ FUNCTION-------------------------------------------------------------------------
 
@@ -274,6 +279,14 @@ def main(swap_path):
 
     #convert development output raster from csv to asc
     rt.IRasterCsvToAsc(cell_dev_output_str,cell_dev_asc_str,full_rast_hdr)
+
+    # GENERATE DWELLINGS PER HECTARE RASTER OUTPUT IF USING VARIABLE DENSITY
+    #cell_dev_asc_str
+    #dph_raster_asc
+    #cell_dph_asc_str
+    if dval:        
+        rt.IRasterDevToDPH(cell_dev_asc_str, dph_raster_asc, cell_dev_asc_str, cell_dph_asc_str)
+
 
     ### METADATA------------------------------------------------------------------------------------------
 
