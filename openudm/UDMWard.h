@@ -25,9 +25,9 @@ public:
 	int devCells;
 
 	//DPH
-	size_t dwellingsRequired;
-	size_t dwellingsAvailable;
-	size_t dwellingsAssigned;
+	int dwellingsRequired;
+	int dwellingsAvailable;
+	int dwellingsAssigned;
 };
 
 // convenience typedef

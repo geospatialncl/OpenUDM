@@ -16,7 +16,7 @@ public:
 	//test
 	bool final;
 	//DPH	
-	size_t dwellingsAvailable;
+	int dwellingsAvailable;
 };
 
 

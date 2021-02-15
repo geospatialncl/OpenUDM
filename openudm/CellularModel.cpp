@@ -760,7 +760,8 @@ void CellularModel::DevelopNonOverflowWards_DPH() {		//VARIABLE DENSITY
 
 						//DPH - change
 						//if ((static_cast<int>(wards[w]->zones[z]->cells.size()) + devCells) <= wards[w]->reqDevCells) {	//not in spread zone
-						if ((static_cast<int>(wards[w]->zones[z]->dwellingsAvailable + dwellings) <= wards[w]->dwellingsRequired)) {	//not in spread zone
+						//if ((static_cast<int>(wards[w]->zones[z]->dwellingsAvailable + dwellings) <= wards[w]->dwellingsRequired)) {	//not in spread zone
+						if ((wards[w]->zones[z]->dwellingsAvailable + dwellings) <= wards[w]->dwellingsRequired) {	//not in spread zone
 
 							//DPH - change
 							//develop all cells in zone - keep track of devCells
