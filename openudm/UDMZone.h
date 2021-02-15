@@ -13,9 +13,10 @@ public:
 	std::vector<UDMCellPtr> cells;
 	int ID;
 	double avgSuit;
-
 	//test
 	bool final;
+	//DPH	
+	int dwellingsAvailable;
 };
 
 

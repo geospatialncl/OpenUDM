@@ -12,7 +12,12 @@ UDMWard::UDMWard()
 	suitDevCells(0),
 	overflow(false),
 	//test
-	devCells(0)
+	devCells(0),
+
+	//DPH
+	dwellingsRequired(0),
+	dwellingsAvailable(0),
+	dwellingsAssigned(0)
 { }
 
 

@@ -34,6 +34,9 @@ void CellularModel::Setup(int wards, int res, int cols, int rows) {
 
 	//calculate density by default
 	densityProvided = false;
+
+	//VARIABLE DENSITY - DISABLE BY DEFAULT
+	useDwellingsData = false;
 	
 	//allocate dynamic memory using numWards
 	AllocateAll();
@@ -104,6 +107,22 @@ void CellularModel::LoadWardDensity(const std::string& densityData, int densityC
 
 	//density values have been provided
 	densityProvided = true;
+}
+
+//VARIABLE DENSITY
+void CellularModel::LoadDwellingsRaster(const std::string& dwellingsData) {	
+
+	//setup and read raster
+	dwellingsRaster.Setup(rastHdr);
+	if (bin_ras) {
+		dwellingsRaster.FromPGBinary(dwellingsData);
+	}
+	else {
+		dwellingsRaster.FromCSV(dwellingsData);
+	}
+
+	//dwellings values are provided
+	useDwellingsData = true;
 }
 
 void CellularModel::LoadWardIDRaster(const std::string& iWardIDData) {	
@@ -179,9 +198,18 @@ void CellularModel::RunModel() {
 	AssignWardCells();
 	CalculatePopulationChange();
 	AssignZones();
-	CalculateRequiredDevelopment();
-	FindOverflowWards();
-	DevelopNonOverflowWards();
+	
+	if (useDwellingsData) {
+		CalculateRequiredDevelopment_DPH();
+		FindOverflowWards_DPH();
+		DevelopNonOverflowWards_DPH();
+	}
+	else {
+		CalculateRequiredDevelopment();
+		FindOverflowWards();
+		DevelopNonOverflowWards();
+	}	
+
 	DevelopOverflowWards();
 	SetCurrentDev();
 	SetNoData();
@@ -336,6 +364,18 @@ void CellularModel::CalculateRequiredDevelopment() {
 	}
 }
 
+void CellularModel::CalculateRequiredDevelopment_DPH() {	//VARIABLE DENSITY VERSION
+
+	//--calculate:	
+	//required dewllings for new development
+
+	for (size_t w = 0; w != static_cast<size_t>(numWards); ++w) {														//all wards
+		
+		//DPH
+		wards[w]->dwellingsRequired = wards[w]->popChange;
+	}
+}
+
 void CellularModel::FindOverflowWards() {
 
 	//FIND OVERFLOW WARDS 
@@ -353,6 +393,70 @@ void CellularModel::FindOverflowWards() {
 			}
 		}
 	}	
+}
+
+// void CellularModel::FindOverflowWards_DPH() {	//VARIABLE DENSITY VERSION
+
+// 	//find out if we have any overflow wards	
+	
+// 	for (size_t w = 0; w != static_cast<size_t>(numWards); ++w) {					//all wards		
+	
+// 		//calculate total dwellings in each development zone
+// 		for (size_t z = 0; z != wards[w]->zones.size(); ++z) {						//all zones
+// 			for (size_t c = 0; c != wards[w]->zones[z]->cells.size(); ++c) {		//all cells
+
+// 				wards[w]->zones[z]->dwellingsAvailable += dwellingsRaster.data[wards[w]->zones[z]->cells[c]->row][wards[w]->zones[z]->cells[c]->col];				
+// 			}
+// 		}
+
+// 		//sum for each ward and test available dwellings against required dwellings
+		
+// 		for (size_t z = 0; z != wards[w]->zones.size(); ++z) {						//all zones
+
+// 			wards[w]->dwellingsAvailable += wards[w]->zones[z]->dwellingsAvailable; 
+// 		}
+
+// 		if (wards[w]->dwellingsAvailable < wards[w]->dwellingsRequired) {		//if not enough dwellings for development record overflow
+// 	 			wards[w]->overflow = true;				
+// 	 	}
+// 	}
+// }
+
+void CellularModel::FindOverflowWards_DPH() {	//VARIABLE DENSITY VERSION
+
+	//find out if we have any overflow wards	
+	
+	for (size_t w = 0; w != static_cast<size_t>(numWards); ++w) {					//all wards	
+
+		int wardDwellings = 0;	
+	
+		//calculate total dwellings in each development zone
+		for (size_t z = 0; z != wards[w]->zones.size(); ++z) {						//all zones
+
+			int zoneDwellings = 0;
+
+			for (size_t c = 0; c != wards[w]->zones[z]->cells.size(); ++c) {		//all cells
+
+				wards[w]->zones[z]->cells[c]->dwellingsAvailable = dwellingsRaster.data[wards[w]->zones[z]->cells[c]->row][wards[w]->zones[z]->cells[c]->col];	
+				zoneDwellings += wards[w]->zones[z]->cells[c]->dwellingsAvailable;			
+			}
+
+			wards[w]->zones[z]->dwellingsAvailable = zoneDwellings;
+		}
+
+		//sum for each ward and test available dwellings against required dwellings
+		
+		for (size_t z = 0; z != wards[w]->zones.size(); ++z) {						//all zones
+
+			wardDwellings += wards[w]->zones[z]->dwellingsAvailable; 
+		}
+
+		wards[w]->dwellingsAvailable = wardDwellings;
+
+		if (wards[w]->dwellingsAvailable < wards[w]->dwellingsRequired) {		//if not enough dwellings for development record overflow
+	 			wards[w]->overflow = true;				
+	 	}
+	}
 }
 
 void CellularModel::DevelopNonOverflowWards() {
@@ -478,7 +582,356 @@ void CellularModel::DevelopNonOverflowWards() {
 	}	
 }
 
+// void CellularModel::DevelopNonOverflowWards_DPH() {		//VARIABLE DENSITY
+
+// 	//DEVELOP NON-OVERFLOW WARDS BEGIN--------	
+
+// 	//sort all zones in ward by highest avgSuit
+// 	for (size_t w = 0; w != numWards; ++w) {
+// 		//if (wards[w]->devReq) {
+// 			//if (!wards[w]->overflow) {
+// 				std::sort(wards[w]->zones.begin(), wards[w]->zones.end(), HighestZoneAVG);
+// 			//}
+// 		//}
+// 	}
+
+// 	//develop cells in non-overflow wards
+// 	for (size_t w = 0; w != numWards; ++w) {
+
+// 		dwellingsAssigned = 0;
+
+// 		for (size_t z = 0; z != wards[w]->zones.size(); ++z) {		//all zones
+
+// 			//develop all cells in zone - keep track of devCells
+// 			for (size_t c = 0; c != wards[w]->zones[z]->cells.size(); ++c) {
+
+// 				if (dwellingsAssigned < dwellingsRequired) {
+
+// 					wards[w]->zones[z]->cells[c]->devStatus = true;
+
+// 					dwellingsAssigned += dwellingsRaster.data[wards[w]->zones[z]->cells[c]->row][wards[w]->zones[z]->cells[c]->col];
+// 				}
+// 			}
+// 		}
+// 	}
+
+// 	std::cout << "dwellingsRequired = " << dwellingsRequired << std::endl;
+// 	std::cout << "dwellingsAssigned = " << dwellingsAssigned << std::endl;
+
+// 	// //develop cells in non-overflow wards
+// 	// for (size_t w = 0; w != numWards; ++w) {
+// 	// 	if (wards[w]->devReq) {
+// 	// 		if (!wards[w]->overflow) {
+
+// 	// 			int devCells = 0;	//keep track of how many cells have been developed - reset for each ward
+
+// 	// 			for (size_t z = 0; z != wards[w]->zones.size(); ++z) {		//all zones
+// 	// 				if (devCells < wards[w]->reqDevCells) {				//requiring further development 
+
+// 	// 					//find out if we're in the spread zone (if there is one... <=)
+// 	// 					if ((static_cast<int>(wards[w]->zones[z]->cells.size()) + devCells) <= wards[w]->reqDevCells) {	//not in spread zone
+
+// 	// 						//develop all cells in zone - keep track of devCells
+// 	// 						for (size_t c = 0; c != wards[w]->zones[z]->cells.size(); ++c) {
+// 	// 							wards[w]->zones[z]->cells[c]->devStatus = true;
+// 	// 							++devCells;
+								
+// 	// 							wards[w]->devCells = devCells;		//keep track of how many cells have been developed
+// 	// 						}
+// 	// 					}
+// 	// 					else {	//spread zone - seed and spread development from most suitable cell
+
+// 	// 						//read cell suitability from raster
+// 	// 						for (size_t c = 0; c != wards[w]->zones[z]->cells.size(); ++c) {
+// 	// 							wards[w]->zones[z]->cells[c]->suit =
+// 	// 								cellSuit.data[wards[w]->zones[z]->cells[c]->row][wards[w]->zones[z]->cells[c]->col];
+// 	// 						}
+
+// 	// 						//sort all cells in zone by highest suitability
+// 	// 						std::sort(wards[w]->zones[z]->cells.begin(), wards[w]->zones[z]->cells.end(), HighestCellSuit);
+
+// 	// 						//test**
+// 	// 						wards[w]->zones[z]->final = true;
+
+// 	// 						//initial seed
+// 	// 						UDMCellPtr seed = wards[w]->zones[z]->cells[0];
+// 	// 						//vetors of seeds and neighbours
+// 	// 						std::vector<UDMCellPtr> seeds;
+// 	// 						std::vector<UDMCellPtr> nbrs;
+
+// 	// 						//develop initial seed cell
+// 	// 						seed->devStatus = true;
+// 	// 						++devCells;
+// 	// 						seeds.push_back(seed);
+							
+// 	// 						wards[w]->devCells = devCells;		//keep track of how many cells have been developed
+
+// 	// 						while (devCells < wards[w]->reqDevCells && !seeds.empty()) {
+
+// 	// 							nbrs.clear();
+
+// 	// 							//get neighbours
+// 	// 							for (size_t c = 0; c != wards[w]->zones[z]->cells.size(); ++c) {
+// 	// 								int cDiff = (seeds[seeds.size() - 1]->col + 1) - (wards[w]->zones[z]->cells[c]->col + 1);
+// 	// 								int rDiff = (seeds[seeds.size() - 1]->row + 1) - (wards[w]->zones[z]->cells[c]->row + 1);
+
+// 	// 								cDiff = abs(cDiff);
+// 	// 								rDiff = abs(rDiff);
+
+// 	// 								if ((cDiff <= 1) && (rDiff <= 1)) {
+// 	// 									if ((cDiff + rDiff) > 0) {
+// 	// 										nbrs.push_back(wards[w]->zones[z]->cells[c]);	//don't include cell itself!
+// 	// 									}										
+// 	// 								}
+// 	// 							}
+
+// 	// 							//remove current seed
+// 	// 							seeds.pop_back();								
+
+// 	// 							//sort neighbours by highest suit
+// 	// 							if (nbrs.size() > 1) {
+// 	// 								std::sort(nbrs.begin(), nbrs.end(), HighestCellSuit);
+// 	// 							}
+								
+// 	// 							//develop neighbouring cells
+// 	// 							for (size_t n = 0; n != nbrs.size(); ++n) {
+// 	// 								if (!nbrs[n]->devStatus) {						//not already developed										
+// 	// 									if (devCells < wards[w]->reqDevCells) {
+// 	// 										nbrs[n]->devStatus = true;
+// 	// 										++devCells;
+// 	// 										seeds.push_back(nbrs[n]);				//add neighbour as potential seed
+											
+// 	// 										wards[w]->devCells = devCells;			//keep track of how many cells have been developed										
+// 	// 									}
+// 	// 								}
+// 	// 							}
+
+// 	// 							//sort seeds by lowest suit 
+// 	// 							//can then access most suitable using seeds[seeds.size()-1]
+// 	// 							//and can remove when finished with using seeds.pop_back()
+
+// 	// 							//**Replicate current development including possible error
+// 	// 							if (!seeds.empty()) {
+// 	// 								if (seeds.size() > 1) {
+// 	// 									std::sort(seeds.begin(), seeds.end(), LowestCellSuit);
+// 	// 								}
+// 	// 							}
+// 	// 							else {							
+// 	// 								wards[w]->overflow = true;		//flag as overflow ward									
+// 	// 							}															
+// 	// 						}
+// 	// 					}
+// 	// 				}
+// 	// 			}
+// 	// 		}
+// 	// 	}
+// 	// }	
+// }
+
+void CellularModel::DevelopNonOverflowWards_DPH() {		//VARIABLE DENSITY
+
+	//DEVELOP NON-OVERFLOW WARDS BEGIN--------	
+
+	//sort all zones in ward by highest avgSuit
+	for (size_t w = 0; w != numWards; ++w) {
+		if (wards[w]->devReq) {
+			if (!wards[w]->overflow) {
+				std::sort(wards[w]->zones.begin(), wards[w]->zones.end(), HighestZoneAVG);
+			}
+		}
+	}
+
+	//develop cells in non-overflow wards
+	for (size_t w = 0; w != numWards; ++w) {
+		if (wards[w]->devReq) {
+			if (!wards[w]->overflow) {
+
+				//DPH - change
+				//int devCells = 0;	//keep track of how many cells have been developed - reset for each ward
+				int dwellings = 0;	//keep track of how many dwellings have been developed - reset for each ward
+
+				for (size_t z = 0; z != wards[w]->zones.size(); ++z) {		//all zones
+
+					//DPH - change
+					//if (devCells < wards[w]->reqDevCells) {				//requiring further development 
+					if (dwellings < wards[w]->dwellingsRequired) {				//requiring further development 
+
+						//find out if we're in the spread zone (if there is one... <=)
+
+						//DPH - change
+						//if ((static_cast<int>(wards[w]->zones[z]->cells.size()) + devCells) <= wards[w]->reqDevCells) {	//not in spread zone
+						//if ((static_cast<int>(wards[w]->zones[z]->dwellingsAvailable + dwellings) <= wards[w]->dwellingsRequired)) {	//not in spread zone
+						if ((wards[w]->zones[z]->dwellingsAvailable + dwellings) <= wards[w]->dwellingsRequired) {	//not in spread zone
+
+							//DPH - change
+							//develop all cells in zone - keep track of devCells
+							for (size_t c = 0; c != wards[w]->zones[z]->cells.size(); ++c) {
+								wards[w]->zones[z]->cells[c]->devStatus = true;
+								
+								//DPH - change
+								//++devCells;								
+								//wards[w]->devCells = devCells;		//keep track of how many cells have been developed
+								dwellings += wards[w]->zones[z]->dwellingsAvailable;
+								wards[w]->dwellingsAssigned = dwellings;							
+							}
+						}
+						else {	//spread zone - seed and spread development from most suitable cell
+
+							//read cell suitability from raster
+							for (size_t c = 0; c != wards[w]->zones[z]->cells.size(); ++c) {
+								wards[w]->zones[z]->cells[c]->suit =
+									cellSuit.data[wards[w]->zones[z]->cells[c]->row][wards[w]->zones[z]->cells[c]->col];
+							}
+
+							//sort all cells in zone by highest suitability
+							std::sort(wards[w]->zones[z]->cells.begin(), wards[w]->zones[z]->cells.end(), HighestCellSuit);
+
+							//test**
+							wards[w]->zones[z]->final = true;
+
+							//initial seed
+							UDMCellPtr seed = wards[w]->zones[z]->cells[0];
+							//vectors of seeds and neighbours
+							std::vector<UDMCellPtr> seeds;
+							std::vector<UDMCellPtr> nbrs;
+
+							//develop initial seed cell
+							seed->devStatus = true;
+
+							//DPH - change
+							//++devCells;
+							dwellings += seed->dwellingsAvailable;
+
+							seeds.push_back(seed);
+							
+							//DPH - change
+							//wards[w]->devCells = devCells;		//keep track of how many cells have been developed
+							wards[w]->dwellingsAssigned = dwellings;
+
+							//DPH - change
+							//while (devCells < wards[w]->reqDevCells && !seeds.empty()) {
+							while (dwellings < wards[w]->dwellingsRequired && !seeds.empty()) {
+
+								nbrs.clear();
+
+								//get neighbours
+								for (size_t c = 0; c != wards[w]->zones[z]->cells.size(); ++c) {
+									int cDiff = (seeds[seeds.size() - 1]->col + 1) - (wards[w]->zones[z]->cells[c]->col + 1);
+									int rDiff = (seeds[seeds.size() - 1]->row + 1) - (wards[w]->zones[z]->cells[c]->row + 1);
+
+									cDiff = abs(cDiff);
+									rDiff = abs(rDiff);
+
+									if ((cDiff <= 1) && (rDiff <= 1)) {
+										if ((cDiff + rDiff) > 0) {
+											nbrs.push_back(wards[w]->zones[z]->cells[c]);	//don't include cell itself!
+										}										
+									}
+								}
+
+								//remove current seed
+								seeds.pop_back();								
+
+								//sort neighbours by highest suit
+								if (nbrs.size() > 1) {
+									std::sort(nbrs.begin(), nbrs.end(), HighestCellSuit);
+								}
+								
+								//develop neighbouring cells
+								for (size_t n = 0; n != nbrs.size(); ++n) {
+									if (!nbrs[n]->devStatus) {						//not already developed	
+
+										//DPH - change	
+										//if (devCells < wards[w]->reqDevCells) {								
+										if (dwellings < wards[w]->dwellingsRequired) {
+											nbrs[n]->devStatus = true;
+
+											//DPH - change
+											//++devCells;
+											dwellings += nbrs[n]->dwellingsAvailable;
+
+											seeds.push_back(nbrs[n]);				//add neighbour as potential seed
+											
+											//DPH - change
+											//wards[w]->devCells = devCells;			//keep track of how many cells have been developed	
+											wards[w]->dwellingsAssigned = dwellings;									
+										}
+									}
+								}
+
+								//sort seeds by lowest suit 
+								//can then access most suitable using seeds[seeds.size()-1]
+								//and can remove when finished with using seeds.pop_back()
+
+								//**Replicate current development including possible error
+								if (!seeds.empty()) {
+									if (seeds.size() > 1) {
+										std::sort(seeds.begin(), seeds.end(), LowestCellSuit);
+									}
+								}
+								else {							
+									wards[w]->overflow = true;		//flag as overflow ward									
+								}															
+							}
+						}
+					}
+				}
+			}
+		}
+	}	
+}
+
 void CellularModel::WriteOverflowWards(const std::string& overflowData) {
+
+	if(useDwellingsData) {
+		Overflow_DPH(overflowData);
+	}
+	else {
+		Overflow(overflowData);
+	}
+}
+
+void CellularModel::Overflow_DPH(const std::string& overflowData) {
+
+	//create an ofstream object
+	std::ofstream opfile(overflowData);
+
+	//check the file opened OK
+	if (opfile.is_open()) {
+		//write header
+		opfile << "WardLabel" << ",";
+
+		opfile << "Overflow" << ",";
+
+		opfile << "Dwellings Required" << ",";		
+
+		opfile << "Dwellings Assigned" << "\n";
+
+		for (size_t w = 0; w != wards.size(); ++w) {
+
+			//ward label
+			opfile << wardLabel[w] << ",";
+
+			//overflow
+			opfile << wards[w]->overflow << ",";
+
+			//dwellings required
+			opfile << wards[w]->dwellingsRequired << ",";
+
+			//dwellings assigned
+			opfile << wards[w]->dwellingsAssigned << "\n";		
+
+		}
+
+		//close opfile
+		opfile.close();
+	}
+	else {
+		std::cout << "Unable to open overflow file";
+	}
+}
+
+void CellularModel::Overflow(const std::string& overflowData) {
 
 	//create an ofstream object
 	std::ofstream opfile(overflowData);

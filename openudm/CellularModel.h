@@ -24,6 +24,9 @@ public:
 	void LoadFuturePopulation(const std::string& popData, int futPopColumn, int numColumns);
 	void LoadWardDensity(const std::string& densityData, int densityColumn, int numColumns);
 
+	//VARIABLE DENSITY
+	void LoadDwellingsRaster(const std::string& dwellingsData);
+
 	void LoadWardIDRaster(const std::string& iWardIDData);
 	void LoadZoneIDRaster(const std::string& zoneIDData);
 	void LoadZoneAVGRaster(const std::string& zoneAVGData);
@@ -38,6 +41,14 @@ public:
 
 private:
 
+	//VARIABLE DENSITY
+	bool useDwellingsData;
+
+	//move these to UDMWard
+	//size_t dwellingsRequired;
+	//size_t dwellingsAssigned;
+	//also add dweelingsAvailable to UDMZone
+
 	//wards and raster parameters
 	size_t numWards; 
 	size_t devRes; 
@@ -45,6 +56,10 @@ private:
 	size_t rasterRows;
 
 	//input rasters
+
+	//VARIABLE DENSITY
+	IRaster dwellingsRaster;
+	
 	IRaster iWardID;
 	IRaster zoneID;
 	DRaster zoneAVG;
@@ -80,13 +95,23 @@ private:
 	void AssignWardCells();
 	void CalculatePopulationChange();
 	void AssignZones();
+
 	void CalculateRequiredDevelopment();
+	void CalculateRequiredDevelopment_DPH();
+
 	void FindOverflowWards();
+	void FindOverflowWards_DPH();
+
 	void DevelopNonOverflowWards();
+	void DevelopNonOverflowWards_DPH();
+
 	void DevelopOverflowWards();
 	void SetCurrentDev();
 	void SetNoData();
 	void SetFutureDev();
+
+	void Overflow(const std::string& overflowData);
+	void Overflow_DPH(const std::string& overflowData);
 
 };
 

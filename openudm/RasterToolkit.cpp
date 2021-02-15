@@ -1048,5 +1048,60 @@ void DRasterSubRaster(const std::string& inRasStr, const std::string& inCodeStr,
 
 }
 
+void IRasterDevToDPH(const std::string& devInStr, const std::string& dphInStr, const std::string& devOutStr, const std::string& dphOutStr) {
+
+	IRaster devIn;
+	devIn.Setup(devInStr);
+	devIn.Read(devInStr);
+
+	IRaster dphIn;
+	dphIn.Setup(dphInStr);
+	dphIn.Read(dphInStr);
+
+	IRaster devOut;
+	devOut.Setup(devIn.ncols, devIn.nrows, 0);
+	devOut.cellsize = devIn.cellsize;
+	devOut.xllcorner = devIn.xllcorner;
+	devOut.yllcorner = devIn.yllcorner;
+	devOut.NODATA_value = devIn.NODATA_value;
+
+	IRaster dphOut;
+	dphOut.Setup(dphIn.ncols, dphIn.nrows, 0);
+	dphOut.cellsize = dphIn.cellsize;
+	dphOut.xllcorner = dphIn.xllcorner;
+	dphOut.yllcorner = dphIn.yllcorner;
+	dphOut.NODATA_value = dphIn.NODATA_value;
+
+	for (int r = 0; r != devIn.nrows; ++r) {
+		for (int c = 0; c != devIn.ncols; ++c) {
+
+			//set output dev and dph to nodata
+			devOut.data[r][c] = devOut.NODATA_value;
+			dphOut.data[r][c] = dphOut.NODATA_value;
+
+			//copy dev to output
+			devOut.data[r][c] = devIn.data[r][c];
+			
+			//for new dev
+			if (devIn.data[r][c] == 2) {				
+
+				//correct output dev for 0dph
+				if (dphIn.data[r][c] == 0) {
+					devOut.data[r][c] = 0;
+				}
+
+				//copy dph > 0 to output 
+				if (dphIn.data[r][c] > 0) {
+					dphOut.data[r][c] = dphIn.data[r][c];
+				}
+			}
+		}
+	}
+
+	//write output dev and dph
+	devOut.Write(devOutStr);
+	dphOut.Write(dphOutStr);
+}
+
 
 
