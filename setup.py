@@ -9,7 +9,7 @@ py_modules = ['CellularModel', 'RasterToolkit', 'MultiCriteriaEval', 'DevZones']
 if os.name == 'nt':
     cxxflags = {'gcc': ['/Qstd=c99']}
 else:
-    cxxflags = ['-Wall', '-std=c++11', '-Werror', '-pedantic']
+    cxxflags = ['-Wall', '-std=c++11', '-pedantic']
 
 headers = glob('openudm/*.h')
 
