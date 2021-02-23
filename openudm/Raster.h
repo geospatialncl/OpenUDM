@@ -56,10 +56,21 @@ void Raster<T>::Setup(int ncols, int nrows, int init) {
 	this->ncols = ncols;
 	this->nrows = nrows;
 
-	data.resize(nrows);
+	//test 
+	std::cout << "ncols = " << ncols << std::endl;
+	std::cout << "nrows = " << nrows << std::endl;
+
+	//data.resize(nrows);
+	//for (auto& r: data)
+	//{
+	//	r.assign(nrows, init);
+	//}
+
+	//test
+	data.resize(ncols);
 	for (auto& r: data)
 	{
-		r.assign(nrows, init);
+		r.assign(ncols, init);
 	}
 }
 
@@ -139,7 +150,8 @@ void Raster<T>::Setup(const std::string& ipfile) {
 	}
 	ipfileHeader.close();	
 
-	Setup(nrows, ncols, 0);
+	//Setup(nrows, ncols, 0);
+	Setup(ncols, nrows, 0);
 }
 
 template<typename T>
