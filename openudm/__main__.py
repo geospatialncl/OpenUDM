@@ -53,6 +53,7 @@ def main(swap_path):
     overflow_data = overflow_str
 
     cell_dph_asc_str = os.path.join(swap_path, 'out_cell_dph.asc')
+    cell_suit_asc_str = os.path.join(swap_path, 'out_cell_suit.asc')
 
     # OUTDATA END----------------------------------------------------------------------------------
 
@@ -279,6 +280,9 @@ def main(swap_path):
 
     #convert development output raster from csv to asc
     rt.IRasterCsvToAsc(cell_dev_output_str,cell_dev_asc_str,full_rast_hdr)
+
+    #convert suitability output raster from csv to asc
+    rt.DRasterCsvToAsc(mce_output_raster_str,cell_suit_asc_str,full_rast_hdr)
 
     # GENERATE DWELLINGS PER HECTARE RASTER OUTPUT IF USING VARIABLE DENSITY
     #cell_dev_asc_str
