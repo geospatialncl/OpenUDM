@@ -2,6 +2,7 @@
 #include "IRaster.h"
 #include "CSVToolkit.h"
 #include <chrono>
+#include <random>
 
 //simple cell structure
 struct Cell {
@@ -20,6 +21,21 @@ struct Zone {
 
 //simple ward structure
 typedef std::vector<Cell> Ward;
+
+//simple tile structure
+struct Tile {
+	int dph;
+	std::string str;
+	std::string str90;
+	IRaster ras;
+	IRaster ras90;
+
+	Tile(int tile_dph) {
+		dph = tile_dph;
+		//str = "";
+		//str90 = "";		
+	}
+};
 
 bool DevCompare(const std::string& iRas1, const std::string& iRas2, const std::string& result);
 bool IRasterCompare(const std::string& iRas1, const std::string& iRas2, const std::string& result);
@@ -56,3 +72,4 @@ void DRasterSubRaster(const std::string& inRasStr, const std::string& inCodeStr,
 
 void IRasterDevToDPH(const std::string& devInStr, const std::string& dphInStr, const std::string& devOutStr, const std::string& dphOutStr);
 
+void UrbanFabricGenerator(const std::string& in_dataPath, int in_numTiles);

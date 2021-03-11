@@ -1,0 +1,17 @@
+tile_dph,tile_str,tile90_str
+7,D1.asc,D1R.asc
+12,D2.asc,D2R.asc
+23,D3.asc,D3R.asc
+30,D4.asc,D4R.asc
+13,S1.asc,S1R.asc
+23,S2.asc,S2R.asc
+31,S3.asc,S3R.asc
+42,S4.asc,S4R.asc
+22,T1.asc,T1R.asc
+68,T2.asc,T2R.asc
+90,T3.asc,T3R.asc
+109,T4.asc,T4R.asc
+77,F1.asc,F1R.asc
+101,F2.asc,F2R.asc
+164,F3.asc,F3R.asc
+216,F4.asc,F4R.asc
