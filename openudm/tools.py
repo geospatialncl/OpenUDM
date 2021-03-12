@@ -4,6 +4,7 @@ import geopandas as gp
 import sys
 import getopt
 
+
 def output_raster_to_vector():
     """
     Run raster to vector file conversion for UDM output dataset conversion.

@@ -5,6 +5,34 @@ import csv
 from openudm import (RasterToolkit as rt)
 
 
+def urban_fabric_generator_entrypoint():
+	"""
+	Commandline entrypoint for urban fabric generator tool
+	"""
+	# default values for required input variables
+	data_path_tiles = ''
+
+	# get args list
+	args = sys.argv[1:]
+
+	# parse passed command line arguments
+	try:
+		opts, args = getopt.getopt(args, "i:", ["tile_data_path=",]) # e.g. i = input file (colon indicates input expected)
+	except getopt.GetoptError as err:
+		print(err)
+		sys.exit(2)
+
+	# check each passed argument and assign values to variables
+	for opt, arg in opts:
+		if opt in ("-i", "tile_data_path="):
+			data_path_tiles = arg
+		else:
+			print('Un-recognised argument %s' %opt)
+			sys.exit(2)
+
+	urban_fabric_generator(data_path_tiles)
+
+
 def urban_fabric_generator(data_path = 'Path/To/TilesFolder'):
 	"""
 	Runs a function to generate a raster file which contains a urban fabric.
