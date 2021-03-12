@@ -45,7 +45,7 @@ def output_raster_to_vector():
                 # get the cell value for the passed feature type
                 value_of_interest = feature_type_identifiers[feature_type]
             else:
-                print('Error! The passed feature_type does not exist! It should be one of %s' % allowed_feature_types)
+                print('Error! The passed feature_type (%s) does not exist! It should be one of %s' % (feature_type, allowed_feature_types))
                 sys.exit(2)
         else:
             print('Un-recognised argument %s' % opt)
