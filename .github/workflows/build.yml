@@ -46,7 +46,7 @@ jobs:
 
     - name: Run test for R2V tool
       run: |
-        raster_to_vector -i Data/out_cell_dev.asc -o Data/new_buildings.gpkg -c 1
+        raster_to_vector -i Data/out_cell_dev.asc -o Data/new_buildings.gpkg -f buildings
       shell: bash -l {0}
 
     - name: Run UFG tool

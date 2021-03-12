@@ -63,12 +63,12 @@ To run the model:
 Command line tool allowing conversion of a raster file to a vector file
 
 #### Usage 
-`raster_to_vector -i input_file -o output_file -c cell_value`
+`raster_to_vector -i input_file -o output_file -f name_of_feature_type`
 
 ##### Expected arguments:
 `-i` - path and name of input raster. Default = 'raster.asc'  
 `-o` - path and name of output vector - supports geopackages only at the moment. Default = 'buildings.gpkg'  
-`-c` - the cell value to identify and convert to vectors, expects an integer. Default = 1
+`-f` - the feature type to extract from the raster layer output from UDM. Allowed values are 'buildings, 'roads' and 'greenspace'.
 
 ### Generate urban fabric
 Command line tool allowing for the generation of buildings and urban layouts using the outputs from a UDM run
