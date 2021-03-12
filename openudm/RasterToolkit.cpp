@@ -1,5 +1,10 @@
 #include "RasterToolkit.h"
 
+//tile vector sorting function by lowest dph
+bool LowestTileDPH(Tile a, Tile b) {
+	return a.dph < b.dph;
+}
+
 bool DevCompare(const std::string& iRas1, const std::string& iRas2, const std::string& result) {
 
 	//set comparison to true initially
@@ -1101,6 +1106,178 @@ void IRasterDevToDPH(const std::string& devInStr, const std::string& dphInStr, c
 	//write output dev and dph
 	devOut.Write(devOutStr);
 	dphOut.Write(dphOutStr);
+}
+
+void UrbanFabricGenerator(const std::string& in_dphPath, const std::string& out_dphPath, const std::string& in_tilePath, int in_numTiles) {
+
+	//path to input / output data	
+	std::string tilePath = in_tilePath;
+
+	//name of tile table	
+	std::string tileTable = tilePath + "in_tile_table.csv";
+
+	//number of tiles in table
+	int numTiles = in_numTiles;	
+
+	//input dph and output downScaleDev rasters
+	IRaster dph, uf;
+
+	//setup and read input dph raster	
+	std::string dphRas = in_dphPath;
+	dph.Setup(dphRas);
+	dph.Read(dphRas);
+
+	//seup vector of tiles
+	std::vector<Tile> tiles;
+	for (int t = 0; t != numTiles; ++t) {
+		tiles.push_back(Tile(0));
+	}
+
+	//storage to read tile rasters	
+	std::vector<std::string> tileStr(numTiles);	
+
+	//storage to read tile90 rasters	
+	std::vector<std::string> tile90Str(numTiles);	
+
+	//storage to read tile dph
+	int* tileDPH;
+	tileDPH = new int[numTiles];
+
+	//std::vector<std::string>& data
+
+	//read tile dph from input csv
+	ExtractCSV(tileTable, 3, 0, tileStr);
+
+	//convert to int
+	for (int t = 0; t != numTiles; ++t) {
+		tileDPH[t] = std::stoi(tileStr[t]);		
+	}
+
+	//std::stoi(s);
+
+	//read tile raster namefrom input csv
+	ExtractCSV(tileTable, 3, 1, tileStr);
+
+	//read tile90 raster namefrom input csv
+	ExtractCSV(tileTable, 3, 2, tile90Str);
+
+	//copy data to vector of tiles
+	for (int t = 0; t != numTiles; ++t) {
+		tiles[t].dph = tileDPH[t];
+		tiles[t].str = tileStr[t];
+		tiles[t].str90 = tile90Str[t];
+	}
+
+	//sort tiles by dph
+	std::sort(tiles.begin(), tiles.end(), LowestTileDPH);
+
+	//output information for tiles ordered by dph 
+	for (int t = 0; t != numTiles; ++t) {
+
+		std::cout << "tile " << t << ":" << std::endl << std::endl;
+		std::cout << "dph = " << tiles[t].dph << std::endl;
+		std::cout << "str = " << tiles[t].str << std::endl;
+		std::cout << "str90 = " << tiles[t].str90 << std::endl << std::endl;
+	}
+
+	//copy data read from tile table csv to vector of tiles
+	for (int t = 0; t != numTiles; ++t) {
+		tiles[t].ras.Setup(tilePath + tiles[t].str);
+		tiles[t].ras.Read(tilePath + tiles[t].str);
+		tiles[t].ras90.Setup(tilePath + tiles[t].str90);
+		tiles[t].ras90.Read(tilePath + tiles[t].str90);
+	}
+
+	//linear xy scale - input dph raster is multiplied by this in each dimension
+	int xyScale = tiles[0].ras.nrows;
+
+	//setup output urban fabric raster	
+	std::string urbanFabricRas = out_dphPath;
+	uf.Setup(dph.ncols * xyScale, dph.nrows * xyScale, -1);	//initialise all cells to nodata value	
+	uf.cellsize = dph.cellsize / xyScale;
+	uf.xllcorner = dph.xllcorner;
+	uf.yllcorner = dph.yllcorner;
+	uf.NODATA_value = dph.NODATA_value;
+
+	//setup random tile rotation
+	std::vector<bool> rotate;
+	rotate.push_back(true);
+	rotate.push_back(false);
+
+	//for all cells in input dph raster
+	for (int r = 0; r != dph.nrows; ++r) {
+		for (int c = 0; c != dph.ncols; ++c) {
+
+			//setup random device for shuffle
+			std::random_device rd;
+			std::mt19937 g(rd());			
+
+			//random tile rotation using above device			
+			std::shuffle(rotate.begin(), rotate.end(), g);
+
+			//apply to all valid development dph cells
+			if (dph.data[r][c] > 0) {
+
+				//have we found a tile with suitable dph? - not yet..
+				bool found = false;
+
+				//search for tile with lowest dph to house development
+				for (int t = 0; t != numTiles; ++t) {
+
+					//if we haven't already found a suitable tile and the current tile can house development at the input dph..
+					if (!found && (tiles[t].dph > dph.data[r][c])) {
+
+						//found a tile with suitable dph
+						found = true;
+
+						//copy tile data to output urban fabric raster
+						for (int rPatch = 0; rPatch != xyScale; ++rPatch) {
+							for (int cPatch = 0; cPatch != xyScale; ++cPatch) {
+
+								//select either tile or rotated tile
+								if (rotate[0]) {
+									uf.data[(r * xyScale) + rPatch][(c * xyScale) + cPatch] = tiles[t].ras90.data[rPatch][cPatch];
+								}
+								else {
+									uf.data[(r * xyScale) + rPatch][(c * xyScale) + cPatch] = tiles[t].ras.data[rPatch][cPatch];
+								}
+							}
+						}
+					}
+
+				}
+
+				//didn't find a tile with suitable dph - use tile with max available dph
+				if (!found) {
+
+					//report that suitable tile was not found
+					std::cout << "Suitable tile dph not found for input dph = " << dph.data[r][c] << ", setting to max dph = " << tiles[numTiles - 1].dph << std::endl;
+
+					//copy tile data to output urban fabric raster
+					for (int rPatch = 0; rPatch != xyScale; ++rPatch) {
+						for (int cPatch = 0; cPatch != xyScale; ++cPatch) {
+
+							//select either tile or rotated tile with max available dph
+							if (rotate[0]) {
+								uf.data[(r * xyScale) + rPatch][(c * xyScale) + cPatch] = tiles[numTiles - 1].ras90.data[rPatch][cPatch];
+							}
+							else {
+								uf.data[(r * xyScale) + rPatch][(c * xyScale) + cPatch] = tiles[numTiles - 1].ras.data[rPatch][cPatch];
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	//write urban fabric to raster
+	uf.Write(urbanFabricRas);
+
+	//free dynamically allocated memory	
+	delete[] tileDPH;
+	tiles.clear();
+	rotate.clear();
 }
 
 

@@ -58,20 +58,13 @@ void Raster<T>::Setup(int ncols, int nrows, int init) {
 
 	//test 
 	std::cout << "ncols = " << ncols << std::endl;
-	std::cout << "nrows = " << nrows << std::endl;
+	std::cout << "nrows = " << nrows << std::endl;	
 
-	//data.resize(nrows);
-	//for (auto& r: data)
-	//{
-	//	r.assign(nrows, init);
-	//}
-
-	//test
-	data.resize(ncols);
+	data.resize(nrows);
 	for (auto& r: data)
 	{
 		r.assign(ncols, init);
-	}
+	}	
 }
 
 template<typename T>

@@ -119,3 +119,12 @@ expected arguments:
 -i <path and name of input raster>
 -o <path and name of output vector - supports geopackages only at the moment>
 -c <the cell value to identify and convert to vectors, expects an integer>
+
+---Generate urban fabric
+Command line tool allowing for the generation of buildings and urban layouts using the outputs from a UDM run
+
+command line call: generate_urban_fabric
+expected arguments:
+-i <path to directory with urban tiles in>
+
+Outputs from UDM are expected in the data directory, and this is also where the output file will be written.
