@@ -7,7 +7,11 @@ from openudm import (RasterToolkit as rt)
 
 def urban_fabric_generator(data_path = 'Path/To/TilesFolder'):
 	"""
+	Runs a function to generate a raster file which contains a urban fabric.
+	Input data to be in the UDM data dir and output written to same directory.
 
+	Inputs:
+	- data_path : accepts a file path to a folder which contains the tiles for forming a urban fabric.
 	"""
 
 	# data path - check exists
