@@ -70,6 +70,18 @@ Command line tool allowing conversion of a raster file to a vector file
 `-o` - path and name of output vector - supports geopackages only at the moment. Default = 'buildings.gpkg'  
 `-c` - the cell value to identify and convert to vectors, expects an integer. Default = 1
 
+### Generate urban fabric
+Command line tool allowing for the generation of buildings and urban layouts using the outputs from a UDM run
+
+Outputs from UDM are expected in the data directory, and this is also where the output file will be written.
+
+#### Usage
+`generate_urban_fabric -i tile_directory`
+
+#### Expected arguments:
+`-i` - path to directory with urban tiles in
+
+
 ## Acknowledgements
 
 OpenUDM has been developed by researchers at Newcastle University and the
