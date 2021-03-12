@@ -72,4 +72,4 @@ void DRasterSubRaster(const std::string& inRasStr, const std::string& inCodeStr,
 
 void IRasterDevToDPH(const std::string& devInStr, const std::string& dphInStr, const std::string& devOutStr, const std::string& dphOutStr);
 
-void UrbanFabricGenerator(const std::string& in_dataPath, int in_numTiles);
+void UrbanFabricGenerator(const std::string& in_dphPath, const std::string& out_dphPath, const std::string& in_tilePath, int in_numTiles);

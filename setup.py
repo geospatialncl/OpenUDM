@@ -89,5 +89,8 @@ setup(
     entry_points={'console_scripts':
                       ['raster_to_vector=openudm.tools:output_raster_to_vector',
                        'generate_urban_fabric=openudm.UrbanFabricGenerator:urban_fabric_generator_entrypoint'
-                       ]}
+                       ]},
+    package_data={
+            "openudm": ["Tiles/*"]
+        }
 )

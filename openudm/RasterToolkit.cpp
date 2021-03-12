@@ -1108,13 +1108,13 @@ void IRasterDevToDPH(const std::string& devInStr, const std::string& dphInStr, c
 	dphOut.Write(dphOutStr);
 }
 
-void UrbanFabricGenerator(const std::string& in_dataPath, int in_numTiles) {
+void UrbanFabricGenerator(const std::string& in_dphPath, const std::string& out_dphPath, const std::string& in_tilePath, int in_numTiles) {
 
 	//path to input / output data	
-	std::string dataPath = in_dataPath;
+	std::string tilePath = in_tilePath;
 
 	//name of tile table	
-	std::string tileTable = dataPath + "in_tile_table.csv";
+	std::string tileTable = tilePath + "in_tile_table.csv";
 
 	//number of tiles in table
 	int numTiles = in_numTiles;	
@@ -1123,7 +1123,7 @@ void UrbanFabricGenerator(const std::string& in_dataPath, int in_numTiles) {
 	IRaster dph, uf;
 
 	//setup and read input dph raster	
-	std::string dphRas = dataPath + "in_dph.asc";
+	std::string dphRas = in_dphPath;
 	dph.Setup(dphRas);
 	dph.Read(dphRas);
 
@@ -1182,17 +1182,17 @@ void UrbanFabricGenerator(const std::string& in_dataPath, int in_numTiles) {
 
 	//copy data read from tile table csv to vector of tiles
 	for (int t = 0; t != numTiles; ++t) {
-		tiles[t].ras.Setup(dataPath + tiles[t].str);
-		tiles[t].ras.Read(dataPath + tiles[t].str);
-		tiles[t].ras90.Setup(dataPath + tiles[t].str90);
-		tiles[t].ras90.Read(dataPath + tiles[t].str90);
+		tiles[t].ras.Setup(tilePath + tiles[t].str);
+		tiles[t].ras.Read(tilePath + tiles[t].str);
+		tiles[t].ras90.Setup(tilePath + tiles[t].str90);
+		tiles[t].ras90.Read(tilePath + tiles[t].str90);
 	}
 
 	//linear xy scale - input dph raster is multiplied by this in each dimension
 	int xyScale = tiles[0].ras.nrows;
 
 	//setup output urban fabric raster	
-	std::string urbanFabricRas = dataPath + "out_uf.asc";
+	std::string urbanFabricRas = out_dphPath;
 	uf.Setup(dph.ncols * xyScale, dph.nrows * xyScale, -1);	//initialise all cells to nodata value	
 	uf.cellsize = dph.cellsize / xyScale;
 	uf.xllcorner = dph.xllcorner;
