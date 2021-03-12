@@ -43,8 +43,10 @@ def urban_fabric_generator(data_path='Path/To/TilesFolder'):
 	"""
 
 	# data path - check exists
-	if os.path.exists(data_path) is not True:
-		return 'Error! Not data does not exist.'
+	#if os.path.exists(data_path) is not True:
+    #	return 'Error! Data path (%s) does not exist.' %data_path
+
+	print(data_path)
 
 	# tile table
 	tile_table = os.path.join(data_path, 'in_tile_table.csv')
