@@ -27,13 +27,14 @@ def output_raster_to_vector():
 
     # parse passed command line arguments
     try:
-        opts, args = getopt.getopt(args, "i:o:f", ["input_path_file=", "output_path_file=", "feature_type="]) # e.g. i = input file (colon indicates input expected)
+        opts, args = getopt.getopt(args, "i:o:f:", ["input_path_file=", "output_path_file=", "feature_type="]) # e.g. i = input file (colon indicates input expected)
     except getopt.GetoptError as err:
         print(err)
         sys.exit(2)
 
     # check each passed argument and assign values to variables
     for opt, arg in opts:
+
         if opt in ("-i", "input_path_file="):
             raster_file_path = arg
         elif opt in ("-o", "output_path_file="):
