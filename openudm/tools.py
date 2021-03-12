@@ -40,7 +40,7 @@ def output_raster_to_vector():
             output_vector_file = arg
         elif opt in ("-f", "feature_type="):
 
-            feature_type = arg
+            feature_type = arg.strip()
             if feature_type in allowed_feature_types:
                 # get the cell value for the passed feature type
                 value_of_interest = feature_type_identifiers[feature_type]
