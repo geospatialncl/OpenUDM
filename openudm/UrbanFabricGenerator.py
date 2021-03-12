@@ -62,6 +62,6 @@ def urban_fabric_generator(data_path='Path/To/TilesFolder'):
 	print(num_tiles)
 
 	# call wrapped C++ UFG function
-	rt.UrbanFabricGenerator(data_path, num_tiles)
+	rt.UrbanFabricGenerator(data_path+'/', num_tiles)
 
 	return
