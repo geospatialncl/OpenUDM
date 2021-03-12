@@ -48,3 +48,8 @@ jobs:
       run: |
         raster_to_vector -i Data/out_cell_dev.asc -o Data/new_buildings.gpkg -c 1
       shell: bash -l {0}
+
+    - name: Run UFG tool
+      run: |
+        generate_urban_fabric -i Tiles
+      shell: bash -l {0}

@@ -33,7 +33,7 @@ def urban_fabric_generator_entrypoint():
 	urban_fabric_generator(data_path_tiles)
 
 
-def urban_fabric_generator(data_path = 'Path/To/TilesFolder'):
+def urban_fabric_generator(data_path='Path/To/TilesFolder'):
 	"""
 	Runs a function to generate a raster file which contains a urban fabric.
 	Input data to be in the UDM data dir and output written to same directory.
