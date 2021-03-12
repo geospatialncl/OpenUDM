@@ -4,22 +4,30 @@ import geopandas as gp
 import sys
 import getopt
 
+
 def output_raster_to_vector():
     """
     Run raster to vector file conversion for UDM output dataset conversion.
 
     """
     # default values for required input variables
-    value_of_interest = 1
+    value_of_interest = 22
     raster_file_path = 'raster.asc'
     output_vector_file = 'buildings.gpkg'
+    feature_type = 'buildings'
+
+    # set details for allowed feature types
+    allowed_feature_types = ['buildings','roads','greenspace']
+    feature_type_identifiers = {'buildings':22,
+                              'roads':21,
+                              'greenspace':20}
 
     # get args list
     args = sys.argv[1:]
 
     # parse passed command line arguments
     try:
-        opts, args = getopt.getopt(args, "i:o:c:", ["input_path_file=", "output_path_file=", "raster_cell_value="]) # e.g. i = input file (colon indicates input expected)
+        opts, args = getopt.getopt(args, "i:o:f", ["input_path_file=", "output_path_file=", "feature_type="]) # e.g. i = input file (colon indicates input expected)
     except getopt.GetoptError as err:
         print(err)
         sys.exit(2)
@@ -30,20 +38,23 @@ def output_raster_to_vector():
             raster_file_path = arg
         elif opt in ("-o", "output_path_file="):
             output_vector_file = arg
-        elif opt in ("-c", "raster_cell_value="):
-            try:
-                value_of_interest = int(arg)
-            except:
-                print('Expected integer value for input argument -c. Instead got %s' %arg)
+        elif opt in ("-f", "feature_type="):
+
+            feature_type = arg
+            if feature_type in allowed_feature_types:
+                # get the cell value for the passed feature type
+                value_of_interest = feature_type_identifiers[feature_type]
+            else:
+                print('Error! The passed feature_type does not exist! It should be one of %s' % allowed_feature_types)
                 sys.exit(2)
         else:
-            print('Un-recognised argument %s' %opt)
+            print('Un-recognised argument %s' % opt)
             sys.exit(2)
 
     raster_to_vector(value_of_interest, raster_file_path, output_vector_file)
 
 
-def raster_to_vector(value_of_interest = 0, raster_file_path = 'raster.asc', output_vector_file = 'buildings.gpkg'):
+def raster_to_vector(value_of_interest=0, raster_file_path='raster.asc', output_vector_file='buildings.gpkg'):
     """
     Converts a .asc file (or any raster format) to a vector geopackage creating polygons for cells with the given value (default value set to 0)
 
