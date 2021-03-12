@@ -81,7 +81,7 @@ Outputs from UDM are expected in the data directory, and this is also where the 
 #### Required arguments:
 `-i` - path to dph raster
 #### Optional arguments
-`-o` - path to output urban fabric raster. Default = <dph_raster_directory>/out_uf.asc
+`-o` - path to output urban fabric raster. Default = <dph_raster_directory>/out_uf.asc  
 `-t` - path to directory containing tiles. Default = openudm/Tiles
 
 
