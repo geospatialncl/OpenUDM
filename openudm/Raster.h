@@ -23,9 +23,9 @@ public:
 	//header data
 	int ncols;
 	int nrows;
-	double xllcorner;
-	double yllcorner;
-	double cellsize;
+	int xllcorner;
+	int yllcorner;
+	int cellsize;
 	value_type NODATA_value;
 	//float weight;
 
@@ -57,8 +57,8 @@ void Raster<T>::Setup(int ncols, int nrows, int init) {
 	this->nrows = nrows;
 
 	//test 
-	std::cout << "ncols = " << ncols << std::endl;
-	std::cout << "nrows = " << nrows << std::endl;	
+	//std::cout << "ncols = " << ncols << std::endl;
+	//std::cout << "nrows = " << nrows << std::endl;	
 
 	data.resize(nrows);
 	for (auto& r: data)
@@ -146,6 +146,8 @@ void Raster<T>::Setup(const std::string& ipfile) {
 	//Setup(nrows, ncols, 0);
 	Setup(ncols, nrows, 0);
 }
+
+
 
 template<typename T>
 void Raster<T>::Read(const std::string& ipfile) {

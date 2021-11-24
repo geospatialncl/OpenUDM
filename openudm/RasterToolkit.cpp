@@ -1,7 +1,7 @@
 #include "RasterToolkit.h"
 
 //tile vector sorting function by lowest dph
-bool LowestTileDPH(Tile a, Tile b) {
+bool LowestTileDPH(RTTile a, RTTile b) {
 	return a.dph < b.dph;
 }
 
@@ -672,16 +672,16 @@ void AreaFromRaster(const std::string& wardIDRas, int numWards, const std::strin
 	wardData.Read(wardDataRas);
 
 	//create a vector of wards whose size = numWards
-	std::vector<Ward> wards;
+	std::vector<RTWard> wards;
 	for (int w = 0; w != numWards; ++w) {
-		wards.push_back(Ward());
+		wards.push_back(RTWard());
 	}
 
 	//loop through all cells in wardID raster and gather cells into wards
 	for (int r = 0; r != wardID.nrows; ++r) {
 		for (int c = 0; c != wardID.ncols; ++c) {
 			if (wardID.data[r][c] != wardID.NODATA_value) {										// ignore NODATA_value cells
-				wards[wardID.data[r][c]].push_back(Cell(c, r, wardID.data[r][c]));
+				wards[wardID.data[r][c]].push_back(RTCell(c, r, wardID.data[r][c]));
 			}
 		}
 	}
@@ -1128,9 +1128,9 @@ void UrbanFabricGenerator(const std::string& in_dphPath, const std::string& out_
 	dph.Read(dphRas);
 
 	//seup vector of tiles
-	std::vector<Tile> tiles;
+	std::vector<RTTile> tiles;
 	for (int t = 0; t != numTiles; ++t) {
-		tiles.push_back(Tile(0));
+		tiles.push_back(RTTile(0));
 	}
 
 	//storage to read tile rasters	
@@ -1279,6 +1279,309 @@ void UrbanFabricGenerator(const std::string& in_dphPath, const std::string& out_
 	tiles.clear();
 	rotate.clear();
 }
+
+void RasteriseAreaThresholds(const std::string& swapPath, const std::string& rastHdr, const std::string& constraintRas, const std::string& devRas, const std::string& inputTbl, int numTblRows, double summedLayerThreshold) {
+
+	std::cout << "swapPath = " << swapPath << std::endl;
+
+	//storage to read layer area rasters and thresholds
+	std::vector<std::string> layerRasStr(numTblRows);
+	std::vector<std::string> layerDevFlagStr(numTblRows);
+	std::vector<std::string> layerThresholdStr(numTblRows);
+	double* layerThreshold;
+	double* layerThresholdArea;
+	layerThreshold = new double[numTblRows];
+	layerThresholdArea = new double[numTblRows];
+
+	//inputTbl format: layerAreaRasterName | layerThresholdPercentageValue
+	//inputTbl format: layerAreaRasterName | current_development_flag | layerThresholdPercentageValue
+
+	bool* devFlag;
+	devFlag = new bool[numTblRows];
+	//read dev_flag column from csv
+	ExtractCSV(inputTbl, 3, 1, layerDevFlagStr);
+	//convert devFlag data to int
+	for (int i = 0; i != numTblRows; ++i) {
+		devFlag[i] = std::stoi(layerDevFlagStr[i]);
+	}
+
+	//read rasters column from csv
+	//ExtractCSV(swapPath + inputTbl, 2, 0, layerRasStr);
+	ExtractCSV(inputTbl, 3, 0, layerRasStr);
+
+	//read thresholds column from csv
+	//ExtractCSV(swapPath + inputTbl, 2, 1, layerThresholdStr);
+	ExtractCSV(inputTbl, 3, 2, layerThresholdStr);
+
+	//convert threshold data to double
+	for (int i = 0; i != numTblRows; ++i) {
+		layerThreshold[i] = std::stod(layerThresholdStr[i]);
+	}
+
+	//setup a vector of layer coverage rasters
+	std::vector<IRaster> inputCoverage;
+
+	//push back for each tbl row
+	for (int i = 0; i != numTblRows; ++i) {
+		inputCoverage.push_back(IRaster());
+	}
+
+	//setup and read rasters
+	for (int i = 0; i != numTblRows; ++i) {
+
+		inputCoverage[i].Setup(swapPath + layerRasStr[i]);
+		inputCoverage[i].Read(swapPath + layerRasStr[i]);
+		std::cout << "reading " << swapPath + layerRasStr[i] << std::endl;
+	}
+
+	//setup output coverage raster
+	IRaster outputCoverage;
+	outputCoverage.Setup(rastHdr);	//initialised to zero by default
+
+	//calculate summed threshold area
+	double summedThresholdArea;
+	summedThresholdArea = (summedLayerThreshold / 100.0f) * (outputCoverage.cellsize * outputCoverage.cellsize);
+	//cout << "summedThresholdArea " << summedThresholdArea << endl;
+
+	//calculate individual constraint threshold areas
+	for (int i = 0; i != numTblRows; ++i) {
+		layerThresholdArea[i] = (layerThreshold[i] / 100.0f) * (outputCoverage.cellsize * outputCoverage.cellsize);
+		//cout << "layerThresholdArea = " << layerThresholdArea[i] << endl;
+	}
+
+	//loop through all cells of all input layers
+	for (int r = 0; r != outputCoverage.nrows; ++r) {
+		for (int c = 0; c != outputCoverage.ncols; ++c) {
+
+			//reset summedLayerArea for each cell
+			double summedLayerArea = 0.0;
+
+			for (int i = 0; i != numTblRows; ++i) {
+
+				//add to summedLayerArea				
+				summedLayerArea += inputCoverage[i].data[r][c];
+
+				//test individual layer thresholds
+				if (inputCoverage[i].data[r][c] > layerThresholdArea[i]) {
+					outputCoverage.data[r][c] = 1;
+				}
+			}
+
+			//cout << "summedLayerArea " << summedLayerArea << endl;
+
+			//test summed layer threshold
+			if (summedLayerArea > summedThresholdArea) {
+				outputCoverage.data[r][c] = 1;
+			}
+		}
+	}
+
+	//write output coverage raster to file
+	std::cout << "writing " << constraintRas << std::endl;
+	outputCoverage.Write(constraintRas);
+
+	//setup current development raster
+	IRaster currentDev;
+	currentDev.Setup(rastHdr);	//initialised to zero by default
+
+	//find current development layer
+	for (int i = 0; i != numTblRows; ++i) {
+		if (devFlag[i]) {
+			std::cout << "current development = " << layerRasStr[i] << std::endl;
+
+			for (int r = 0; r != outputCoverage.nrows; ++r) {
+				for (int c = 0; c != outputCoverage.ncols; ++c) {
+
+					//test layer threshold
+					if (inputCoverage[i].data[r][c] > layerThresholdArea[i]) {
+						currentDev.data[r][c] = 1;
+					}
+				}
+			}
+		}
+	}
+
+	//write current development raster to file
+	std::cout << "writing " << devRas << std::endl;
+	currentDev.Write(devRas);
+
+	//tidy up 	
+	delete[] layerThreshold;
+	delete[] layerThresholdArea;
+	delete[] devFlag;
+}
+
+//void IRasterToHeader(const std::string& inputRaster, const std::string& outputHeader, const std::string& swapPath) {
+//
+//	//setup and read input raster
+//	IRaster input;
+//	input.Setup(swapPath + inputRaster);
+//	input.Read(swapPath + inputRaster);
+//
+//	//create an ofstream object	to write header
+//	std::ofstream opfile(swapPath + outputHeader);
+//
+//	//check the file opened OK
+//	if (opfile.is_open()) {
+//
+//		//write header
+//		opfile << "ncols" << " " << input.ncols << "\n";
+//		opfile << "nrows" << " " << input.nrows << "\n";
+//		opfile << "xllcorner" << " " << input.xllcorner << "\n";
+//		opfile << "yllcorner" << " " << input.yllcorner << "\n";
+//		opfile << "cellsize" << " " << input.cellsize << "\n";
+//		opfile << "NODATA_value" << " " << input.NODATA_value;
+//
+//		//close opfile
+//		opfile.close();
+//	}
+//	else {
+//		std::cout << "Unable to open output file";
+//	}
+//}
+
+void IRasterToHeader(const std::string& inputRaster, const std::string& outputHeader) {
+
+	//setup and read input raster
+	IRaster input;
+	input.Setup(inputRaster);
+	input.Read(inputRaster);
+
+	//create an ofstream object	to write header
+	std::ofstream opfile(outputHeader);
+
+	//check the file opened OK
+	if (opfile.is_open()) {
+
+		//write header
+		opfile << "ncols" << " " << input.ncols << "\n";
+		opfile << "nrows" << " " << input.nrows << "\n";
+		opfile << "xllcorner" << " " << input.xllcorner << "\n";
+		opfile << "yllcorner" << " " << input.yllcorner << "\n";
+		opfile << "cellsize" << " " << input.cellsize << "\n";
+		opfile << "NODATA_value" << " " << input.NODATA_value;
+
+		//close opfile
+		opfile.close();
+	}
+	else {
+		std::cout << "Unable to open output file";
+	}
+}
+
+int ParameterFromHeader(const std::string& header, const std::string& parameter) {
+
+	//template<typename T>
+	//void Raster<T>::Setup(const std::string & ipfile) {
+
+	int hdrNCols = 0;
+	int hdrNRows = 0;
+	int hdrXllcorner = 0;
+	int hdrYllcorner = 0;
+	int hdrCellsize = 0;
+	int hdrNodata = 0;
+
+
+
+		//declare an ifstream object
+		//ifstream ipfileHeader ("testRaster.asc");
+		std::ifstream ipfileHeader(header);
+
+		//declare a string object
+		std::string line, read, value;
+
+		//boolean header complete
+		bool headerComplete = false;
+
+		//check the file opened OK
+		if (ipfileHeader.is_open())
+		{
+			//std::cout << "Reading Header..." << std::endl << std::endl;
+
+			while (ipfileHeader.good() && !headerComplete)
+			{
+
+				std::stringstream lineStream;
+
+				//read a line from the file into string line
+				getline(ipfileHeader, line);
+				//and then into linestream
+				lineStream << line;
+				//std::cout << line << std::endl;
+
+				//and then out to string read
+				lineStream >> read;
+
+				if (read == "ncols") {
+					//std::cout << "ncols data detected.." << std::endl;
+					lineStream >> value;
+					hdrNCols = std::stoi(value);
+					//std::cout << "ncols = " << ncols << std::endl;
+				}
+
+				if (read == "nrows") {
+					//std::cout << "nrows data detected.." << std::endl;
+					lineStream >> value;
+					hdrNRows = std::stoi(value);
+					//std::cout << "nrows = " << nrows << std::endl;
+				}
+
+				if (read == "xllcorner") {
+					//std::cout << "xllcorner data detected.." << std::endl;
+					lineStream >> value;
+					hdrXllcorner = std::stoi(value);
+					//std::cout << "xllcorner = " << xllcorner << std::endl;
+				}
+
+				if (read == "yllcorner") {
+					//std::cout << "yllcorner data detected.." << std::endl;
+					lineStream >> value;
+					hdrYllcorner = std::stoi(value);
+					//std::cout << "yllcorner = " << yllcorner << std::endl;
+				}
+
+				if (read == "cellsize") {
+					//std::cout << "cellsize data detected.." << std::endl;
+					lineStream >> value;
+					hdrCellsize = std::stoi(value);
+					//std::cout << "cellsize = " << cellsize << std::endl;
+				}
+
+				if (read == "NODATA_value") {
+					//std::cout << "NODATA_value data detected.." << std::endl;
+					lineStream >> value;
+					//NODATA_value = getFromString(value);
+					hdrNodata = std::stoi(value);
+					//std::cout << "NODATA_value = " << NODATA_value << std::endl << std::endl;
+					headerComplete = true;
+				}
+			}
+		}
+		ipfileHeader.close();
+
+		int val = 0;
+
+		if (parameter == "ncols") {
+			val = hdrNCols;
+		}
+
+		if (parameter == "nrows") {
+			val = hdrNRows;
+		}
+
+		if (parameter == "cellsize") {
+			val = hdrCellsize;
+		}
+
+		//std::cout << "val = " << val << std::endl;
+
+		return(val);
+
+		//Setup(nrows, ncols, 0);
+		//Setup(ncols, nrows, 0);
+	//}
+}
+
 
 
 

@@ -5,32 +5,32 @@
 #include <random>
 
 //simple cell structure
-struct Cell {
+struct RTCell {
 	int c;
 	int r;
 	int z;
-	Cell(int col, int row, int zone) : c(col), r(row), z(zone) { }
+	RTCell(int col, int row, int zone) : c(col), r(row), z(zone) { }
 };
 
 //simple zone structure
-struct Zone {
+struct RTZone {
 	int id;
-	std::vector<Cell> cells;
-	Zone(int zid) : id(zid) { }
+	std::vector<RTCell> cells;
+	RTZone(int zid) : id(zid) { }
 };
 
 //simple ward structure
-typedef std::vector<Cell> Ward;
+typedef std::vector<RTCell> RTWard;
 
 //simple tile structure
-struct Tile {
+struct RTTile {
 	int dph;
 	std::string str;
 	std::string str90;
 	IRaster ras;
 	IRaster ras90;
 
-	Tile(int tile_dph) {
+	RTTile(int tile_dph) {
 		dph = tile_dph;
 		//str = "";
 		//str90 = "";		
@@ -73,3 +73,8 @@ void DRasterSubRaster(const std::string& inRasStr, const std::string& inCodeStr,
 void IRasterDevToDPH(const std::string& devInStr, const std::string& dphInStr, const std::string& devOutStr, const std::string& dphOutStr);
 
 void UrbanFabricGenerator(const std::string& in_dphPath, const std::string& out_dphPath, const std::string& in_tilePath, int in_numTiles);
+
+void RasteriseAreaThresholds(const std::string& swapPath, const std::string& rastHdr, const std::string& constraintRas, const std::string& devRas, const std::string& inputTbl, int numTblRows, double summedLayerThreshold);
+void IRasterToHeader(const std::string& inputRaster, const std::string& outputHeader);
+
+int ParameterFromHeader(const std::string& header, const std::string& parameter);

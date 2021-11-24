@@ -23,13 +23,14 @@ void CreateDevZones(bool useBin,
 	
 	//load mask raster from binary
 	IRaster mask;
-	mask.Setup(rastHdr);
-	if (bin_ras) {
-		mask.FromPGBinary(maskData);
-	}
-	else {
-		mask.FromCSV(maskData);
-	}
+	mask.Setup(maskData);
+	mask.Read(maskData);
+	//if (bin_ras) {
+	//	mask.FromPGBinary(maskData);
+	//}
+	//else {
+	//	mask.FromCSV(maskData);
+	//}
 
 	//obtain raster dimensions from inputSuit raster
 	int rCols = mask.ncols;
@@ -42,13 +43,14 @@ void CreateDevZones(bool useBin,
 		wardID.Setup(rCols, rRows, 1);			//initialise cells to 1
 	}
 	else {										//if wardID raster provided then create zones within wards 
-		wardID.Setup(rastHdr);
-		if (bin_ras) {
-			wardID.FromPGBinary(wardIDData);
-		}
-		else {
-			wardID.FromCSV(wardIDData);
-		}
+		wardID.Setup(wardIDData);
+		wardID.Read(wardIDData);
+		//if (bin_ras) {
+		//	wardID.FromPGBinary(wardIDData);
+		//}
+		//else {
+		//	wardID.FromCSV(wardIDData);
+		//}
 	}
 
 	//setup inital zone raster
@@ -542,13 +544,14 @@ void CreateDevZones(bool useBin,
 	}
 	//cout << "Number of zones created = " << opZCode << endl;
 
-	//write outputZoneID raster		
-	if (bin_ras) {
-		outputZoneID.ToPGBinary(pathToBinConfig, outputZoneIDData);
-	}
-	else {
-		outputZoneID.ToCSV(outputZoneIDData);
-	}
+	//write outputZoneID raster	
+	outputZoneID.Write(outputZoneIDData);
+	//if (bin_ras) {
+	//	outputZoneID.ToPGBinary(pathToBinConfig, outputZoneIDData);
+	//}
+	//else {
+	//	outputZoneID.ToCSV(outputZoneIDData);
+	//}
 }
 
 void DevZoneAVGSuit(bool useBin, 
@@ -562,23 +565,25 @@ void DevZoneAVGSuit(bool useBin,
 
 	//load input zoneID raster	
 	IRaster zID;	
-	zID.Setup(rastHdr);
-	if (bin_ras) {
-		zID.FromPGBinary(zoneID);
-	}
-	else {
-		zID.FromCSV(zoneID);
-	}
+	zID.Setup(zoneID);
+	zID.Read(zoneID);
+	//if (bin_ras) {
+	//	zID.FromPGBinary(zoneID);
+	//}
+	//else {
+	//	zID.FromCSV(zoneID);
+	//}
 
 	//load input zoneData raster	
 	DRaster zData;	
-	zData.Setup(rastHdr);
-	if (bin_ras) {
-		zData.FromPGBinary(zoneData);
-	}
-	else {
-		zData.FromCSV(zoneData);
-	}
+	zData.Setup(zoneData);
+	zData.Read(zoneData);
+	//if (bin_ras) {
+	//	zData.FromPGBinary(zoneData);
+	//}
+	//else {
+	//	zData.FromCSV(zoneData);
+	//}
 
 	//setup output zoneStats raster	
 	DRaster zStats;	
@@ -660,11 +665,12 @@ void DevZoneAVGSuit(bool useBin,
 	}
 
 	//write to file	
-	if (bin_ras) {
-		zStats.ToPGBinary(pathToBinConfig, zoneAVG);
-	}
-	else {
-		zStats.ToCSV(zoneAVG);
-	}
+	zStats.Write(zoneAVG);
+	//if (bin_ras) {
+	//	zStats.ToPGBinary(pathToBinConfig, zoneAVG);
+	//}
+	//else {
+	//	zStats.ToCSV(zoneAVG);
+	//}
 }
 

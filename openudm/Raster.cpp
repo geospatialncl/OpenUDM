@@ -6,10 +6,11 @@ Raster<int>::Raster()
   :	//header data
   ncols(0),
   nrows(0),
-  xllcorner(0.0),
-  yllcorner(0.0),
-  cellsize(100.0),
-  NODATA_value(-9999)
+  xllcorner(0),
+  yllcorner(0),
+  cellsize(100),
+  //NODATA_value(-9999)
+  NODATA_value(-1)
 { }
 
 template<>
@@ -17,10 +18,11 @@ Raster<double>::Raster()
   :	//header data
   ncols(0),
   nrows(0),
-  xllcorner(0.0),
-  yllcorner(0.0),
-  cellsize(100.0),
-  NODATA_value(-1.0)
+  xllcorner(0),
+  yllcorner(0),
+  cellsize(100),
+  //NODATA_value(-1.0)
+  NODATA_value(-1)
 { }
 
 

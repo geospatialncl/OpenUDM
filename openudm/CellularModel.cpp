@@ -113,13 +113,14 @@ void CellularModel::LoadWardDensity(const std::string& densityData, int densityC
 void CellularModel::LoadDwellingsRaster(const std::string& dwellingsData) {	
 
 	//setup and read raster
-	dwellingsRaster.Setup(rastHdr);
-	if (bin_ras) {
-		dwellingsRaster.FromPGBinary(dwellingsData);
-	}
-	else {
-		dwellingsRaster.FromCSV(dwellingsData);
-	}
+	dwellingsRaster.Setup(dwellingsData);
+	dwellingsRaster.Read(dwellingsData);
+	//if (bin_ras) {
+	//	dwellingsRaster.FromPGBinary(dwellingsData);
+	//}
+	//else {
+	//	dwellingsRaster.FromCSV(dwellingsData);
+	//}
 
 	//dwellings values are provided
 	useDwellingsData = true;
@@ -128,61 +129,66 @@ void CellularModel::LoadDwellingsRaster(const std::string& dwellingsData) {
 void CellularModel::LoadWardIDRaster(const std::string& iWardIDData) {	
 
 	//setup and read raster
-	iWardID.Setup(rastHdr);
-	if (bin_ras) {
-		iWardID.FromPGBinary(iWardIDData);
-	}
-	else {
-		iWardID.FromCSV(iWardIDData);
-	}
+	iWardID.Setup(iWardIDData);
+	iWardID.Read(iWardIDData);
+	//if (bin_ras) {
+	//	iWardID.FromPGBinary(iWardIDData);
+	//}
+	//else {
+	//	iWardID.FromCSV(iWardIDData);
+	//}
 }
 
 void CellularModel::LoadZoneIDRaster(const std::string& zoneIDData) {
 
 	//setup and read raster
-	zoneID.Setup(rastHdr);
-	if (bin_ras) {
-		zoneID.FromPGBinary(zoneIDData);
-	}
-	else {
-		zoneID.FromCSV(zoneIDData);
-	}
+	zoneID.Setup(zoneIDData);
+	zoneID.Read(zoneIDData);
+	//if (bin_ras) {
+	//	zoneID.FromPGBinary(zoneIDData);
+	//}
+	//else {
+	//	zoneID.FromCSV(zoneIDData);
+	//}
 }
 
 void CellularModel::LoadZoneAVGRaster(const std::string& zoneAVGData) {
 
 	//setup and read raster
-	zoneAVG.Setup(rastHdr);
-	if (bin_ras) {
-		zoneAVG.FromPGBinary(zoneAVGData);
-	}
-	else {
-		zoneAVG.FromCSV(zoneAVGData);
-	}
+	zoneAVG.Setup(zoneAVGData);
+	zoneAVG.Read(zoneAVGData);
+	//if (bin_ras) {
+	//	zoneAVG.FromPGBinary(zoneAVGData);
+	//}
+	//else {
+	//	zoneAVG.FromCSV(zoneAVGData);
+	//}
 }
 
 void CellularModel::LoadDevLandRaster(const std::string& devLandData) {
 
 	//setup and read raster
-	devLand.Setup(rastHdr);
-	if (bin_ras) {
-		devLand.FromPGBinary(devLandData);
-	}
-	else {
-		devLand.FromCSV(devLandData);
-	}
+	devLand.Setup(devLandData);
+	devLand.Read(devLandData);
+	//if (bin_ras) {
+	//	devLand.FromPGBinary(devLandData);
+	//}
+	//else {
+	//	devLand.FromCSV(devLandData);
+	//}
 }
 
 void CellularModel::LoadCellSuitRaster(const std::string& cellSuitData) {
 
 	//setup and read raster
-	cellSuit.Setup(rastHdr);
-	if (bin_ras) {
-		cellSuit.FromPGBinary(cellSuitData);
-	}
-	else {
-		cellSuit.FromCSV(cellSuitData);
-	}
+	cellSuit.Setup(cellSuitData);
+	cellSuit.Read(cellSuitData);
+	//if (bin_ras) {
+	//	cellSuit.FromPGBinary(cellSuitData);
+	//}
+	//else {
+	//	cellSuit.FromCSV(cellSuitData);
+	//}
 }
 
 void CellularModel::SetupFinalDevRaster() {
@@ -1104,12 +1110,13 @@ void CellularModel::SetFutureDev() {
 
 void CellularModel::OutputRasterResult(const std::string& rasterData) {
 
-	//write results to raster	
-	if (bin_ras) {
-		finalDev.ToPGBinary(pathToBinConfig, rasterData);
-	}
-	else {
-		finalDev.ToCSV(rasterData);
-	}
+	//write results to raster
+	finalDev.Write(rasterData);
+	//if (bin_ras) {
+	//	finalDev.ToPGBinary(pathToBinConfig, rasterData);
+	//}
+	//else {
+	//	finalDev.ToCSV(rasterData);
+	//}
 }
 
