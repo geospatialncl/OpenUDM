@@ -107,10 +107,10 @@ def main(swap_path):
         reader = csv.DictReader(csvfile)        
         for row in reader:
             num_attractors += 1
-            #if row['reverse_polarity_flag'] == '1':            
-            #    rt.RevPolarityStandardise(os.path.join(swap_path, row['layer_name']), zone_id_ras)
-            #elif row['reverse_polarity_flag'] == '0':
-            #    rt.Standardise(os.path.join(swap_path, row['layer_name']), zone_id_ras)
+            if row['reverse_polarity_flag'] == '1':            
+                rt.RevPolarityStandardise(os.path.join(swap_path, row['layer_name']), zone_id_ras)
+            elif row['reverse_polarity_flag'] == '0':
+                rt.Standardise(os.path.join(swap_path, row['layer_name']), zone_id_ras)
 
     #test
     print('num_zones = ')
@@ -146,7 +146,7 @@ def main(swap_path):
     # COVERAGE TO CONSTRAINT
 
     #generate combined constraint and current development rasters
-    rt.RasteriseAreaThresholds(swap_path, rast_hdr, constraint_ras, current_dev_ras, constraints_tbl, num_constraints, combined_threshold)
+    rt.RasteriseAreaThresholds(swap_path + "/", rast_hdr, constraint_ras, current_dev_ras, constraints_tbl, num_constraints, combined_threshold)
 
     #flip constraint raster to form boolean suitability
     rt.IRasterNotBoolean(constraint_ras)
