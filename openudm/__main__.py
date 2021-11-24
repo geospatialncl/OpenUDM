@@ -86,9 +86,9 @@ def main(swap_path):
 
     # PARAMETERS FROM TABLES - ATTRACTOR STANDARDISATION
 
-    int num_zones = 0
-    int num_constraints = 0
-    int num_attractors = 0
+    num_zones = 0
+    num_constraints = 0
+    num_attractors = 0
 
     #num_zones = number of rows in population_tbl
     with open(population_tbl) as csvfile:
@@ -122,9 +122,9 @@ def main(swap_path):
 
     # PARAMETERS FROM RASTER HEADER
 
-    int ras_columns = 0
-    int ras_rows = 0
-    int ras_cellsize = 0
+    ras_columns = 0
+    ras_rows = 0
+    ras_cellsize = 0
 
     #generate raster header from zone identity raster
     rt.IRasterToHeader(zone_id_ras, rast_hdr)
@@ -208,16 +208,16 @@ def main(swap_path):
     cm.SetPathToBinaryConfigFiles(swap_path)    
 
     #set parameters to read zone codes from population table
-    int label_total = 4
-    int label_col = 1
+    label_total = 4
+    label_col = 1
 
     #read zone codes from population table
     cm.LoadWardLabels(population_tbl, label_col, label_total)
 
     #set parameters to read population data from population table
-    int pop_total = 4
-    int cur_pop_col = 2
-    int fut_pop_col = 3
+    pop_total = 4
+    cur_pop_col = 2
+    fut_pop_col = 3
 
     #read population data from population table
     cm.LoadCurrentPopulation(population_tbl, cur_pop_col, pop_total)
