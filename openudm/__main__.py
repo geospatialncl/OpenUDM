@@ -107,10 +107,10 @@ def main(swap_path):
         reader = csv.DictReader(csvfile)        
         for row in reader:
             num_attractors += 1
-            if row['reverse_polarity_flag'] == '1':            
-                rt.RevPolarityStandardise(os.path.join(swap_path, row['layer_name']), zone_id_ras)
-            elif row['reverse_polarity_flag'] == '0':
-                rt.Standardise(os.path.join(swap_path, row['layer_name']), zone_id_ras)
+            #if row['reverse_polarity_flag'] == '1':            
+            #    rt.RevPolarityStandardise(os.path.join(swap_path, row['layer_name']), zone_id_ras)
+            #elif row['reverse_polarity_flag'] == '0':
+            #    rt.Standardise(os.path.join(swap_path, row['layer_name']), zone_id_ras)
 
     #test
     print('num_zones = ')
