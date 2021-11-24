@@ -1582,6 +1582,23 @@ int ParameterFromHeader(const std::string& header, const std::string& parameter)
 	//}
 }
 
+void IRasterSetToValue(const std::string& rasterHeader, int value, const std::string& outputRaster) {
+
+	//setup output raster
+	IRaster ras;
+	ras.Setup(rasterHeader);
+
+	//set all cells to value provided	
+	for (int r = 0; r != ras.nrows; ++r) {
+		for (int c = 0; c != ras.ncols; ++c) {
+			ras.data[r][c] = value;
+		}
+	}
+	
+	//write output raster
+	ras.Write(outputRaster);
+}
+
 
 
 

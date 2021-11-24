@@ -266,10 +266,16 @@ def main(swap_path):
     cm.OutputRasterResult(cell_dev_output_ras)    
     cm.WriteOverflowWards(overflow_tbl)
 
-    # GENERATE DWELLINGS PER HECTARE RASTER OUTPUT IF USING VARIABLE DENSITY  
+    # GENERATE DWELLINGS PER HECTARE RASTER OUTPUT IF USING VARIABLE DENSITY 
+    # otherwise set to a constant value for now
+    # todo - derive fixed density output from zonal density and dwellings occupancy  
 
     if dval:        
         rt.IRasterDevToDPH(cell_dev_output_ras, density_ras, cell_dev_output_ras, cell_dph_ras)
+    else:
+        rt.IRasterSetToValue(rast_hdr, 50, density_ras)
+        rt.IRasterDevToDPH(cell_dev_output_ras, density_ras, cell_dev_output_ras, cell_dph_ras) 
+    
 
     # METADATA - basic for now
     # todo - full metadata for new interface

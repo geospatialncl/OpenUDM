@@ -78,3 +78,5 @@ void RasteriseAreaThresholds(const std::string& swapPath, const std::string& ras
 void IRasterToHeader(const std::string& inputRaster, const std::string& outputHeader);
 
 int ParameterFromHeader(const std::string& header, const std::string& parameter);
+
+void IRasterSetToValue(const std::string& rasterHeader, int value, const std::string& outputRaster);
