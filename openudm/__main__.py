@@ -150,6 +150,9 @@ def main(swap_path):
 
     #flip constraint raster to form boolean suitability
     rt.IRasterNotBoolean(constraint_ras)
+    
+    #mask nodata for region using zone_id_ras
+    rt.IRasterSetNoDataToRef(constraint_ras, zone_id_ras);
 
     #MULTI CRITERIA EVALUATION
 
