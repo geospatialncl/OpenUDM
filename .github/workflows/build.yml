@@ -32,6 +32,9 @@ jobs:
         activate-environment: udm
         environment-file: environment.yml
         use-only-tar-bz2: true
+        
+    - name: Set tag as env
+      run: echo "TAG=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
 
     - name: Build openudm
       run: |
