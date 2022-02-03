@@ -79,7 +79,7 @@ def readme():
 
 setup(
     name='openudm',
-    version='3.0.0',
+    version=os.getenv('TAG'),
     author='James Virgo',
     description='Urban Development Model',
     long_description=readme(),
