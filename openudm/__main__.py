@@ -20,17 +20,14 @@ def main(swap_path):
 
     # NEW INTERFACE
 
-    # HARDCODED CONTROL PARAMETERS - TODO DECIDE WHICH TO PROVIDE TO USER
+    # HARDCODED CONTROL PARAMETERS - NOT NEEDED BY USER
 
     bin_ras = 0
     unlog_ras = 0
     is_driven = 0
     reverse = 0
     moore = 0
-    min_dev_area = 4
-    density_provided = 0
-    dph = 0
-    combined_threshold = 50.0
+    zonal_density = 0    
 
     # RASTER HEADER AND HARDCODED NAMES
 
@@ -75,6 +72,9 @@ def main(swap_path):
     #set name of population table - including swap_path
     population_tbl = os.path.join(swap_path, 'population.csv')
 
+    #set name of parameters table - including swap_path
+    parameters_tbl = os.path.join(swap_path, 'parameters.csv')
+
     #set name of overflow data table - including swap_path
     overflow_tbl = os.path.join(swap_path, 'out_cell_overflow.csv')
 
@@ -85,6 +85,22 @@ def main(swap_path):
     metadata_tbl = os.path.join(swap_path, 'out_cell_metadata.csv')
 
     # PARAMETERS FROM TABLES - ATTRACTOR STANDARDISATION
+
+    #density_from_raster
+    #people_per_dwelling
+    #coverage_threshold
+    #minimum_plot_size
+
+    #import parameters
+    with open(parameters_tbl) as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            density_from_raster = int(row['density_from_raster'])
+            people_per_dwelling = float(row['people_per_dwelling'])
+            coverage_threshold = float(row['coverage_threshold'])
+            minimum_plot_size = int(row['minimum_plot_size'])            
+
+    print( "Parameters file imported.")
 
     num_zones = 0
     num_constraints = 0
@@ -146,7 +162,7 @@ def main(swap_path):
     # COVERAGE TO CONSTRAINT
 
     #generate combined constraint and current development rasters
-    rt.RasteriseAreaThresholds(swap_path + "/", rast_hdr, constraint_ras, current_dev_ras, constraints_tbl, num_constraints, combined_threshold)
+    rt.RasteriseAreaThresholds(swap_path + "/", rast_hdr, constraint_ras, current_dev_ras, constraints_tbl, num_constraints, coverage_threshold)
 
     #flip constraint raster to form boolean suitability
     rt.IRasterNotBoolean(constraint_ras)
@@ -176,7 +192,7 @@ def main(swap_path):
 
     #CREATE DEVELOPMENT AREAS
 
-    #int min_dev_area = 4 
+    #int minimum_plot_size = 4 
 
     #moore = 0
 
@@ -186,8 +202,8 @@ def main(swap_path):
         mval = 1
 
     #generate development area identity raster
-    #dz.CreateDevZones(binary, min_dev_area, moore, constraint_ras, dev_area_id_ras, rast_hdr, swap_path, zone_id_ras)
-    dz.CreateDevZones((bval>0), min_dev_area, (mval>0), constraint_ras, dev_area_id_ras, rast_hdr, swap_path, zone_id_ras)    
+    #dz.CreateDevZones(binary, minimum_plot_size, moore, constraint_ras, dev_area_id_ras, rast_hdr, swap_path, zone_id_ras)
+    dz.CreateDevZones((bval>0), minimum_plot_size, (mval>0), constraint_ras, dev_area_id_ras, rast_hdr, swap_path, zone_id_ras)    
     print("dz.CreateDevZones") 
 
     #COMPUTE DEVELOPMENT AREA SUITABILITY
@@ -228,19 +244,19 @@ def main(swap_path):
 
     ##---
 
-    #density_provided = 0
+    #zonal_density = 0
 
     #table format: zone_id | zone_density
-    print("if", density_provided)
-    if density_provided:
+    print("if", zonal_density)
+    if zonal_density:
         print("cm.LoadWardDensity", density_tbl,0,2)
         cm.LoadWardDensity(density_tbl,0,2)
 
-    #dph = 0
+    #density_from_raster = 0
 
-    #set dval based upon boolean input (dph) - it can then be tested in place as function argument
+    #set dval based upon boolean input (density_from_raster) - it can then be tested in place as function argument
     dval = 0
-    if dph:
+    if density_from_raster:
         dval = 1
 
     #variable density 
