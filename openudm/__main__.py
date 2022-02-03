@@ -58,8 +58,11 @@ def main(swap_path):
     #set name of OPTIONAL density raster - including swap_path
     density_ras = os.path.join(swap_path, 'density.asc')
 
-    #set name of OPTIONAL development density raster - including swap_path
+    #set name of development density raster - including swap_path
     cell_dph_ras = os.path.join(swap_path, 'out_cell_dph.asc')
+
+    #set name of development density raster - including swap_path
+    cell_pph_ras = os.path.join(swap_path, 'out_cell_pph.asc')
 
     # TABLE NAMES
 
@@ -292,8 +295,9 @@ def main(swap_path):
     if dval:        
         rt.IRasterDevToDPH(cell_dev_output_ras, density_ras, cell_dev_output_ras, cell_dph_ras)
     else:
-        rt.IRasterSetToValue(rast_hdr, 50, density_ras)
-        rt.IRasterDevToDPH(cell_dev_output_ras, density_ras, cell_dev_output_ras, cell_dph_ras) 
+        #rt.IRasterSetToValue(rast_hdr, 50, density_ras)
+        #rt.IRasterDevToDPH(cell_dev_output_ras, density_ras, cell_dev_output_ras, cell_dph_ras) 
+        cm.OutputDevelopmentDensity(cell_pph_ras, cell_dph_ras, people_per_dwelling)
     
 
     # METADATA - basic for now

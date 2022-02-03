@@ -39,6 +39,8 @@ public:
 	void OutputRasterResult(const std::string& rasterData);
 	void WriteOverflowWards(const std::string& overflowData);
 
+	void OutputDevelopmentDensity(const std::string& popDensityRaster, const std::string& dwellingDensityRaster, double people_per_dwelling);
+
 private:
 
 	//VARIABLE DENSITY

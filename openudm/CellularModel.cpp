@@ -1120,3 +1120,36 @@ void CellularModel::OutputRasterResult(const std::string& rasterData) {
 	//}
 }
 
+void CellularModel::OutputDevelopmentDensity(const std::string& popDensityRaster, const std::string& dwellingDensityRaster, double people_per_dwelling) {
+
+	DRaster popDensity;
+	popDensity.Setup(rastHdr);
+
+	DRaster dwellingDensity;
+	dwellingDensity.Setup(rastHdr);
+
+	//CurrentCellDensity = wards[w]->cellDensity
+	//opfile << wards[w]->cellDensity << ",";
+
+	//set future development population density
+	for (size_t w = 0; w != wards.size(); ++w) {
+		if (wards[w]->devReq) {
+			if (!wards[w]->zones.empty()) {
+				for (size_t z = 0; z != wards[w]->zones.size(); ++z) {
+					for (size_t c = 0; c != wards[w]->zones[z]->cells.size(); ++c) {
+
+						if (wards[w]->zones[z]->cells[c]->devStatus) {
+							popDensity.data[wards[w]->zones[z]->cells[c]->row][wards[w]->zones[z]->cells[c]->col] = wards[w]->cellDensity;
+							dwellingDensity.data[wards[w]->zones[z]->cells[c]->row][wards[w]->zones[z]->cells[c]->col] = wards[w]->cellDensity / people_per_dwelling;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	popDensity.Write(popDensityRaster);
+	dwellingDensity.Write(dwellingDensityRaster);
+
+}
+
