@@ -10,11 +10,11 @@ def output_raster_to_vector():
     Run raster to vector file conversion for UDM output dataset conversion.
 
     """
-    # default values for required input variables
+    # default values for required input variables - used if not passed as env
     value_of_interest = 22
     raster_file_path = 'raster.asc'
     output_vector_file = 'buildings.gpkg'
-    feature_type = 'buildings'
+    feature_types = 'buildings','roads','greenspace'
 
     # set details for allowed feature types
     allowed_feature_types = ['buildings','roads','greenspace']
@@ -41,18 +41,27 @@ def output_raster_to_vector():
             output_vector_file = arg
         elif opt in ("-f", "feature_type="):
 
-            feature_type = arg.strip()
-            if feature_type in allowed_feature_types:
-                # get the cell value for the passed feature type
-                value_of_interest = feature_type_identifiers[feature_type]
-            else:
-                print('Error! The passed feature_type (%s) does not exist! It should be one of %s' % (feature_type, allowed_feature_types))
-                sys.exit(2)
+            feature_types = arg.strip()
+            feature_types = feature_types.split(',')
+
+            for feature_type in feature_types:
+                if feature_type in allowed_feature_types:
+                    # get the cell value for the passed feature type
+                    value_of_interest = feature_type_identifiers[feature_type]
+                else:
+                    print('Error! The passed feature_type (%s) does not exist! It should be one of %s' % (feature_type, allowed_feature_types))
+                    sys.exit(2)
         else:
             print('Un-recognised argument %s' % opt)
             sys.exit(2)
 
-    raster_to_vector(value_of_interest, raster_file_path, output_vector_file)
+    # loop through the feature types and process
+    for feature_type in feature_types:
+        value_of_interest = feature_type_identifiers[feature_type]
+
+        output_vector_file = f'{feature_type}.gpkg'
+
+        raster_to_vector(value_of_interest, raster_file_path, output_vector_file)
 
 
 def raster_to_vector(value_of_interest=0, raster_file_path='raster.asc', output_vector_file='buildings.gpkg'):
