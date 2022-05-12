@@ -3,6 +3,7 @@ from rasterio.features import shapes
 import geopandas as gp
 import sys
 import getopt
+from os.path import join
 
 
 def output_raster_to_vector():
