@@ -79,7 +79,7 @@ def readme():
 
 setup(
     name='openudm',
-    version='4.0.4',
+    version='4.0.5',
     author='James Virgo',
     description='Urban Development Model',
     long_description=readme(),
