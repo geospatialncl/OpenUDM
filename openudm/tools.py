@@ -62,10 +62,10 @@ def output_raster_to_vector():
 
         output_vector_file = f'{feature_type}.gpkg'
 
-        raster_to_vector(value_of_interest, raster_file_path, output_vector_file)
+        raster_to_vector(value_of_interest, raster_file_path, output_vector_file, feature_type)
 
 
-def raster_to_vector(value_of_interest=0, raster_file_path='/data/output/data/out_uf.asc', output_vector_file='buildings.gpkg'):
+def raster_to_vector(value_of_interest=0, raster_file_path='/data/output/data/out_uf.asc', output_vector_file='buildings.gpkg', feature_type='buildings'):
     """
     Converts a .asc file (or any raster format) to a vector geopackage creating polygons for cells with the given value (default value set to 0)
 
@@ -101,6 +101,6 @@ def raster_to_vector(value_of_interest=0, raster_file_path='/data/output/data/ou
         exit(2)
 
     # export file
-    gpd_polygons.to_file(join('/data/outputs/data',output_vector_file), layer=output_vector_file.split('.')[0], driver="GPKG")
+    gpd_polygons.to_file(join('/data/outputs/data',output_vector_file), layer=feature_type, driver="GPKG")
 
     return
