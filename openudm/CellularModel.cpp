@@ -1120,27 +1120,98 @@ void CellularModel::OutputRasterResult(const std::string& rasterData) {
 	//}
 }
 
+//void CellularModel::OutputDevelopmentDensity(const std::string& popDensityRaster, const std::string& dwellingDensityRaster, double people_per_dwelling) {
+//
+//	DRaster popDensity;
+//	popDensity.Setup(rastHdr);
+//
+//	DRaster dwellingDensity;
+//	dwellingDensity.Setup(rastHdr);
+//
+//	//overflow
+//	//wards[w]->overflow << ",";
+//
+//	//CurrentCellDensity = wards[w]->cellDensity
+//	//wards[w]->cellDensity << ",";
+//
+//	//OverflowCellDensity
+//	//if (wards[w]->suitDevCells == 0) {	//avoid division by zero - output 9999 to represent implausibly high pop density
+//	//	opfile << 9999 << ",";
+//	//}
+//	//else {
+//	//	//RequiredPopDensityinFreePixels = wards[w]->popChange / wards[w]->suitDevCells
+//	//	opfile << wards[w]->popChange / wards[w]->suitDevCells << ",";
+//	//}
+//
+//	//set future development population density
+//	for (size_t w = 0; w != wards.size(); ++w) {
+//		if (wards[w]->devReq) {
+//			if (!wards[w]->zones.empty()) {
+//				for (size_t z = 0; z != wards[w]->zones.size(); ++z) {
+//					for (size_t c = 0; c != wards[w]->zones[z]->cells.size(); ++c) {
+//
+//						if (wards[w]->zones[z]->cells[c]->devStatus) {
+//							popDensity.data[wards[w]->zones[z]->cells[c]->row][wards[w]->zones[z]->cells[c]->col] = wards[w]->cellDensity;
+//							dwellingDensity.data[wards[w]->zones[z]->cells[c]->row][wards[w]->zones[z]->cells[c]->col] = wards[w]->cellDensity / people_per_dwelling;
+//						}
+//					}
+//				}
+//			}
+//		}
+//	}
+//
+//	popDensity.Write(popDensityRaster);
+//	dwellingDensity.Write(dwellingDensityRaster);
+//
+//}
+
 void CellularModel::OutputDevelopmentDensity(const std::string& popDensityRaster, const std::string& dwellingDensityRaster, double people_per_dwelling) {
 
-	DRaster popDensity;
+	IRaster popDensity;
 	popDensity.Setup(rastHdr);
+	popDensity.NODATA_value = 0;
 
-	DRaster dwellingDensity;
+	IRaster dwellingDensity;
 	dwellingDensity.Setup(rastHdr);
+	dwellingDensity.NODATA_value = 0;
 
-	//CurrentCellDensity = wards[w]->cellDensity
-	//opfile << wards[w]->cellDensity << ",";
-
-	//set future development population density
+	//set future development population and dwelling density
 	for (size_t w = 0; w != wards.size(); ++w) {
 		if (wards[w]->devReq) {
 			if (!wards[w]->zones.empty()) {
 				for (size_t z = 0; z != wards[w]->zones.size(); ++z) {
 					for (size_t c = 0; c != wards[w]->zones[z]->cells.size(); ++c) {
 
-						if (wards[w]->zones[z]->cells[c]->devStatus) {
-							popDensity.data[wards[w]->zones[z]->cells[c]->row][wards[w]->zones[z]->cells[c]->col] = wards[w]->cellDensity;
-							dwellingDensity.data[wards[w]->zones[z]->cells[c]->row][wards[w]->zones[z]->cells[c]->col] = wards[w]->cellDensity / people_per_dwelling;
+						if (!wards[w]->overflow) {
+
+							if (wards[w]->zones[z]->cells[c]->devStatus) {
+								//round population density up to nearest integer
+								int PPH = ceil(wards[w]->cellDensity);
+								popDensity.data[wards[w]->zones[z]->cells[c]->row][wards[w]->zones[z]->cells[c]->col] = PPH;
+								//round dwellings density up to nearest integer
+								int DPH = ceil(wards[w]->cellDensity / people_per_dwelling);
+								dwellingDensity.data[wards[w]->zones[z]->cells[c]->row][wards[w]->zones[z]->cells[c]->col] = DPH;
+							}
+						}
+						else {
+
+							if (wards[w]->zones[z]->cells[c]->devStatus) {								 
+								 
+								int PPH, DPH;
+
+								if (wards[w]->suitDevCells == 0) {
+									PPH = 999;
+									DPH = 999;
+								}
+								else {
+									PPH = ceil(wards[w]->popChange / wards[w]->suitDevCells);
+									DPH = ceil(((wards[w]->popChange / wards[w]->suitDevCells) / people_per_dwelling));
+								}	
+
+								//write to raster
+								popDensity.data[wards[w]->zones[z]->cells[c]->row][wards[w]->zones[z]->cells[c]->col] = PPH;
+								dwellingDensity.data[wards[w]->zones[z]->cells[c]->row][wards[w]->zones[z]->cells[c]->col] = DPH;
+							}
 						}
 					}
 				}
