@@ -47,9 +47,4 @@ jobs:
     - name: Run UFG tool
       run: |
         generate_urban_fabric -i Data/out_cell_dph.asc
-      shell: bash -l {0}
-
-    - name: Run test for R2V tool
-      run: |
-        output_raster_to_vector -i Data/out_uf.asc -o Data/new_buildings.gpkg -f buildings
-      shell: bash -l {0}
+      shell: bash -l {0}    
