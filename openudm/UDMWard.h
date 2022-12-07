@@ -11,6 +11,10 @@ public:
 
 	std::vector<UDMZonePtr> zones;
 	std::vector<UDMCellPtr> cells;
+
+	//new spreading algorithm
+	std::vector<UDMCellPtr> allDevZoneCells;
+
 	double popChange;
 	bool devReq;
 	int curDevCells;

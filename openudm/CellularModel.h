@@ -49,7 +49,7 @@ private:
 	//move these to UDMWard
 	//size_t dwellingsRequired;
 	//size_t dwellingsAssigned;
-	//also add dweelingsAvailable to UDMZone
+	//also add dwellingsAvailable to UDMZone
 
 	//wards and raster parameters
 	size_t numWards; 

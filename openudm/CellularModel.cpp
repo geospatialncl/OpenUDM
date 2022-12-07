@@ -465,124 +465,344 @@ void CellularModel::FindOverflowWards_DPH() {	//VARIABLE DENSITY VERSION
 	}
 }
 
-void CellularModel::DevelopNonOverflowWards() {
+//void CellularModel::DevelopNonOverflowWards() {
+//
+//	//DEVELOP NON-OVERFLOW WARDS BEGIN--------	
+//
+//	//sort all zones in ward by highest avgSuit
+//	for (size_t w = 0; w != numWards; ++w) {
+//		if (wards[w]->devReq) {
+//			if (!wards[w]->overflow) {
+//				std::sort(wards[w]->zones.begin(), wards[w]->zones.end(), HighestZoneAVG);
+//			}
+//		}
+//	}
+//
+//	//develop cells in non-overflow wards
+//	for (size_t w = 0; w != numWards; ++w) {
+//		if (wards[w]->devReq) {
+//			if (!wards[w]->overflow) {
+//
+//				int devCells = 0;	//keep track of how many cells have been developed - reset for each ward
+//
+//				for (size_t z = 0; z != wards[w]->zones.size(); ++z) {		//all zones
+//					if (devCells < wards[w]->reqDevCells) {				//requiring further development 
+//
+//						//find out if we're in the spread zone (if there is one... <=)
+//						if ((static_cast<int>(wards[w]->zones[z]->cells.size()) + devCells) <= wards[w]->reqDevCells) {	//not in spread zone
+//
+//							//develop all cells in zone - keep track of devCells
+//							for (size_t c = 0; c != wards[w]->zones[z]->cells.size(); ++c) {
+//								wards[w]->zones[z]->cells[c]->devStatus = true;
+//								++devCells;
+//								
+//								wards[w]->devCells = devCells;		//keep track of how many cells have been developed
+//							}
+//						}
+//						else {	//spread zone - seed and spread development from most suitable cell
+//
+//							//read cell suitability from raster
+//							for (size_t c = 0; c != wards[w]->zones[z]->cells.size(); ++c) {
+//								wards[w]->zones[z]->cells[c]->suit =
+//									cellSuit.data[wards[w]->zones[z]->cells[c]->row][wards[w]->zones[z]->cells[c]->col];
+//							}
+//
+//							//sort all cells in zone by highest suitability
+//							std::sort(wards[w]->zones[z]->cells.begin(), wards[w]->zones[z]->cells.end(), HighestCellSuit);
+//
+//							//test**
+//							wards[w]->zones[z]->final = true;
+//
+//							//initial seed
+//							UDMCellPtr seed = wards[w]->zones[z]->cells[0];
+//							//vetors of seeds and neighbours
+//							std::vector<UDMCellPtr> seeds;
+//							std::vector<UDMCellPtr> nbrs;
+//
+//							//develop initial seed cell
+//							seed->devStatus = true;
+//							++devCells;
+//							seeds.push_back(seed);
+//							
+//							wards[w]->devCells = devCells;		//keep track of how many cells have been developed
+//
+//							while (devCells < wards[w]->reqDevCells && !seeds.empty()) {
+//
+//								nbrs.clear();
+//
+//								//get neighbours
+//								for (size_t c = 0; c != wards[w]->zones[z]->cells.size(); ++c) {
+//									int cDiff = (seeds[seeds.size() - 1]->col + 1) - (wards[w]->zones[z]->cells[c]->col + 1);
+//									int rDiff = (seeds[seeds.size() - 1]->row + 1) - (wards[w]->zones[z]->cells[c]->row + 1);
+//
+//									cDiff = abs(cDiff);
+//									rDiff = abs(rDiff);
+//
+//									if ((cDiff <= 1) && (rDiff <= 1)) {
+//										if ((cDiff + rDiff) > 0) {
+//											nbrs.push_back(wards[w]->zones[z]->cells[c]);	//don't include cell itself!
+//										}										
+//									}
+//								}
+//
+//								//remove current seed
+//								seeds.pop_back();								
+//
+//								//sort neighbours by highest suit
+//								if (nbrs.size() > 1) {
+//									std::sort(nbrs.begin(), nbrs.end(), HighestCellSuit);
+//								}
+//								
+//								//develop neighbouring cells
+//								for (size_t n = 0; n != nbrs.size(); ++n) {
+//									if (!nbrs[n]->devStatus) {						//not already developed										
+//										if (devCells < wards[w]->reqDevCells) {
+//											nbrs[n]->devStatus = true;
+//											++devCells;
+//											seeds.push_back(nbrs[n]);				//add neighbour as potential seed
+//											
+//											wards[w]->devCells = devCells;			//keep track of how many cells have been developed										
+//										}
+//									}
+//								}
+//
+//								//sort seeds by lowest suit 
+//								//can then access most suitable using seeds[seeds.size()-1]
+//								//and can remove when finished with using seeds.pop_back()
+//
+//								//**Replicate current development including possible error
+//								if (!seeds.empty()) {
+//									if (seeds.size() > 1) {
+//										std::sort(seeds.begin(), seeds.end(), LowestCellSuit);
+//									}
+//								}
+//								else {							
+//									wards[w]->overflow = true;		//flag as overflow ward									
+//								}															
+//							}
+//						}
+//					}
+//				}
+//			}
+//		}
+//	}	
+//}
+
+void CellularModel::DevelopNonOverflowWards() {	
 
 	//DEVELOP NON-OVERFLOW WARDS BEGIN--------	
 
-	//sort all zones in ward by highest avgSuit
+	//hardcode parameter for now
+	int maxDevRate = 4;	
+
+	//gather cells from all dev zones into single vector
 	for (size_t w = 0; w != numWards; ++w) {
 		if (wards[w]->devReq) {
 			if (!wards[w]->overflow) {
-				std::sort(wards[w]->zones.begin(), wards[w]->zones.end(), HighestZoneAVG);
-			}
-		}
-	}
-
-	//develop cells in non-overflow wards
-	for (size_t w = 0; w != numWards; ++w) {
-		if (wards[w]->devReq) {
-			if (!wards[w]->overflow) {
-
-				int devCells = 0;	//keep track of how many cells have been developed - reset for each ward
-
-				for (size_t z = 0; z != wards[w]->zones.size(); ++z) {		//all zones
-					if (devCells < wards[w]->reqDevCells) {				//requiring further development 
-
-						//find out if we're in the spread zone (if there is one... <=)
-						if ((static_cast<int>(wards[w]->zones[z]->cells.size()) + devCells) <= wards[w]->reqDevCells) {	//not in spread zone
-
-							//develop all cells in zone - keep track of devCells
+				if (!wards[w]->zones.empty()) {
+					for (size_t z = 0; z != wards[w]->zones.size(); ++z) {
+						if (!wards[w]->zones[z]->cells.empty()) {
 							for (size_t c = 0; c != wards[w]->zones[z]->cells.size(); ++c) {
-								wards[w]->zones[z]->cells[c]->devStatus = true;
-								++devCells;
-								
-								wards[w]->devCells = devCells;		//keep track of how many cells have been developed
-							}
-						}
-						else {	//spread zone - seed and spread development from most suitable cell
 
-							//read cell suitability from raster
-							for (size_t c = 0; c != wards[w]->zones[z]->cells.size(); ++c) {
-								wards[w]->zones[z]->cells[c]->suit =
-									cellSuit.data[wards[w]->zones[z]->cells[c]->row][wards[w]->zones[z]->cells[c]->col];
-							}
-
-							//sort all cells in zone by highest suitability
-							std::sort(wards[w]->zones[z]->cells.begin(), wards[w]->zones[z]->cells.end(), HighestCellSuit);
-
-							//test**
-							wards[w]->zones[z]->final = true;
-
-							//initial seed
-							UDMCellPtr seed = wards[w]->zones[z]->cells[0];
-							//vetors of seeds and neighbours
-							std::vector<UDMCellPtr> seeds;
-							std::vector<UDMCellPtr> nbrs;
-
-							//develop initial seed cell
-							seed->devStatus = true;
-							++devCells;
-							seeds.push_back(seed);
-							
-							wards[w]->devCells = devCells;		//keep track of how many cells have been developed
-
-							while (devCells < wards[w]->reqDevCells && !seeds.empty()) {
-
-								nbrs.clear();
-
-								//get neighbours
-								for (size_t c = 0; c != wards[w]->zones[z]->cells.size(); ++c) {
-									int cDiff = (seeds[seeds.size() - 1]->col + 1) - (wards[w]->zones[z]->cells[c]->col + 1);
-									int rDiff = (seeds[seeds.size() - 1]->row + 1) - (wards[w]->zones[z]->cells[c]->row + 1);
-
-									cDiff = abs(cDiff);
-									rDiff = abs(rDiff);
-
-									if ((cDiff <= 1) && (rDiff <= 1)) {
-										if ((cDiff + rDiff) > 0) {
-											nbrs.push_back(wards[w]->zones[z]->cells[c]);	//don't include cell itself!
-										}										
-									}
-								}
-
-								//remove current seed
-								seeds.pop_back();								
-
-								//sort neighbours by highest suit
-								if (nbrs.size() > 1) {
-									std::sort(nbrs.begin(), nbrs.end(), HighestCellSuit);
-								}
-								
-								//develop neighbouring cells
-								for (size_t n = 0; n != nbrs.size(); ++n) {
-									if (!nbrs[n]->devStatus) {						//not already developed										
-										if (devCells < wards[w]->reqDevCells) {
-											nbrs[n]->devStatus = true;
-											++devCells;
-											seeds.push_back(nbrs[n]);				//add neighbour as potential seed
-											
-											wards[w]->devCells = devCells;			//keep track of how many cells have been developed										
-										}
-									}
-								}
-
-								//sort seeds by lowest suit 
-								//can then access most suitable using seeds[seeds.size()-1]
-								//and can remove when finished with using seeds.pop_back()
-
-								//**Replicate current development including possible error
-								if (!seeds.empty()) {
-									if (seeds.size() > 1) {
-										std::sort(seeds.begin(), seeds.end(), LowestCellSuit);
-									}
-								}
-								else {							
-									wards[w]->overflow = true;		//flag as overflow ward									
-								}															
+								wards[w]->zones[z]->cells[c]->devZoneIndex = z;						//store devZoneIndex
+								wards[w]->allDevZoneCells.push_back(wards[w]->zones[z]->cells[c]);
 							}
 						}
 					}
 				}
+			}
+		}
+	}
+
+	////test	
+	//for (size_t w = 0; w != numWards; ++w) {
+	//	if (wards[w]->devReq) {
+	//		if (!wards[w]->overflow) {
+	//			if (!wards[w]->zones.empty()) {
+	//				std::cout << "First devZoneIndex = " << wards[w]->allDevZoneCells[0]->devZoneIndex << std::endl;
+	//				std::cout << "Last devZoneIndex = " << wards[w]->allDevZoneCells[wards[w]->allDevZoneCells.size()-1]->devZoneIndex << std::endl;
+	//			}
+	//		}
+	//	}
+	//}
+	
+	//read cell suitability from raster
+	for (size_t w = 0; w != numWards; ++w) {
+		if (wards[w]->devReq) {
+			if (!wards[w]->overflow) {
+				if (!wards[w]->zones.empty()) {
+					for (size_t z = 0; z != wards[w]->zones.size(); ++z) {
+						if (!wards[w]->zones[z]->cells.empty()) {
+							for (size_t c = 0; c != wards[w]->zones[z]->cells.size(); ++c) {
+
+								wards[w]->zones[z]->cells[c]->suit =
+									cellSuit.data[wards[w]->zones[z]->cells[c]->row][wards[w]->zones[z]->cells[c]->col];								
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	//sort all cells in all development areas in zone by highest suit
+	for (size_t w = 0; w != numWards; ++w) {
+		if (wards[w]->devReq) {
+			if (!wards[w]->overflow) {
+				std::sort(wards[w]->allDevZoneCells.begin(), wards[w]->allDevZoneCells.end(), HighestCellSuit);
+			}
+		}
+	}	
+
+	//develop cells in non-overflow wards
+	for (size_t w = 0; w != numWards; ++w) {
+		if (wards[w]->devReq) {
+			if (!wards[w]->overflow) {				
+
+				//find seedZone and seedPos				
+				int seedPos = 0;
+				int seedDevArea = 0;
+				//int devRate = 0;
+
+				int devCells = 0;	//keep track of how many cells have been developed - reset for each ward
+
+				while (devCells < wards[w]->reqDevCells) {				//requiring further development 	
+
+					//reset for each iteration
+					int devRate = 0;
+
+					//test maximum neighbourhood for development spreading
+					int maxNbrs = 0;	
+
+					//initial seed
+					bool seedNotFound = true;
+					//find (new) seed with highest suitability and zone in which it resides
+					while (seedNotFound) {
+						//std::cout << "wards[w]->allDevZoneCells[seedPos]->devStatus = " << wards[w]->allDevZoneCells[seedPos]->devStatus << std::endl;
+						if (!wards[w]->allDevZoneCells[seedPos]->devStatus) {							//only consider undeveloped cells
+
+							//seedPos = seedPos;
+							//std::cout << "seedPos = " << seedPos << std::endl;
+							seedDevArea = wards[w]->allDevZoneCells[seedPos]->devZoneIndex;
+							seedNotFound = false;
+						}
+						else {
+							//std::cout << "Cell at seedPos = " << seedPos << " is already developed.." << std::endl;
+						}
+						++seedPos;
+					}
+
+					//std::cout << "seedPos = " << seedPos << std::endl;
+					//std::cout << "seedDevArea = " << seedDevArea << std::endl;
+					int z = seedDevArea;
+
+					//initial seed
+					UDMCellPtr seed = wards[w]->allDevZoneCells[seedPos-1];
+
+					//vetors of seeds and neighbours
+					std::vector<UDMCellPtr> seeds;
+					std::vector<UDMCellPtr> nbrs;
+
+					//develop initial seed cell
+					seed->devStatus = true;
+					++devCells;
+					++devRate;
+					seeds.push_back(seed);
+
+					wards[w]->devCells = devCells;		//keep track of how many cells have been developed
+
+					//test
+					//wards[w]->allDevZoneCells[seedPos-1]->devStatus = true;
+
+					//while (devCells < wards[w]->reqDevCells && !seeds.empty()) {
+					while (devCells < wards[w]->reqDevCells && !seeds.empty() && devRate < maxDevRate) {
+
+						//std::cout << "SHOULDN'T BE READING THIS!!!!!!!!!!!!!!!!!!!" << std::endl;
+
+						//test maximum neighbourhood for development spreading
+						if (nbrs.size() > maxNbrs) {
+							maxNbrs = nbrs.size();
+						}								
+
+						//get neighbours
+						for (size_t c = 0; c != wards[w]->zones[z]->cells.size(); ++c) {
+
+							//only add nbrs if not already in vector
+							int row = wards[w]->zones[z]->cells[c]->row;
+							int col = wards[w]->zones[z]->cells[c]->col;
+							bool addNewNBR = true;
+
+							int cDiff = (seeds[seeds.size() - 1]->col + 1) - (wards[w]->zones[z]->cells[c]->col + 1);
+							int rDiff = (seeds[seeds.size() - 1]->row + 1) - (wards[w]->zones[z]->cells[c]->row + 1);
+
+							cDiff = abs(cDiff);
+							rDiff = abs(rDiff);
+
+							if ((cDiff <= 1) && (rDiff <= 1)) {
+								if ((cDiff + rDiff > 0) && (cDiff + rDiff < 2)) {		//don't include cell itself - only VN nbrs
+									if (!wards[w]->zones[z]->cells[c]->devStatus) {		//only add nbrs if undeveloped 
+
+										if (!nbrs.empty()) {
+											for (int n = 0; n != nbrs.size(); ++n) {
+												int nbrRow = nbrs[n]->row;
+												int nbrCol = nbrs[n]->col;
+												if ((row == nbrRow) && (col == nbrCol)) {
+													addNewNBR = false;
+												}
+											}
+										}
+
+										if (addNewNBR) {									//only add nbrs not already in vector
+											nbrs.push_back(wards[w]->zones[z]->cells[c]);
+										}
+									}
+								}
+							}
+						}
+
+						////DEBUGGING INFO
+						//std::cout << "Seed @ r = " << seeds[0]->row << " c = " << seeds[0]->col << std::endl;
+						//if (!nbrs.empty()) {
+						//	for (int n = 0; n != nbrs.size(); ++n) {
+						//		std::cout << "Nbr @ r = " << nbrs[n]->row << " c = " << nbrs[n]->col << std::endl;
+						//	}
+						//}
+
+						//remove current seed - seeds should now be empty (possible test?)
+						seeds.pop_back();
+
+						//sort neighbours by highest suit - change to lowset suit
+						if (nbrs.size() > 1) {
+							//std::sort(nbrs.begin(), nbrs.end(), HighestCellSuit);
+							std::sort(nbrs.begin(), nbrs.end(), LowestCellSuit);
+						}
+
+						//DEBUGGING INFO
+						//std::cout << "Dev @ r = " << nbrs[nbrs.size() - 1]->row << " c = " << nbrs[nbrs.size() - 1]->col << std::endl;
+
+						//develop neighbouring cells
+						if (!nbrs.empty()) {								//make sure we have at least one nbr
+							if (devCells < wards[w]->reqDevCells) {			//don't really need this test - already in while loop test
+								if (!nbrs[nbrs.size() - 1]->devStatus) {
+									nbrs[nbrs.size() - 1]->devStatus = true;
+									++devCells;
+
+									seeds.push_back(nbrs[nbrs.size() - 1]);		//set neighbour as new seed
+									nbrs.pop_back();							//remove nbr
+
+									wards[w]->devCells = devCells;				//keep track of how many cells have been developed	
+								}
+							}
+						}	
+						++devRate;
+					}					
+					//test maximum neighbourhood for development spreading
+					//std::cout << "Maximum neighbourhood size = " << maxNbrs << std::endl;
+				}					
+				//test devcells
+				//std::cout << "devCells = " << devCells << std::endl;				
+				//test wards[w]->devcells
+				//std::cout << "wards[w]->devCells = " << wards[w]->devCells << std::endl;
 			}
 		}
 	}	

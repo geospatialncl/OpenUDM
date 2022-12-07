@@ -13,6 +13,9 @@ public:
 	double suit;
 
 	int dwellingsAvailable;
+
+	//new spreading algorithm
+	size_t devZoneIndex;
 };
 
 // convenience typedef
