@@ -1,0 +1,5 @@
+tile_dph,tile_str,tile90_str,pc_build,pc_roads,pc_green
+22,T1.asc,T1R.asc,12,25,63
+68,T2.asc,T2R.asc,29,32,39
+90,T3.asc,T3R.asc,34,43,23
+109,T4.asc,T4R.asc,34,51,15

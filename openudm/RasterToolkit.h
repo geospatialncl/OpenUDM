@@ -37,6 +37,27 @@ struct RTTile {
 	}
 };
 
+//simple tile structure
+struct UFTile {
+	int dph;
+	int build_cov;
+	int roads_cov;
+	int green_cov;
+	std::string str;
+	std::string str90;
+	IRaster ras;
+	IRaster ras90;
+
+	UFTile() {	
+		dph = 0;
+		build_cov = 0;
+		roads_cov = 0;
+		green_cov = 0;
+		str = "";
+		str90 = "";
+	}
+};
+
 bool DevCompare(const std::string& iRas1, const std::string& iRas2, const std::string& result);
 bool IRasterCompare(const std::string& iRas1, const std::string& iRas2, const std::string& result);
 bool DRasterCompare(const std::string& dRas1, const std::string& dRas2, const std::string& result);
@@ -80,3 +101,6 @@ void IRasterToHeader(const std::string& inputRaster, const std::string& outputHe
 int ParameterFromHeader(const std::string& header, const std::string& parameter);
 
 void IRasterSetToValue(const std::string& rasterHeader, int value, const std::string& outputRaster);
+
+void UFGCoverageFromDensity(const std::string& densityFolder, const std::string& tilesFolder);
+void UFGFabricFomCoverage(const std::string& densityFolder, const std::string& tilesFolder);
