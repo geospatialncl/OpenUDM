@@ -298,7 +298,10 @@ def main(swap_path):
         #rt.IRasterSetToValue(rast_hdr, 50, density_ras)
         #rt.IRasterDevToDPH(cell_dev_output_ras, density_ras, cell_dev_output_ras, cell_dph_ras) 
         cm.OutputDevelopmentDensity(cell_pph_ras, cell_dph_ras, people_per_dwelling)
-    
+
+    # generate coverage from dph
+    tiles_path = os.path.abspath(os.path.join(os.path.dirname(__file__), 'Tiles'))
+    rt.UFGCoverageFromDensity(swap_path, tiles_path)    
 
     # METADATA - basic for now
     # todo - full metadata for new interface

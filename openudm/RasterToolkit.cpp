@@ -1603,6 +1603,11 @@ void IRasterSetToValue(const std::string& rasterHeader, int value, const std::st
 
 void UFGCoverageFromDensity(const std::string& densityFolder, const std::string& tilesFolder) {
 
+	std::cout << std::endl << "UFGCoverageFromDensity()" << std::endl << std::endl;
+	//print inputs
+	std::cout << "densityFolder = " << densityFolder << std::endl;
+	std::cout << "tilesFolder = " << tilesFolder << std::endl;
+
 	//------------------------------------------------------------READ TILES DATA BEGIN
 
 	//number of tile types
@@ -1640,6 +1645,7 @@ void UFGCoverageFromDensity(const std::string& densityFolder, const std::string&
 	//density vs building types data
 	//std::string detachedData = "Tiles/tiles-detached.csv";	
 	std::string detachedData = tilesFolder + "/tiles-detached.csv";
+	std::cout << "detachedData = " << detachedData << std::endl;
 
 	//read tile dph from input csv
 	ExtractCSV(detachedData, 6, 0, tileDataStr);
@@ -1649,10 +1655,10 @@ void UFGCoverageFromDensity(const std::string& densityFolder, const std::string&
 		tilesDetached[t].dph = std::stoi(tileDataStr[t]);
 	}
 
-	//test
-	for (int t = 0; t != numTileTypes; ++t) {
-		std::cout << "detachedDPH[" << t << "] = " << tilesDetached[t].dph << std::endl;
-	}
+	////test
+	//for (int t = 0; t != numTileTypes; ++t) {
+	//	std::cout << "detachedDPH[" << t << "] = " << tilesDetached[t].dph << std::endl;
+	//}
 
 	//--
 
@@ -1664,10 +1670,10 @@ void UFGCoverageFromDensity(const std::string& densityFolder, const std::string&
 		tilesDetached[t].str = tileDataStr[t];
 	}
 
-	//test
-	for (int t = 0; t != numTileTypes; ++t) {
-		std::cout << "detachedSTR[" << t << "] = " << tilesDetached[t].str << std::endl;
-	}
+	////test
+	//for (int t = 0; t != numTileTypes; ++t) {
+	//	std::cout << "detachedSTR[" << t << "] = " << tilesDetached[t].str << std::endl;
+	//}
 
 	//--
 
@@ -1679,10 +1685,10 @@ void UFGCoverageFromDensity(const std::string& densityFolder, const std::string&
 		tilesDetached[t].str90 = tileDataStr[t];
 	}
 
-	//test
-	for (int t = 0; t != numTileTypes; ++t) {
-		std::cout << "detachedSTR90[" << t << "] = " << tilesDetached[t].str90 << std::endl;
-	}
+	////test
+	//for (int t = 0; t != numTileTypes; ++t) {
+	//	std::cout << "detachedSTR90[" << t << "] = " << tilesDetached[t].str90 << std::endl;
+	//}
 
 	//--
 
@@ -1694,10 +1700,10 @@ void UFGCoverageFromDensity(const std::string& densityFolder, const std::string&
 		tilesDetached[t].build_cov = std::stoi(tileDataStr[t]) * 100;
 	}
 
-	//test
-	for (int t = 0; t != numTileTypes; ++t) {
-		std::cout << "detachedBuildCov[" << t << "] = " << tilesDetached[t].build_cov << std::endl;
-	}
+	////test
+	//for (int t = 0; t != numTileTypes; ++t) {
+	//	std::cout << "detachedBuildCov[" << t << "] = " << tilesDetached[t].build_cov << std::endl;
+	//}
 
 	//--
 
@@ -1709,10 +1715,10 @@ void UFGCoverageFromDensity(const std::string& densityFolder, const std::string&
 		tilesDetached[t].roads_cov = std::stoi(tileDataStr[t]) * 100;
 	}
 
-	//test
-	for (int t = 0; t != numTileTypes; ++t) {
-		std::cout << "detachedRoadsCov[" << t << "] = " << tilesDetached[t].roads_cov << std::endl;
-	}
+	////test
+	//for (int t = 0; t != numTileTypes; ++t) {
+	//	std::cout << "detachedRoadsCov[" << t << "] = " << tilesDetached[t].roads_cov << std::endl;
+	//}
 
 	//--
 
@@ -1724,10 +1730,10 @@ void UFGCoverageFromDensity(const std::string& densityFolder, const std::string&
 		tilesDetached[t].green_cov = std::stoi(tileDataStr[t]) * 100;
 	}
 
-	//test
-	for (int t = 0; t != numTileTypes; ++t) {
-		std::cout << "detachedGreenCov[" << t << "] = " << tilesDetached[t].green_cov << std::endl;
-	}
+	////test
+	//for (int t = 0; t != numTileTypes; ++t) {
+	//	std::cout << "detachedGreenCov[" << t << "] = " << tilesDetached[t].green_cov << std::endl;
+	//}
 
 	//------------------------------------------------------------READ DETACHED DATA END
 
@@ -1736,6 +1742,7 @@ void UFGCoverageFromDensity(const std::string& densityFolder, const std::string&
 	//density vs building types data
 	//std::string semisData = "Tiles/tiles-semi-detached.csv";
 	std::string semisData = tilesFolder + "/tiles-semi-detached.csv";
+	std::cout << "semisData = " << semisData << std::endl;
 
 	//read tile dph from input csv
 	ExtractCSV(semisData, 6, 0, tileDataStr);
@@ -1745,10 +1752,10 @@ void UFGCoverageFromDensity(const std::string& densityFolder, const std::string&
 		tilesSemis[t].dph = std::stoi(tileDataStr[t]);
 	}
 
-	//test
-	for (int t = 0; t != numTileTypes; ++t) {
-		std::cout << "semisDPH[" << t << "] = " << tilesSemis[t].dph << std::endl;
-	}
+	////test
+	//for (int t = 0; t != numTileTypes; ++t) {
+	//	std::cout << "semisDPH[" << t << "] = " << tilesSemis[t].dph << std::endl;
+	//}
 
 	//--
 
@@ -1760,10 +1767,10 @@ void UFGCoverageFromDensity(const std::string& densityFolder, const std::string&
 		tilesSemis[t].str = tileDataStr[t];
 	}
 
-	//test
-	for (int t = 0; t != numTileTypes; ++t) {
-		std::cout << "semisSTR[" << t << "] = " << tilesSemis[t].str << std::endl;
-	}
+	////test
+	//for (int t = 0; t != numTileTypes; ++t) {
+	//	std::cout << "semisSTR[" << t << "] = " << tilesSemis[t].str << std::endl;
+	//}
 
 	//--
 
@@ -1775,10 +1782,10 @@ void UFGCoverageFromDensity(const std::string& densityFolder, const std::string&
 		tilesSemis[t].str90 = tileDataStr[t];
 	}
 
-	//test
-	for (int t = 0; t != numTileTypes; ++t) {
-		std::cout << "semisSTR90[" << t << "] = " << tilesSemis[t].str90 << std::endl;
-	}
+	////test
+	//for (int t = 0; t != numTileTypes; ++t) {
+	//	std::cout << "semisSTR90[" << t << "] = " << tilesSemis[t].str90 << std::endl;
+	//}
 
 	//--
 
@@ -1790,10 +1797,10 @@ void UFGCoverageFromDensity(const std::string& densityFolder, const std::string&
 		tilesSemis[t].build_cov = std::stoi(tileDataStr[t]) * 100;
 	}
 
-	//test
-	for (int t = 0; t != numTileTypes; ++t) {
-		std::cout << "semisBuildCov[" << t << "] = " << tilesSemis[t].build_cov << std::endl;
-	}
+	////test
+	//for (int t = 0; t != numTileTypes; ++t) {
+	//	std::cout << "semisBuildCov[" << t << "] = " << tilesSemis[t].build_cov << std::endl;
+	//}
 
 	//--
 
@@ -1805,10 +1812,10 @@ void UFGCoverageFromDensity(const std::string& densityFolder, const std::string&
 		tilesSemis[t].roads_cov = std::stoi(tileDataStr[t]) * 100;
 	}
 
-	//test
-	for (int t = 0; t != numTileTypes; ++t) {
-		std::cout << "semisRoadsCov[" << t << "] = " << tilesSemis[t].roads_cov << std::endl;
-	}
+	////test
+	//for (int t = 0; t != numTileTypes; ++t) {
+	//	std::cout << "semisRoadsCov[" << t << "] = " << tilesSemis[t].roads_cov << std::endl;
+	//}
 
 	//--
 
@@ -1820,10 +1827,10 @@ void UFGCoverageFromDensity(const std::string& densityFolder, const std::string&
 		tilesSemis[t].green_cov = std::stoi(tileDataStr[t]) * 100;
 	}
 
-	//test
-	for (int t = 0; t != numTileTypes; ++t) {
-		std::cout << "semisGreenCov[" << t << "] = " << tilesSemis[t].green_cov << std::endl;
-	}
+	////test
+	//for (int t = 0; t != numTileTypes; ++t) {
+	//	std::cout << "semisGreenCov[" << t << "] = " << tilesSemis[t].green_cov << std::endl;
+	//}
 
 	//------------------------------------------------------------READ SEMIS DATA END
 
@@ -1832,6 +1839,7 @@ void UFGCoverageFromDensity(const std::string& densityFolder, const std::string&
 	//density vs building types data
 	//std::string terracedData = "Tiles/tiles-terraced.csv";
 	std::string terracedData = tilesFolder + "/tiles-terraced.csv";
+	std::cout << "terracedData = " << terracedData << std::endl;
 
 	//read tile dph from input csv
 	ExtractCSV(terracedData, 6, 0, tileDataStr);
@@ -1841,10 +1849,10 @@ void UFGCoverageFromDensity(const std::string& densityFolder, const std::string&
 		tilesTerraced[t].dph = std::stoi(tileDataStr[t]);
 	}
 
-	//test
-	for (int t = 0; t != numTileTypes; ++t) {
-		std::cout << "terracedDPH[" << t << "] = " << tilesTerraced[t].dph << std::endl;
-	}
+	////test
+	//for (int t = 0; t != numTileTypes; ++t) {
+	//	std::cout << "terracedDPH[" << t << "] = " << tilesTerraced[t].dph << std::endl;
+	//}
 
 	//--
 
@@ -1856,10 +1864,10 @@ void UFGCoverageFromDensity(const std::string& densityFolder, const std::string&
 		tilesTerraced[t].str = tileDataStr[t];
 	}
 
-	//test
-	for (int t = 0; t != numTileTypes; ++t) {
-		std::cout << "terracedSTR[" << t << "] = " << tilesTerraced[t].str << std::endl;
-	}
+	////test
+	//for (int t = 0; t != numTileTypes; ++t) {
+	//	std::cout << "terracedSTR[" << t << "] = " << tilesTerraced[t].str << std::endl;
+	//}
 
 	//--
 
@@ -1871,10 +1879,10 @@ void UFGCoverageFromDensity(const std::string& densityFolder, const std::string&
 		tilesTerraced[t].str90 = tileDataStr[t];
 	}
 
-	//test
-	for (int t = 0; t != numTileTypes; ++t) {
-		std::cout << "terracedSTR90[" << t << "] = " << tilesTerraced[t].str90 << std::endl;
-	}
+	////test
+	//for (int t = 0; t != numTileTypes; ++t) {
+	//	std::cout << "terracedSTR90[" << t << "] = " << tilesTerraced[t].str90 << std::endl;
+	//}
 
 	//--
 
@@ -1886,10 +1894,10 @@ void UFGCoverageFromDensity(const std::string& densityFolder, const std::string&
 		tilesTerraced[t].build_cov = std::stoi(tileDataStr[t]) * 100;
 	}
 
-	//test
-	for (int t = 0; t != numTileTypes; ++t) {
-		std::cout << "terracedBuildCov[" << t << "] = " << tilesTerraced[t].build_cov << std::endl;
-	}
+	////test
+	//for (int t = 0; t != numTileTypes; ++t) {
+	//	std::cout << "terracedBuildCov[" << t << "] = " << tilesTerraced[t].build_cov << std::endl;
+	//}
 
 	//--
 
@@ -1901,10 +1909,10 @@ void UFGCoverageFromDensity(const std::string& densityFolder, const std::string&
 		tilesTerraced[t].roads_cov = std::stoi(tileDataStr[t]) * 100;
 	}
 
-	//test
-	for (int t = 0; t != numTileTypes; ++t) {
-		std::cout << "terracedRoadsCov[" << t << "] = " << tilesTerraced[t].roads_cov << std::endl;
-	}
+	////test
+	//for (int t = 0; t != numTileTypes; ++t) {
+	//	std::cout << "terracedRoadsCov[" << t << "] = " << tilesTerraced[t].roads_cov << std::endl;
+	//}
 
 	//--
 
@@ -1916,10 +1924,10 @@ void UFGCoverageFromDensity(const std::string& densityFolder, const std::string&
 		tilesTerraced[t].green_cov = std::stoi(tileDataStr[t]) * 100;
 	}
 
-	//test
-	for (int t = 0; t != numTileTypes; ++t) {
-		std::cout << "terracedGreenCov[" << t << "] = " << tilesTerraced[t].green_cov << std::endl;
-	}
+	////test
+	//for (int t = 0; t != numTileTypes; ++t) {
+	//	std::cout << "terracedGreenCov[" << t << "] = " << tilesTerraced[t].green_cov << std::endl;
+	//}
 
 	//------------------------------------------------------------READ TERRACED DATA END
 
@@ -1928,6 +1936,7 @@ void UFGCoverageFromDensity(const std::string& densityFolder, const std::string&
 	//density vs building types data
 	//std::string flatsData = "Tiles/tiles-flats.csv";
 	std::string flatsData = tilesFolder + "/tiles-flats.csv";
+	std::cout << "flatsData = " << flatsData << std::endl;
 
 	//read tile dph from input csv
 	ExtractCSV(flatsData, 6, 0, tileDataStr);
@@ -1937,10 +1946,10 @@ void UFGCoverageFromDensity(const std::string& densityFolder, const std::string&
 		tilesFlats[t].dph = std::stoi(tileDataStr[t]);
 	}
 
-	//test
-	for (int t = 0; t != numTileTypes; ++t) {
-		std::cout << "flatsDPH[" << t << "] = " << tilesFlats[t].dph << std::endl;
-	}
+	////test
+	//for (int t = 0; t != numTileTypes; ++t) {
+	//	std::cout << "flatsDPH[" << t << "] = " << tilesFlats[t].dph << std::endl;
+	//}
 
 	//--
 
@@ -1952,10 +1961,10 @@ void UFGCoverageFromDensity(const std::string& densityFolder, const std::string&
 		tilesFlats[t].str = tileDataStr[t];
 	}
 
-	//test
-	for (int t = 0; t != numTileTypes; ++t) {
-		std::cout << "flatsSTR[" << t << "] = " << tilesFlats[t].str << std::endl;
-	}
+	////test
+	//for (int t = 0; t != numTileTypes; ++t) {
+	//	std::cout << "flatsSTR[" << t << "] = " << tilesFlats[t].str << std::endl;
+	//}
 
 	//--
 
@@ -1967,10 +1976,10 @@ void UFGCoverageFromDensity(const std::string& densityFolder, const std::string&
 		tilesFlats[t].str90 = tileDataStr[t];
 	}
 
-	//test
-	for (int t = 0; t != numTileTypes; ++t) {
-		std::cout << "flatsSTR90[" << t << "] = " << tilesFlats[t].str90 << std::endl;
-	}
+	////test
+	//for (int t = 0; t != numTileTypes; ++t) {
+	//	std::cout << "flatsSTR90[" << t << "] = " << tilesFlats[t].str90 << std::endl;
+	//}
 
 	//--
 
@@ -1982,10 +1991,10 @@ void UFGCoverageFromDensity(const std::string& densityFolder, const std::string&
 		tilesFlats[t].build_cov = std::stoi(tileDataStr[t]) * 100;
 	}
 
-	//test
-	for (int t = 0; t != numTileTypes; ++t) {
-		std::cout << "flatsBuildCov[" << t << "] = " << tilesFlats[t].build_cov << std::endl;
-	}
+	////test
+	//for (int t = 0; t != numTileTypes; ++t) {
+	//	std::cout << "flatsBuildCov[" << t << "] = " << tilesFlats[t].build_cov << std::endl;
+	//}
 
 	//--
 
@@ -1997,10 +2006,10 @@ void UFGCoverageFromDensity(const std::string& densityFolder, const std::string&
 		tilesFlats[t].roads_cov = std::stoi(tileDataStr[t]) * 100;
 	}
 
-	//test
-	for (int t = 0; t != numTileTypes; ++t) {
-		std::cout << "flatsRoadsCov[" << t << "] = " << tilesFlats[t].roads_cov << std::endl;
-	}
+	////test
+	//for (int t = 0; t != numTileTypes; ++t) {
+	//	std::cout << "flatsRoadsCov[" << t << "] = " << tilesFlats[t].roads_cov << std::endl;
+	//}
 
 	//--
 
@@ -2012,10 +2021,10 @@ void UFGCoverageFromDensity(const std::string& densityFolder, const std::string&
 		tilesFlats[t].green_cov = std::stoi(tileDataStr[t]) * 100;
 	}
 
-	//test
-	for (int t = 0; t != numTileTypes; ++t) {
-		std::cout << "flatsGreenCov[" << t << "] = " << tilesFlats[t].green_cov << std::endl;
-	}
+	////test
+	//for (int t = 0; t != numTileTypes; ++t) {
+	//	std::cout << "flatsGreenCov[" << t << "] = " << tilesFlats[t].green_cov << std::endl;
+	//}
 
 	//------------------------------------------------------------READ FLATS DATA END
 
@@ -2029,6 +2038,7 @@ void UFGCoverageFromDensity(const std::string& densityFolder, const std::string&
 	//density vs building types data
 	//std::string typesVsDensityData = "Tiles/types-vs-density.csv";
 	std::string typesVsDensityData = tilesFolder + "/types-vs-density.csv";
+	std::cout << "typesVsDensityData = " << typesVsDensityData << std::endl;
 
 	//storage to read tile densities and types
 	std::vector<std::string> typesVsDensityStr(numBands);
@@ -2044,10 +2054,10 @@ void UFGCoverageFromDensity(const std::string& densityFolder, const std::string&
 		typesVsDensityDPH[b] = std::stoi(typesVsDensityStr[b]);
 	}
 
-	//test
-	for (int b = 0; b != numBands; ++b) {
-		std::cout << "density = " << typesVsDensityDPH[b] << std::endl;
-	}
+	////test
+	//for (int b = 0; b != numBands; ++b) {
+	//	std::cout << "density = " << typesVsDensityDPH[b] << std::endl;
+	//}
 
 	//read housing-type probabilties for bands
 
@@ -2174,16 +2184,18 @@ void UFGCoverageFromDensity(const std::string& densityFolder, const std::string&
 	//find out which band we're in 
 	//data will be read from out_cell_dph.asc
 	int bandwidth = typesVsDensityDPH[0];
-	std::cout << "bandwidth = " << bandwidth << std::endl;
+	//std::cout << "bandwidth = " << bandwidth << std::endl;
 
 	//std::string dphRasStr = "UFG/out_cell_dph.asc";
 	std::string dphRasStr = densityFolder + "/out_cell_dph.asc";
+	std::cout << "dphRasStr = " << dphRasStr << std::endl;
 	IRaster dphRas;
 	dphRas.Setup(dphRasStr);
 	dphRas.Read(dphRasStr);
 
 	//std::string bandRasStr = "UFG/out_cell_density_band.asc";
 	std::string bandRasStr = densityFolder + "/out_cell_density_band.asc";
+	std::cout << "bandRasStr = " << bandRasStr << std::endl;
 	IRaster bandRas;
 	bandRas.Setup(dphRasStr);
 	bandRas.NODATA_value = -1;
@@ -2229,6 +2241,7 @@ void UFGCoverageFromDensity(const std::string& densityFolder, const std::string&
 
 	//std::string buildTypeRasStr = "UFG/out_cell_build_type.asc";
 	std::string buildTypeRasStr = densityFolder + "/out_cell_build_type.asc";
+	std::cout << "buildTypeRasStr = " << buildTypeRasStr << std::endl;
 	IRaster buildTypeRas;
 	buildTypeRas.Setup(dphRasStr);
 
@@ -2259,6 +2272,7 @@ void UFGCoverageFromDensity(const std::string& densityFolder, const std::string&
 
 	//std::string tileTypeRasStr = "UFG/out_cell_tile_type.asc";
 	std::string tileTypeRasStr = densityFolder + "/out_cell_tile_type.asc";
+	std::cout << "tileTypeRasStr = " << tileTypeRasStr << std::endl;
 	IRaster tileTypeRas;
 	tileTypeRas.Setup(dphRasStr);
 
@@ -2322,16 +2336,19 @@ void UFGCoverageFromDensity(const std::string& densityFolder, const std::string&
 
 	//std::string tileRoadsCovRasStr = "UFG/out_cell_roads_cov.asc";
 	std::string tileRoadsCovRasStr = densityFolder + "/out_cell_roads_cov.asc";
+	std::cout << "tileRoadsCovRasStr = " << tileRoadsCovRasStr << std::endl;
 	IRaster tileRoadsCovRas;
 	tileRoadsCovRas.Setup(dphRasStr);
 
 	//std::string tileGreenCovRasStr = "UFG/out_cell_green_cov.asc";
 	std::string tileGreenCovRasStr = densityFolder + "/out_cell_green_cov.asc";
+	std::cout << "tileGreenCovRasStr = " << tileGreenCovRasStr << std::endl;
 	IRaster tileGreenCovRas;
 	tileGreenCovRas.Setup(dphRasStr);
 
 	//std::string tileBuildCovRasStr = "UFG/out_cell_build_cov.asc";
 	std::string tileBuildCovRasStr = densityFolder + "/out_cell_build_cov.asc";
+	std::cout << "tileBuildCovRasStr = " << tileBuildCovRasStr << std::endl;
 	IRaster tileBuildCovRas;
 	tileBuildCovRas.Setup(dphRasStr);
 
@@ -2378,7 +2395,338 @@ void UFGCoverageFromDensity(const std::string& densityFolder, const std::string&
 	return;
 }
 
-void UFGFabricFomCoverage(const std::string& densityFolder, const std::string& tilesFolder) {
+//void UFGFabricFomCoverage(const std::string& densityFolder, const std::string& tilesFolder) {
+//
+//	//number of tile types
+//	int numTileTypes = 4;
+//
+//	//storage to read tile densities and types
+//	std::vector<std::string> tileDataStr(numTileTypes);
+//
+//	//setup vector of tiles
+//	std::vector<UFTile> tilesDetached;
+//	for (int t = 0; t != numTileTypes; ++t) {
+//		tilesDetached.push_back(UFTile());
+//	}
+//
+//	//setup vector of tiles
+//	std::vector<UFTile> tilesSemis;
+//	for (int t = 0; t != numTileTypes; ++t) {
+//		tilesSemis.push_back(UFTile());
+//	}
+//
+//	//setup vector of tiles
+//	std::vector<UFTile> tilesTerraced;
+//	for (int t = 0; t != numTileTypes; ++t) {
+//		tilesTerraced.push_back(UFTile());
+//	}
+//
+//	//setup vector of tiles
+//	std::vector<UFTile> tilesFlats;
+//	for (int t = 0; t != numTileTypes; ++t) {
+//		tilesFlats.push_back(UFTile());
+//	}
+//
+//	//------------------------------------------------------------READ DETACHED DATA BEGIN
+//
+//	//density vs building types data
+//	//std::string detachedData = "Tiles/tiles-detached.csv";	
+//	std::string detachedData = tilesFolder + "/tiles-detached.csv";
+//
+//	//--
+//
+//	//read tile str from input csv
+//	ExtractCSV(detachedData, 6, 1, tileDataStr);
+//
+//	//convert to int
+//	for (int t = 0; t != numTileTypes; ++t) {
+//		tilesDetached[t].str = tileDataStr[t];
+//	}
+//
+//	//test
+//	for (int t = 0; t != numTileTypes; ++t) {
+//		std::cout << "detachedSTR[" << t << "] = " << tilesDetached[t].str << std::endl;
+//	}
+//
+//	//--
+//
+//	//read tile str90 from input csv
+//	ExtractCSV(detachedData, 6, 2, tileDataStr);
+//
+//	//convert to int
+//	for (int t = 0; t != numTileTypes; ++t) {
+//		tilesDetached[t].str90 = tileDataStr[t];
+//	}
+//
+//	//test
+//	for (int t = 0; t != numTileTypes; ++t) {
+//		std::cout << "detachedSTR90[" << t << "] = " << tilesDetached[t].str90 << std::endl;
+//	}
+//
+//	//------------------------------------------------------------READ DETACHED DATA END
+//
+//	//------------------------------------------------------------READ SEMIS DATA BEGIN
+//
+//	//density vs building types data
+//	//std::string semisData = "Tiles/tiles-semi-detached.csv";
+//	std::string semisData = tilesFolder + "/tiles-semi-detached.csv";
+//
+//	//--	
+//
+//	//read tile str from input csv
+//	ExtractCSV(semisData, 6, 1, tileDataStr);
+//
+//	//convert to int
+//	for (int t = 0; t != numTileTypes; ++t) {
+//		tilesSemis[t].str = tileDataStr[t];
+//	}
+//
+//	//test
+//	for (int t = 0; t != numTileTypes; ++t) {
+//		std::cout << "semisSTR[" << t << "] = " << tilesSemis[t].str << std::endl;
+//	}
+//
+//	//--
+//
+//	//read tile str90 from input csv
+//	ExtractCSV(semisData, 6, 2, tileDataStr);
+//
+//	//convert to int
+//	for (int t = 0; t != numTileTypes; ++t) {
+//		tilesSemis[t].str90 = tileDataStr[t];
+//	}
+//
+//	//test
+//	for (int t = 0; t != numTileTypes; ++t) {
+//		std::cout << "semisSTR90[" << t << "] = " << tilesSemis[t].str90 << std::endl;
+//	}
+//
+//	//------------------------------------------------------------READ SEMIS DATA END
+//
+//	//------------------------------------------------------------READ TERRACED DATA BEGIN
+//
+//	//density vs building types data
+//	//std::string terracedData = "Tiles/tiles-terraced.csv";
+//	std::string terracedData = tilesFolder + "/tiles-terraced.csv";
+//
+//	//--	
+//
+//	//read tile str from input csv
+//	ExtractCSV(terracedData, 6, 1, tileDataStr);
+//
+//	//convert to int
+//	for (int t = 0; t != numTileTypes; ++t) {
+//		tilesTerraced[t].str = tileDataStr[t];
+//	}
+//
+//	//test
+//	for (int t = 0; t != numTileTypes; ++t) {
+//		std::cout << "terracedSTR[" << t << "] = " << tilesTerraced[t].str << std::endl;
+//	}
+//
+//	//--
+//
+//	//read tile str90 from input csv
+//	ExtractCSV(terracedData, 6, 2, tileDataStr);
+//
+//	//convert to int
+//	for (int t = 0; t != numTileTypes; ++t) {
+//		tilesTerraced[t].str90 = tileDataStr[t];
+//	}
+//
+//	//test
+//	for (int t = 0; t != numTileTypes; ++t) {
+//		std::cout << "terracedSTR90[" << t << "] = " << tilesTerraced[t].str90 << std::endl;
+//	}
+//
+//	//------------------------------------------------------------READ TERRACED DATA END
+//
+//	//------------------------------------------------------------READ FLATS DATA BEGIN
+//
+//	//density vs building types data
+//	//std::string flatsData = "Tiles/tiles-flats.csv";
+//	std::string flatsData = tilesFolder + "/tiles-flats.csv";
+//
+//	//--	
+//
+//	//read tile str from input csv
+//	ExtractCSV(flatsData, 6, 1, tileDataStr);
+//
+//	//convert to int
+//	for (int t = 0; t != numTileTypes; ++t) {
+//		tilesFlats[t].str = tileDataStr[t];
+//	}
+//
+//	//test
+//	for (int t = 0; t != numTileTypes; ++t) {
+//		std::cout << "flatsSTR[" << t << "] = " << tilesFlats[t].str << std::endl;
+//	}
+//
+//	//--
+//
+//	//read tile str90 from input csv
+//	ExtractCSV(flatsData, 6, 2, tileDataStr);
+//
+//	//convert to int
+//	for (int t = 0; t != numTileTypes; ++t) {
+//		tilesFlats[t].str90 = tileDataStr[t];
+//	}
+//
+//	//test
+//	for (int t = 0; t != numTileTypes; ++t) {
+//		std::cout << "flatsSTR90[" << t << "] = " << tilesFlats[t].str90 << std::endl;
+//	}
+//
+//	//------------------------------------------------------------READ FLATS DATA END
+//
+//	//------------------------------------------------------------SETUP RASTERS BEGIN
+//
+//	//setup rasters
+//	for (int t = 0; t != numTileTypes; ++t) {
+//		tilesDetached[t].ras.Setup(tilesFolder + "/" + tilesDetached[t].str);
+//		tilesDetached[t].ras.Read(tilesFolder + "/" + tilesDetached[t].str);
+//		tilesDetached[t].ras90.Setup(tilesFolder + "/" + tilesDetached[t].str90);
+//		tilesDetached[t].ras90.Read(tilesFolder + "/" + tilesDetached[t].str90);
+//
+//		tilesSemis[t].ras.Setup(tilesFolder + "/" + tilesSemis[t].str);
+//		tilesSemis[t].ras.Read(tilesFolder + "/" + tilesSemis[t].str);
+//		tilesSemis[t].ras90.Setup(tilesFolder + "/" + tilesSemis[t].str90);
+//		tilesSemis[t].ras90.Read(tilesFolder + "/" + tilesSemis[t].str90);
+//
+//		tilesTerraced[t].ras.Setup(tilesFolder + "/" + tilesTerraced[t].str);
+//		tilesTerraced[t].ras.Read(tilesFolder + "/" + tilesTerraced[t].str);
+//		tilesTerraced[t].ras90.Setup(tilesFolder + "/" + tilesTerraced[t].str90);
+//		tilesTerraced[t].ras90.Read(tilesFolder + "/" + tilesTerraced[t].str90);
+//
+//		tilesFlats[t].ras.Setup(tilesFolder + "/" + tilesFlats[t].str);
+//		tilesFlats[t].ras.Read(tilesFolder + "/" + tilesFlats[t].str);
+//		tilesFlats[t].ras90.Setup(tilesFolder + "/" + tilesFlats[t].str90);
+//		tilesFlats[t].ras90.Read(tilesFolder + "/" + tilesFlats[t].str90);
+//	}
+//
+//	//------------------------------------------------------------SETUP RASTERS END
+//
+//	//------------------------------------------------------------SETUP INPUTS BEGIN
+//
+//	IRaster buildTypes;
+//	buildTypes.Setup(densityFolder + "/out_cell_build_type.asc");
+//	buildTypes.Read(densityFolder + "/out_cell_build_type.asc");
+//
+//	IRaster tileTypes;
+//	tileTypes.Setup(densityFolder + "/out_cell_tile_type.asc");
+//	tileTypes.Read(densityFolder + "/out_cell_tile_type.asc");
+//
+//
+//	//------------------------------------------------------------SETUP INPUTS END
+//
+//	//------------------------------------------------------------SETUP OUTPUTS BEGIN
+//
+//	//linear xy scale - input dph raster is multiplied by this in each dimension
+//	int xyScale = tilesDetached[0].ras.nrows;
+//	std::cout << "nrows = " << tilesDetached[0].ras.nrows << std::endl;
+//
+//	//setup output urban fabric raster	
+//	std::string urbanFabricRasStr = densityFolder + "/out_urban_fabric.asc";
+//	IRaster uf;
+//	uf.Setup(buildTypes.ncols * xyScale, buildTypes.nrows * xyScale, -1);	//initialise all cells to nodata value	
+//	uf.cellsize = buildTypes.cellsize / xyScale;
+//	uf.xllcorner = buildTypes.xllcorner;
+//	uf.yllcorner = buildTypes.yllcorner;
+//	uf.NODATA_value = buildTypes.NODATA_value;
+//
+//	//------------------------------------------------------------SETUP OUTPUTS END
+//
+//	//setup random tile rotation
+//	std::vector<bool> rotate;
+//	rotate.push_back(true);
+//	rotate.push_back(false);
+//
+//	const int detachedID = 1;
+//	const int semisID = 2;
+//	const int terracedID = 3;
+//	const int flatsID = 4;
+//
+//	IRaster tile;
+//
+//	//for all cells in input dph raster
+//	for (int r = 0; r != buildTypes.nrows; ++r) {
+//		for (int c = 0; c != buildTypes.ncols; ++c) {
+//
+//			//setup random device for shuffle
+//			std::random_device rd;
+//			std::mt19937 g(rd());
+//
+//			//random tile rotation using above device			
+//			std::shuffle(rotate.begin(), rotate.end(), g);
+//
+//			if (buildTypes.data[r][c] != buildTypes.NODATA_value) {
+//
+//				switch (buildTypes.data[r][c])
+//				{
+//				case(detachedID):
+//					if (rotate[0]) {
+//						tile = tilesDetached[tileTypes.data[r][c] - 11].ras;
+//					}
+//					else {
+//						tile = tilesDetached[tileTypes.data[r][c] - 11].ras90;
+//					}
+//					break;
+//				case(semisID):
+//					if (rotate[0]) {
+//						tile = tilesSemis[tileTypes.data[r][c] - 21].ras;
+//					}
+//					else {
+//						tile = tilesSemis[tileTypes.data[r][c] - 21].ras90;
+//					}
+//					break;
+//				case(terracedID):
+//					if (rotate[0]) {
+//						tile = tilesTerraced[tileTypes.data[r][c] - 31].ras;
+//					}
+//					else {
+//						tile = tilesTerraced[tileTypes.data[r][c] - 31].ras90;
+//					}
+//					break;
+//				case(flatsID):
+//					if (rotate[0]) {
+//						tile = tilesFlats[tileTypes.data[r][c] - 41].ras;
+//					}
+//					else {
+//						tile = tilesFlats[tileTypes.data[r][c] - 41].ras90;
+//					}
+//					break;
+//				default:
+//					break;
+//				}
+//			}
+//
+//			if (buildTypes.data[r][c] != buildTypes.NODATA_value) {
+//				//copy tile data to output urban fabric raster
+//				for (int rPatch = 0; rPatch != xyScale; ++rPatch) {
+//					for (int cPatch = 0; cPatch != xyScale; ++cPatch) {
+//						//select either tile or rotated tile
+//						uf.data[(r * xyScale) + rPatch][(c * xyScale) + cPatch] = tile.data[rPatch][cPatch];
+//					}
+//				}
+//			}
+//		}
+//	}
+//
+//	//output uf data
+//	uf.Write(urbanFabricRasStr);
+//
+//	return;
+//}
+
+//void UFGFabricFomCoverage(const std::string& densityFolder, const std::string& tilesFolder) {
+void UFGFabricFomCoverage(const std::string & buildTypeRas, const std::string & tileTypeRas, const std::string & urbanFabricRas, const std::string & tilesFolder) {
+
+	std::cout << std::endl << "UFGFabricFromCoverage()" << std::endl << std::endl;
+	//print inputs
+	std::cout << "buildTypeRas = " << buildTypeRas << std::endl;
+	std::cout << "tileTypeRas = " << tileTypeRas << std::endl;
+	std::cout << "urbanFabricRas = " << urbanFabricRas << std::endl;
+	std::cout << "tilesFolder = " << tilesFolder << std::endl << std::endl;
 
 	//number of tile types
 	int numTileTypes = 4;
@@ -2427,9 +2775,9 @@ void UFGFabricFomCoverage(const std::string& densityFolder, const std::string& t
 	}
 
 	//test
-	for (int t = 0; t != numTileTypes; ++t) {
+	/*for (int t = 0; t != numTileTypes; ++t) {
 		std::cout << "detachedSTR[" << t << "] = " << tilesDetached[t].str << std::endl;
-	}
+	}*/
 
 	//--
 
@@ -2441,10 +2789,10 @@ void UFGFabricFomCoverage(const std::string& densityFolder, const std::string& t
 		tilesDetached[t].str90 = tileDataStr[t];
 	}
 
-	//test
-	for (int t = 0; t != numTileTypes; ++t) {
-		std::cout << "detachedSTR90[" << t << "] = " << tilesDetached[t].str90 << std::endl;
-	}
+	////test
+	//for (int t = 0; t != numTileTypes; ++t) {
+	//	std::cout << "detachedSTR90[" << t << "] = " << tilesDetached[t].str90 << std::endl;
+	//}
 
 	//------------------------------------------------------------READ DETACHED DATA END
 
@@ -2464,10 +2812,10 @@ void UFGFabricFomCoverage(const std::string& densityFolder, const std::string& t
 		tilesSemis[t].str = tileDataStr[t];
 	}
 
-	//test
-	for (int t = 0; t != numTileTypes; ++t) {
-		std::cout << "semisSTR[" << t << "] = " << tilesSemis[t].str << std::endl;
-	}
+	////test
+	//for (int t = 0; t != numTileTypes; ++t) {
+	//	std::cout << "semisSTR[" << t << "] = " << tilesSemis[t].str << std::endl;
+	//}
 
 	//--
 
@@ -2479,10 +2827,10 @@ void UFGFabricFomCoverage(const std::string& densityFolder, const std::string& t
 		tilesSemis[t].str90 = tileDataStr[t];
 	}
 
-	//test
-	for (int t = 0; t != numTileTypes; ++t) {
-		std::cout << "semisSTR90[" << t << "] = " << tilesSemis[t].str90 << std::endl;
-	}
+	////test
+	//for (int t = 0; t != numTileTypes; ++t) {
+	//	std::cout << "semisSTR90[" << t << "] = " << tilesSemis[t].str90 << std::endl;
+	//}
 
 	//------------------------------------------------------------READ SEMIS DATA END
 
@@ -2502,10 +2850,10 @@ void UFGFabricFomCoverage(const std::string& densityFolder, const std::string& t
 		tilesTerraced[t].str = tileDataStr[t];
 	}
 
-	//test
-	for (int t = 0; t != numTileTypes; ++t) {
-		std::cout << "terracedSTR[" << t << "] = " << tilesTerraced[t].str << std::endl;
-	}
+	////test
+	//for (int t = 0; t != numTileTypes; ++t) {
+	//	std::cout << "terracedSTR[" << t << "] = " << tilesTerraced[t].str << std::endl;
+	//}
 
 	//--
 
@@ -2517,10 +2865,10 @@ void UFGFabricFomCoverage(const std::string& densityFolder, const std::string& t
 		tilesTerraced[t].str90 = tileDataStr[t];
 	}
 
-	//test
-	for (int t = 0; t != numTileTypes; ++t) {
-		std::cout << "terracedSTR90[" << t << "] = " << tilesTerraced[t].str90 << std::endl;
-	}
+	////test
+	//for (int t = 0; t != numTileTypes; ++t) {
+	//	std::cout << "terracedSTR90[" << t << "] = " << tilesTerraced[t].str90 << std::endl;
+	//}
 
 	//------------------------------------------------------------READ TERRACED DATA END
 
@@ -2540,10 +2888,10 @@ void UFGFabricFomCoverage(const std::string& densityFolder, const std::string& t
 		tilesFlats[t].str = tileDataStr[t];
 	}
 
-	//test
-	for (int t = 0; t != numTileTypes; ++t) {
-		std::cout << "flatsSTR[" << t << "] = " << tilesFlats[t].str << std::endl;
-	}
+	////test
+	//for (int t = 0; t != numTileTypes; ++t) {
+	//	std::cout << "flatsSTR[" << t << "] = " << tilesFlats[t].str << std::endl;
+	//}
 
 	//--
 
@@ -2555,10 +2903,10 @@ void UFGFabricFomCoverage(const std::string& densityFolder, const std::string& t
 		tilesFlats[t].str90 = tileDataStr[t];
 	}
 
-	//test
-	for (int t = 0; t != numTileTypes; ++t) {
-		std::cout << "flatsSTR90[" << t << "] = " << tilesFlats[t].str90 << std::endl;
-	}
+	////test
+	//for (int t = 0; t != numTileTypes; ++t) {
+	//	std::cout << "flatsSTR90[" << t << "] = " << tilesFlats[t].str90 << std::endl;
+	//}
 
 	//------------------------------------------------------------READ FLATS DATA END
 
@@ -2592,12 +2940,16 @@ void UFGFabricFomCoverage(const std::string& densityFolder, const std::string& t
 	//------------------------------------------------------------SETUP INPUTS BEGIN
 
 	IRaster buildTypes;
-	buildTypes.Setup(densityFolder + "/out_cell_build_type.asc");
-	buildTypes.Read(densityFolder + "/out_cell_build_type.asc");
+	//buildTypes.Setup(densityFolder + "/out_cell_build_type.asc");
+	//buildTypes.Read(densityFolder + "/out_cell_build_type.asc");
+	buildTypes.Setup(buildTypeRas);
+	buildTypes.Read(buildTypeRas);
 
 	IRaster tileTypes;
-	tileTypes.Setup(densityFolder + "/out_cell_tile_type.asc");
-	tileTypes.Read(densityFolder + "/out_cell_tile_type.asc");
+	//tileTypes.Setup(densityFolder + "/out_cell_tile_type.asc");
+	//tileTypes.Read(densityFolder + "/out_cell_tile_type.asc");
+	tileTypes.Setup(tileTypeRas);
+	tileTypes.Read(tileTypeRas);
 
 
 	//------------------------------------------------------------SETUP INPUTS END
@@ -2609,7 +2961,8 @@ void UFGFabricFomCoverage(const std::string& densityFolder, const std::string& t
 	std::cout << "nrows = " << tilesDetached[0].ras.nrows << std::endl;
 
 	//setup output urban fabric raster	
-	std::string urbanFabricRasStr = densityFolder + "/out_urban_fabric.asc";
+	//std::string urbanFabricRasStr = densityFolder + "/out_urban_fabric.asc";
+	std::string urbanFabricRasStr = urbanFabricRas;
 	IRaster uf;
 	uf.Setup(buildTypes.ncols * xyScale, buildTypes.nrows * xyScale, -1);	//initialise all cells to nodata value	
 	uf.cellsize = buildTypes.cellsize / xyScale;
