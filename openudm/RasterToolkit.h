@@ -104,4 +104,4 @@ void IRasterSetToValue(const std::string& rasterHeader, int value, const std::st
 
 void UFGCoverageFromDensity(const std::string& densityFolder, const std::string& tilesFolder);
 //void UFGFabricFomCoverage(const std::string& densityFolder, const std::string& tilesFolder);
-void UFGFabricFomCoverage(const std::string& buildTypeRas, const std::string& tileTypeRas, const std::string& urbanFabricRas, const std::string& tilesFolder);
+void UFGFabricFromCoverage(const std::string& buildTypeRas, const std::string& tileTypeRas, const std::string& urbanFabricRas, const std::string& tilesFolder);

@@ -2719,7 +2719,7 @@ void UFGCoverageFromDensity(const std::string& densityFolder, const std::string&
 //}
 
 //void UFGFabricFomCoverage(const std::string& densityFolder, const std::string& tilesFolder) {
-void UFGFabricFomCoverage(const std::string & buildTypeRas, const std::string & tileTypeRas, const std::string & urbanFabricRas, const std::string & tilesFolder) {
+void UFGFabricFromCoverage(const std::string & buildTypeRas, const std::string & tileTypeRas, const std::string & urbanFabricRas, const std::string & tilesFolder) {
 
 	std::cout << std::endl << "UFGFabricFromCoverage()" << std::endl << std::endl;
 	//print inputs
