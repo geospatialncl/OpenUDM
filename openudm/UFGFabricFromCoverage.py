@@ -22,7 +22,7 @@ def ufg_fabric_from_coverage_entrypoint():
     try:
         # e.g. i = input file (colon indicates input expected)        
         #opts, args = getopt.getopt(args, "i:t:", ["input_data_path=", 'tile_data_path='])
-        opts, args = getopt.getopt(args, "ib:it:of:tp:", ["input_build_ras=", "input_tile_ras=", "output_fabric_ras=", 'tile_data_path='])
+        opts, args = getopt.getopt(args, "b:t:f:p:", ["input_build_ras=", "input_tile_ras=", "output_fabric_ras=", 'tile_data_path='])
     except getopt.GetoptError as err:
         print(err)
         sys.exit(2)
@@ -36,13 +36,13 @@ def ufg_fabric_from_coverage_entrypoint():
     # check each passed argument and assign values to variables
     for opt, arg in opts:
         print(opt)
-        if opt in ("-ib", "input_build_ras="):
+        if opt in ("-b", "input_build_ras="):
             input_build_ras = arg
-        elif opt in ("-it", 'input_tile_ras='):
+        elif opt in ("-t", 'input_tile_ras='):
             input_tile_ras = arg 
-        elif opt in ("-of", 'output_fabric_ras='):
+        elif opt in ("-f", 'output_fabric_ras='):
             output_fabric_ras = arg 
-        elif opt in ("-tp", 'tile_data_path='):
+        elif opt in ("-p", 'tile_data_path='):
             tile_data_path = arg        
         else:
             print('Un-recognised argument %s' %opt)
