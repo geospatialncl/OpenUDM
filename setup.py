@@ -79,7 +79,7 @@ def readme():
 
 setup(
     name='openudm',
-    version='5.0.5',
+    version='5.0.6',
     author='James Virgo',
     description='Urban Development Model',
     long_description=readme(),
@@ -88,7 +88,9 @@ setup(
     ext_modules=ext_modules,
     entry_points={'console_scripts':
                       ['raster_to_vector=openudm.tools:output_raster_to_vector',
-                       'generate_urban_fabric=openudm.UrbanFabricGenerator:urban_fabric_generator_entrypoint'
+                       'generate_urban_fabric=openudm.UrbanFabricGenerator:urban_fabric_generator_entrypoint',
+                       'ufg_coverage=openudm.UFGCoverageFromDensity:ufg_coverage_from_density_entrypoint',
+                       'ufg_fabric=openudm.UFGFabricFromCoverage:ufg_fabric_from_coverage_entrypoint'
                        ]},
     package_data={
             "openudm": ["Tiles/*"]
