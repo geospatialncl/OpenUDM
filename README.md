@@ -69,6 +69,7 @@ Command line tool allowing conversion of a raster file to a vector file
 `-i` - path and name of input raster. Default = 'raster.asc'  
 `-o` - path and name of output vector - supports geopackages only at the moment. Default = 'buildings.gpkg'. Where multiple options passed, parameter ignored and files match feature type names.  
 `-f` - the feature type to extract from the raster layer output from UDM. Allowed values are 'buildings, 'roads' and 'greenspace'. Pass multiple using a comma separated list.
+`-c` - the coordinate system for the output if to be different from the input data. If not passed, the coordinate system of the input data will be used, and if that can't be established, EPSG:27700 (British National Grid) will be used.
 
 ### Generate urban fabric
 Command line tool allowing for the generation of buildings and urban layouts using the outputs from a UDM run
@@ -83,7 +84,6 @@ Outputs from UDM are expected in the data directory, and this is also where the 
 #### Optional arguments
 `-o` - path to output urban fabric raster. Default = <dph_raster_directory>/out_uf.asc  
 `-t` - path to directory containing tiles. Default = openudm/Tiles
-
 
 ## Acknowledgements
 

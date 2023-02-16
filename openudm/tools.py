@@ -17,6 +17,11 @@ def output_raster_to_vector():
     output_vector_file = 'buildings.gpkg'
     feature_types = 'buildings','roads','greenspace'
 
+    # set a default output coordinate system, e.g.'EPSG:27700'
+    default_crs = 'EPSG:27700'
+    # set an output crs. Use that of input raster or the default if set to None
+    output_crs = None
+
     # set details for allowed feature types
     allowed_feature_types = ['buildings','roads','greenspace']
     feature_type_identifiers = {'buildings':22,
@@ -52,6 +57,8 @@ def output_raster_to_vector():
                 else:
                     print('Error! The passed feature_type (%s) does not exist! It should be one of %s' % (feature_type, allowed_feature_types))
                     sys.exit(2)
+        elif opt in ("-c", "output_crs="):
+                output_crs = arg.strip()
         else:
             print('Un-recognised argument %s' % opt)
             sys.exit(2)
@@ -62,10 +69,10 @@ def output_raster_to_vector():
 
         output_vector_file = f'{feature_type}.gpkg'
 
-        raster_to_vector(value_of_interest, raster_file_path, output_vector_file, feature_type)
+        raster_to_vector(value_of_interest, raster_file_path, output_vector_file, feature_type, default_crs, output_crs)
 
 
-def raster_to_vector(value_of_interest=0, raster_file_path='/data/output/data/out_uf.asc', output_vector_file='buildings.gpkg', feature_type='buildings'):
+def raster_to_vector(value_of_interest=0, raster_file_path='/data/output/data/out_uf.asc', output_vector_file='buildings.gpkg', feature_type='buildings', default_crs, output_crs=None):
     """
     Converts a .asc file (or any raster format) to a vector geopackage creating polygons for cells with the given value (default value set to 0)
 
@@ -82,16 +89,27 @@ def raster_to_vector(value_of_interest=0, raster_file_path='/data/output/data/ou
     mask = None
     with rasterio.Env():
         with rasterio.open(raster_file_path) as src:
+            raster_crs = src.crs # get the coordinate system of the raster
             image = src.read(1) # first band
-            results = (
-            {'properties': {'raster_val': v}, 'geometry': s}
+            results = ( {'properties': {'raster_val': v}, 'geometry': s}
             for i, (s, v)
             in enumerate(
                 shapes(image, mask=mask, transform=src.transform)))
 
+
     # save polygons to a geodataframe
     polygons = list(results)
     gpd_polygons  = gp.GeoDataFrame.from_features(polygons)
+
+    # if no crs for the dataset, assign one
+    if gpd_polygons.crs is None:
+        if output_crs is None: #if user has not asked one to be used
+            if raster_crs is not None:
+                gpd_polygons.set_crs(raster_crs, inplace=True)
+            else:
+                gpd_polygons.set_crs(default_crs, inplace=True)
+        else:
+            gpd_polygons.set_crs(output_crs, inplace-True)
 
     # remove any polygons which are not of interest
     gpd_polygons = gpd_polygons[gpd_polygons.raster_val == value_of_interest]
