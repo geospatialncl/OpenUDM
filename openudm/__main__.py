@@ -101,7 +101,8 @@ def main(swap_path):
             density_from_raster = int(row['density_from_raster'])
             people_per_dwelling = float(row['people_per_dwelling'])
             coverage_threshold = float(row['coverage_threshold'])
-            minimum_plot_size = int(row['minimum_plot_size'])            
+            minimum_development_area = int(row['minimum_development_area']) 
+            maximum_plot_size = int(row['maximum_plot_size'])            
 
     print( "Parameters file imported.")
 
@@ -206,7 +207,7 @@ def main(swap_path):
 
     #generate development area identity raster
     #dz.CreateDevZones(binary, minimum_plot_size, moore, constraint_ras, dev_area_id_ras, rast_hdr, swap_path, zone_id_ras)
-    dz.CreateDevZones((bval>0), minimum_plot_size, (mval>0), constraint_ras, dev_area_id_ras, rast_hdr, swap_path, zone_id_ras)    
+    dz.CreateDevZones((bval>0), minimum_development_area, (mval>0), constraint_ras, dev_area_id_ras, rast_hdr, swap_path, zone_id_ras)    
     print("dz.CreateDevZones") 
 
     #COMPUTE DEVELOPMENT AREA SUITABILITY
@@ -281,7 +282,10 @@ def main(swap_path):
     cm.LoadDevLandRaster(current_dev_ras)
 
     #load development suitability raster
-    cm.LoadCellSuitRaster(cell_suit_ras)    
+    cm.LoadCellSuitRaster(cell_suit_ras)  
+
+    #set maximum plot size
+    cm.SetMaximumDevelopmentRate(maximum_plot_size) 
 
     cm.RunModel()
 

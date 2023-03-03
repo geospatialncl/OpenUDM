@@ -41,6 +41,8 @@ public:
 
 	void OutputDevelopmentDensity(const std::string& popDensityRaster, const std::string& dwellingDensityRaster, double people_per_dwelling);
 
+	void SetMaximumDevelopmentRate(int max_plot_size);
+
 private:
 
 	//VARIABLE DENSITY
@@ -114,6 +116,8 @@ private:
 
 	void Overflow(const std::string& overflowData);
 	void Overflow_DPH(const std::string& overflowData);
+
+	int maxDevRate;
 
 };
 

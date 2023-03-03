@@ -40,6 +40,8 @@ void CellularModel::Setup(int wards, int res, int cols, int rows) {
 	
 	//allocate dynamic memory using numWards
 	AllocateAll();
+
+	maxDevRate = 4;
 }
 
 void CellularModel::AllocateAll() {
@@ -52,6 +54,10 @@ void CellularModel::AllocateAll() {
 	curPop.resize(numWards);	
 	futPop.resize(numWards);
 	wardDensity.resize(numWards);
+}
+
+void CellularModel::SetMaximumDevelopmentRate(int max_plot_size) {
+	maxDevRate = max_plot_size;
 }
 
 void CellularModel::UseBinaryRasters(bool useBin) {
@@ -593,7 +599,7 @@ void CellularModel::DevelopNonOverflowWards() {
 	//DEVELOP NON-OVERFLOW WARDS BEGIN--------	
 
 	//hardcode parameter for now
-	int maxDevRate = 4;	
+	//int maxDevRate = 4;	
 
 	//gather cells from all dev zones into single vector
 	for (size_t w = 0; w != numWards; ++w) {
