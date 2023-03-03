@@ -1,2 +1,2 @@
-density_from_raster,people_per_dwelling,coverage_threshold,minimum_plot_size
-0,2.5,50.0,4
+density_from_raster,people_per_dwelling,coverage_threshold,minimum_development_area,maximum_plot_size
+0,2.5,50,4,4
